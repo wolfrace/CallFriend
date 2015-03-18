@@ -1,0 +1,16 @@
+syntax: glob
+.gradle/*
+.idea/*
+build/*
+gradle/*
+*.iml
+app/build/*
+*.log
+*.orig
+*.rej
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
