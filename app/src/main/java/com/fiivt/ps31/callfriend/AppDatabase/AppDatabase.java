@@ -35,4 +35,12 @@ public class AppDatabase extends Singleton{
         ArrayList<Person> lPerson = new ArrayList<Person>();
         return lPerson;
     }
+
+    public boolean addPerson(Person person)
+    {
+        _db.execSQL("INSERT INTO person VALUES('"
+            + person.getName(), "','"
+            + person.getDob(), "','"
+            + person.isMale(), "');");
+    }
 }
