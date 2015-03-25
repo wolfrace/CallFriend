@@ -17,30 +17,35 @@ import static android.database.sqlite.SQLiteDatabase.*;
 public class AppDatabase extends Singleton{
     private SQLiteDatabase _db;
 
-    public AppDatabase()
-    {
+    public AppDatabase() {
         _db = openOrCreateDatabase("AppDb", null, null);
         _db.execSQL("CREATE TABLE IF NOT EXISTS person(name VARCHAR, dob DATE, isMale BOOLEAN);");
         _db.execSQL("CREATE TABLE IF NOT EXISTS event(title VARCHAR, date DATE, person VARCHAR);");
     }
 
-    public Person GetPerson(String name, Date dob)
-    {
+    public Person GetPerson(String name, Date dob) {
         Person p = new Person("vasya", new Date(), true);
         return p;
     }
 
-    public List<Person> GetPersons()
-    {
+    public List<Person> GetPersons() {
         ArrayList<Person> lPerson = new ArrayList<Person>();
         return lPerson;
     }
 
-    public boolean addPerson(Person person)
-    {
+    public int addPerson(Person person) {
         _db.execSQL("INSERT INTO person VALUES('"
-            + person.getName(), "','"
-            + person.getDob(), "','"
-            + person.isMale(), "');");
+                + person.getName()
+                +  "','"  + person.getDob() + "','"
+                + person.isMale() + "');");
+        return 0;
     }
+
+    public void addEvent(Event event) {
+        _db.execSQL("INSERT INTO event VALUES('"
+                + event.getTitle() +  "','"
+                + event.getDate()
+                + "','"  + event.getPerson().getName() + "');");
+    }
+
 }
