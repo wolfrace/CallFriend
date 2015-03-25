@@ -5,6 +5,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.fiivt.ps31.callfriend.AppDatabase.AppDatabase;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -12,6 +19,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AppDatabase db = new AppDatabase();
+        Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
+
+        db.addPerson(tmpPerson);
+        db.addPerson(tmpPerson2);
+
+        List<Person> persons = db.getPersons();
+        int a = 2;
     }
 
 
