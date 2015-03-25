@@ -16,10 +16,18 @@ public class Event {
 
     public Event(String title, Date date, Person person)
     {
+        this.id = 0;
         this.title = title;
         this.date = date;
         this.person = person;
     }
 
+    public Event(Integer id, String title, Date date, Person person)
+    {
+        this.id = id;
+        this.title = title;
+        this.date = date;
+        this.person = person;
+    }
 
 }

@@ -29,6 +29,19 @@ public class AppDb extends Singleton {
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idE INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, title VARCHAR, date DATE, idP INTEGER NOT NULL);");
     }
 
+    public void deleteEvent(Integer id) {
+        db.execSQL("DELETE FROM event WHERE idE='" + id + "'");
+    }
+
+    public void deleteEventByPersonId(Integer id) {
+        db.execSQL("DELETE FROM event WHERE idP='" + id + "'");
+    }
+
+    public void deletePerson(Integer id) {
+        deleteEventByPersonId(id);
+        db.execSQL("DELETE FROM person WHERE idP='" + id + "'");
+    }
+
     public Person getPerson(Integer id) {
         Cursor cursor = db.rawQuery("SELECT * FROM person WHERE idP='" + id + "'", null);
         cursor.moveToNext();
@@ -39,12 +52,11 @@ public class AppDb extends Singleton {
     public List<Event> getExpiredEvents() {
         ArrayList<Event> events = new ArrayList<Event>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE date <=" + (new Date()), null);
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE date <='" + (new Date().getTime()) + "'", null);
 
         while(cursor.moveToNext()) {
-
-//            Event e = new Event(cursor.getString(0), new Date(cursor.getLong(1)), cursor.getInt(2) > 0);
-//            events.add(p);
+            Event e = new Event(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), this.getPerson(cursor.getInt(3)));
+            events.add(e);
         }
 
         return events;
@@ -53,14 +65,14 @@ public class AppDb extends Singleton {
     public void addPerson(Person person) {
         db.execSQL("INSERT INTO person(name, dob, isMale) VALUES('"
                 + person.getName() +  "','"
-                + person.getDob() + "','"
+                + person.getDob().getTime() + "','"
                 + person.isMale() + "');");
     }
 
     public void addEvent(Event event) {
         db.execSQL("INSERT INTO event(title, date, idP) VALUES('"
                 + event.getTitle() +  "','"
-                + event.getDate() + "','"
+                + event.getDate().getTime() + "','"
                 + event.getPerson().getId() + "');");
     }
 
@@ -75,6 +87,19 @@ public class AppDb extends Singleton {
         }
 
         return persons;
+    }
+
+    public List<Event> getEvents() {
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event", null);
+
+        while(cursor.moveToNext()) {
+            Event e = new Event(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), this.getPerson(cursor.getInt(3)));
+            events.add(e);
+        }
+
+        return events;
     }
 
 }
