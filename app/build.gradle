@@ -3,8 +3,7 @@ apply plugin: 'com.neenbedankt.android-apt'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
-
+    buildToolsVersion '19.1.0'
     defaultConfig {
         applicationId "com.fiivt.ps31.callfriend"
         minSdkVersion 15
