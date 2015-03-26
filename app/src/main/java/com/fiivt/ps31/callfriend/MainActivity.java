@@ -5,9 +5,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.fiivt.ps31.callfriend.AppDatabase.DatabaseHelper;
+import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         try {
-            DatabaseHelper db = new DatabaseHelper(this);
+            AppDb db = new AppDb(this);
             Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
             Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
 
@@ -28,7 +29,11 @@ public class MainActivity extends ActionBarActivity {
             db.addPerson(tmpPerson2);
 
             List<Person> persons = db.getPersons();
-            int a = 2;
+            {
+                Person p = db.getPerson(1);
+                if (p.getName().equals(tmpPerson.getName()))
+                    throw new Exception("invalid getPerson method");
+            }
         }
         catch (Exception e) {
             System.out.print(e.getMessage().toString());
