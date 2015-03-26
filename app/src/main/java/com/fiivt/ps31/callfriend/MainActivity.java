@@ -31,6 +31,8 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
 
+    public AppDb database;
+
     public void test(AppDb db) {
         Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
         Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
@@ -60,10 +62,10 @@ public class MainActivity extends ActionBarActivity {
             Event e4 = new Event("Позвать в мак", new Date(), p3);
             db.addEvent(e4);
 
-            db.deleteEvent(allEvents.get(0).getId());
+//            db.deleteEvent(allEvents.get(0).getId());
             allEvents = db.getEvents();
 
-            db.deletePerson(p3.getId());
+//            db.deletePerson(p3.getId());
             persons = db.getPersons();
             allEvents = db.getEvents();
         }
@@ -72,15 +74,9 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        database = new AppDb(this);
+        test(database);
         setContentView(R.layout.activity_main);
-
-        try {
-            AppDb db = new AppDb(this);
-            test(db);
-        }
-        catch (Exception e) {
-            System.out.print(e.getMessage().toString());
-        }
     }
 
 
@@ -89,37 +85,15 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-
-        final ListView listview = (ListView) findViewById(R.id.contactListView);
-        Event[] values = new Event[] { new Event("Kill dog", "Kolya"),  new Event("Kit-kat android call", "Petya"),
-                new Event("Resource Usage example", "Amjad"),};
-
-        final List<Event> list = new ArrayList<Event>();
-        for (int i = 0; i < values.length; ++i) {
-            list.add(values[i]);
-        }
-        final ArrayAdapter adapter = new MySimpleArrayAdapter(this, list);
-        listview.setAdapter(adapter);
-
-        listview.setOnItemClickListener(  new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, final View view,
-                                    int position, long id) {
-                final String item = (String) parent.getItemAtPosition(position);
-                view.animate().setDuration(2000).alpha(0)
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.remove(item);
-                                adapter.notifyDataSetChanged();
-                                view.setAlpha(1);
-                            }
-                });
-            }
-
-        });
-
+        ListView eventsListView = (ListView) findViewById(R.id.contactListView);
+        final List<Event> event = database.getEvents();
+        ArrayAdapter adapter = new MySimpleArrayAdapter(this, event);
+        eventsListView.setAdapter(adapter);
+//        eventsListView.setOnItemClickListener(  new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+//            }
+//        });
         return true;
     }
 
@@ -144,11 +118,9 @@ public class MainActivity extends ActionBarActivity {
             ImageView avatar = (ImageView) rowView.findViewById(R.id.contactAvatar);
 
             Event event = values.get(position);
-
-            nameView.setText(event.getName());
-            typeView.setText(event.getText());
+            nameView.setText(event.getPerson().getName());
+            typeView.setText(event.getTitle());
             avatar.setImageResource(R.mipmap.ic_user);
-
             return rowView;
         }
 
@@ -157,18 +129,6 @@ public class MainActivity extends ActionBarActivity {
             return values.size();
         }
 
-    }
-
-    @Data
-    public static class Event {
-        private String text;
-        private String name;
-        private int age;
-
-        public Event(String text, String name) {
-            this.text = text;
-            this.name = name;
-        }
     }
 
     @Override
