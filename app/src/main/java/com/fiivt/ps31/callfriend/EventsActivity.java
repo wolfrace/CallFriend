@@ -8,28 +8,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class EventsActivity extends ActionBarActivity {
 
     public AppDb database;
 
@@ -77,6 +73,11 @@ public class MainActivity extends ActionBarActivity {
         database = new AppDb(this);
         test(database);
         setContentView(R.layout.activity_main);
+
+        ListView eventsListView = (ListView) findViewById(R.id.events_list_view);
+        final List<Event> event = database.getEvents();
+        ArrayAdapter adapter = new MySimpleArrayAdapter(this, event);
+        eventsListView.setAdapter(adapter);
     }
 
 
@@ -85,10 +86,6 @@ public class MainActivity extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        ListView eventsListView = (ListView) findViewById(R.id.contactListView);
-        final List<Event> event = database.getEvents();
-        ArrayAdapter adapter = new MySimpleArrayAdapter(this, event);
-        eventsListView.setAdapter(adapter);
 //        eventsListView.setOnItemClickListener(  new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -97,6 +94,21 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+
+    @Data
+    @NoArgsConstructor
+    static class EventViewHolder {
+        private TextView name;
+        private TextView title;
+        private ImageView image;
+        private TextView daysLeft;
+
+        public void setEventValues(Event event) {
+            name.setText(event.getPerson().getName());
+            title.setText(event.getTitle());
+            //image.setImageResource(R.mipmap.ic_user);
+        }
+    }
 
     public class MySimpleArrayAdapter extends ArrayAdapter<Event> {
         private final Context context;
@@ -110,18 +122,36 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = inflater.inflate(R.layout.row_list_contact, parent, false);
-
-            TextView typeView = (TextView) rowView.findViewById(R.id.contactName);
-            TextView nameView = (TextView) rowView.findViewById(R.id.contactType);
-            ImageView avatar = (ImageView) rowView.findViewById(R.id.contactAvatar);
-
+            View view = getViewWithHolder(convertView, parent);
+            EventViewHolder viewHolder = (EventViewHolder) view.getTag();
             Event event = values.get(position);
-            nameView.setText(event.getPerson().getName());
-            typeView.setText(event.getTitle());
-            avatar.setImageResource(R.mipmap.ic_user);
-            return rowView;
+            viewHolder.setEventValues(values.get(position));
+            return view;
+        }
+
+        private View getViewWithHolder(View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                View view = createNewView(parent);
+                initializeHolder(view);
+                return view;
+            } else {
+                return convertView;
+            }
+        }
+
+        private View createNewView(ViewGroup parent) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            return inflater.inflate(R.layout.row_list_contact, parent, false);
+        }
+
+        private EventViewHolder initializeHolder(View view) {
+            EventViewHolder holder = new EventViewHolder();
+            holder.setName((TextView) view.findViewById(R.id.event_list_contact_name));
+            holder.setTitle((TextView) view.findViewById(R.id.event_list_event_title));
+            holder.setDaysLeft((TextView) view.findViewById(R.id.events_days_left));
+            //holder.setImage((ImageView) view.findViewById(R.id.contactAvatar));
+            view.setTag(holder);
+            return holder;
         }
 
         @Override
@@ -139,7 +169,7 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_show_contacts) {
             return true;
         }
 
