@@ -11,37 +11,24 @@ import java.util.Date;
 public class EventTemplate {
     private Integer id;
     private String info;
-    private Date cooldown;
+    private Date defaultDate;
+    private Integer idIcon;
+    private boolean canModified;
 
-    public EventTemplate(Integer id, String info, Date cooldown) {
+
+    public EventTemplate(Integer id, String info, Date defaultDate, Integer idIcon, boolean canModified) {
         this.id = id;
         this.info = info;
-        this.cooldown = cooldown;
+        this.defaultDate = defaultDate;
+        this.idIcon = idIcon;
+        this.canModified = canModified;
     }
 
-    public EventTemplate(String info, Date cooldown) {
+    public EventTemplate(String info, Date defaultDate, Integer idIcon, boolean canModified) {
         this.id = 0;
         this.info = info;
-        this.cooldown = cooldown;
+        this.defaultDate = defaultDate;
+        this.idIcon = idIcon;
+        this.canModified = canModified;
     }
-
-    // TODO
-    private String generateInfo(String parentInfo, String personInfo) {
-        return parentInfo.concat(" ").concat(personInfo);
-    }
-
-    private Date generateDate(Date cooldown, Date lastEventDate) {
-        return new Date(lastEventDate.getTime() + cooldown.getTime());
-    }
-
-    public Event generateEvent(Person person) {
-
-        Event event = new Event(id,
-                person.getId(),
-                generateInfo(info, person.getInfo()),
-                generateDate(cooldown, person.getLastEventDate(id))
-        );
-        return event;
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.fiivt.ps31.callfriend.AppDatabase2;
 
+import com.fiivt.ps31.callfriend.Utils.Status;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,24 +12,27 @@ import java.util.Date;
 @Data
 public class Event {
     private Integer id;
-    private Integer idTemplate;
+    private Integer idPersonTemplate;
     private Integer idPerson;
     private String info;
     private Date date;
+    private Status status;
 
-    public Event(Integer id, Integer idTemplate, Integer idPerson, String info, Date date) {
+    public Event(Integer id, Integer idPerson, Integer idPersonTemplate, String info, Date date, Status status) {
         this.id = id;
-        this.idTemplate = idTemplate;
+        this.idPersonTemplate = idPersonTemplate;
         this.idPerson = idPerson;
         this.info = info;
         this.date = date;
+        this.status = status;
     }
 
-    public Event(Integer idTemplate, Integer idPerson, String info, Date date) {
+    public Event(Integer idPerson, Integer idPersonTemplate, String info, Date date, Status status) {
         this.id = 0;
-        this.idTemplate = idTemplate;
+        this.idPersonTemplate = idPersonTemplate;
         this.idPerson = idPerson;
         this.info = info;
         this.date = date;
+        this.status = status;
     }
 }
