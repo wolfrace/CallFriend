@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/event_list_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="New Text"
+        android:textColor="@color/text_color"
+        android:textSize="@dimen/mini_text_size"
+        android:id="@+id/event_list_title_text"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="12dp" />
+
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/events_list_view"
+        android:divider="@null" />
+</LinearLayout>

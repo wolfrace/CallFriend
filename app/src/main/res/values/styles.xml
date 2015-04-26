@@ -25,7 +25,8 @@
     <color name="text_color_light">#cccccc</color>
     <color name="window_background">#ffffff</color>
     <color name="circle_button_color">#ff4181</color>
-    <color name="text_days_left_color">#ff80ab</color>
+    <color name="text_days_left_color_urgently">#ff80ab</color>
+    <color name="text_days_left_color_soon">@color/text_color_light</color>
     <color name="avatar_holder_background_color">@color/text_color_light</color>
 
 </resources>

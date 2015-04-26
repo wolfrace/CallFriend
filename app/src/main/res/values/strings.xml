@@ -7,4 +7,6 @@
     <string name="action_event_list">Events</string>
     <string name="events_activity_title">События</string>
     <string name="events_days_left_suffix">дн.</string>
+    <string name="event_list_title_urgently">Срочно</string>
+    <string name="event_list_title_soon">Скоро</string>
 </resources>
