@@ -154,7 +154,7 @@ public class EventsListView extends LinearLayout {
         private final Context context;
 
         public EventAdapter(Context context, ListView listView) {
-            super(context, R.layout.event_list_item);
+            super(context, R.layout.row_list_event);
             this.context = context;
             this.values = new ArrayList<Event>();
         }
@@ -186,7 +186,7 @@ public class EventsListView extends LinearLayout {
 
         private View createNewView(ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            return inflater.inflate(R.layout.event_list_item, parent, false);
+            return inflater.inflate(R.layout.row_list_event, parent, false);
         }
 
         private EventViewHolder initializeHolder(View view) {

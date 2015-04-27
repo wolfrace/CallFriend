@@ -9,8 +9,4 @@
     <string name="events_days_left_suffix">дн.</string>
     <string name="event_list_title_urgently">Срочно</string>
     <string name="event_list_title_soon">Скоро</string>
-
-    <string name="event_action_accept">Принять</string>
-    <string name="event_action_put_off">Отложить</string>
-    <string name="event_action_dismiss">Отклонить</string>
 </resources>
