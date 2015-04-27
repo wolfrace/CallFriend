@@ -1,8 +1,8 @@
 package com.fiivt.ps31.callfriend;
 
+import android.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -79,19 +79,16 @@ public class EventsActivity extends ActionBarActivity {
         addEvents(database.getEvents());
     }
 
-    private void initEventsLists() {
-        OnEventClickListener eventClickListener = new OnEventClickListener() {
-            @Override
-            public void onClick(Event event) {
-                Log.d("event", "" + event.getId());
-            }
-        };
+    public void dismissEvent(Event event) {
+        //todo remove(update) event from db and view
+    }
 
-        eventsListUrgently = (EventsListView) findViewById(R.id.events_list_urgently);
-        eventsListSoon = (EventsListView) findViewById(R.id.events_list_soon);
+    public void acceptEvent(Event event) {
+        //todo remove(update) event from db and view
+    }
 
-        eventsListSoon.setClickListener(eventClickListener);
-        eventsListUrgently.setClickListener(eventClickListener);
+    public void putOffEvent(Event event) {
+        //todo 1) show time picker?; 2) update event in db; 3) update view;
     }
 
     public void addEvent(Event event) {
@@ -119,6 +116,46 @@ public class EventsActivity extends ActionBarActivity {
         }
     }
 
+    private void initEventsLists() {
+        OnEventClickListener eventClickListener = new OnEventClickListener() {
+            @Override
+            public void onClick(Event event) {
+                showEventActionsDialog(event);
+            }
+        };
+
+        eventsListUrgently = (EventsListView) findViewById(R.id.events_list_urgently);
+        eventsListSoon = (EventsListView) findViewById(R.id.events_list_soon);
+
+        eventsListSoon.setClickListener(eventClickListener);
+        eventsListUrgently.setClickListener(eventClickListener);
+    }
+
+    private void showEventActionsDialog(final Event event) {
+        FragmentManager manager = getFragmentManager();
+        EventActionDialog dialog = new EventActionDialog();
+        dialog.setClickListener(new EventActionDialog.EventActionClickListener() {
+            @Override
+            public void onClick(EventActionDialog.EventActionType actionType) {
+                processEventAction(event, actionType);
+            }
+        });
+        dialog.show(manager, "event-actions");
+    }
+
+    private void processEventAction(Event event, EventActionDialog.EventActionType actionType) {
+        switch (actionType) {
+            case PUT_OFF:
+                putOffEvent(event);
+                break;
+            case ACCEPT:
+                acceptEvent(event);
+                break;
+            case DISMISS:
+                dismissEvent(event);
+                break;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
