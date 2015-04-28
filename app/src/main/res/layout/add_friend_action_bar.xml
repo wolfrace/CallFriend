@@ -2,34 +2,36 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:layout_gravity="start|bottom"
-        android:id="@+id/imgButtonSave"
+        android:id="@+id/save_button"
         android:background="@color/text_days_left_color_urgently"
         android:layout_weight="0"
         android:contentDescription="@string/save_button_title" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:textSize="@dimen/standard_text_size"
         android:text="@string/add_contact_layout_title"
         android:textAlignment="center"
         android:id="@+id/labelFriendEdit"
-        android:textColor="@android:color/black"
+        android:textColor="@color/text_color_primary"
         android:layout_weight="1"
-        android:gravity="center" />
+        android:gravity="center_vertical"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" />
 
     <ImageButton
         android:layout_width="48dp"
         android:layout_height="match_parent"
         android:background="@color/text_days_left_color_urgently"
-        android:id="@+id/imgButtonDiscard"
+        android:id="@+id/cancel_button"
         android:layout_weight="0"
         android:contentDescription="@string/cancel_button_title" />
 

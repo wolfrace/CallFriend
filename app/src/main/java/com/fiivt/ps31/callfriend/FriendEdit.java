@@ -1,18 +1,15 @@
 package com.fiivt.ps31.callfriend;
 
 import android.app.ActionBar;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 
 
 public class FriendEdit extends ActionBarActivity {
@@ -21,67 +18,59 @@ public class FriendEdit extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend_edit);
+        setCustomActionBar();
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        ActionBar actionBar = getActionBar();
-//эти ребята для ширины экрана
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
+    @SuppressWarnings("all")
+    private void setCustomActionBar() {
+        ActionBar mActionBar = getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(false);
+        mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
-        View mCustomView = mInflater.inflate(R.layout.a_bar_friend_edit, null);
-        mCustomView.setMinimumWidth(outMetrics.widthPixels);//при выставлении минимального экрана по дисплею показывает норм,
-        //но это ультракостыль.  Поэтому было бы не плохо сохранить исходное форматирование. или нет.
-        ImageButton imageButton = (ImageButton) mCustomView.findViewById(R.id.imgButtonDiscard);
-        imageButton.setOnClickListener(new View.OnClickListener() {
+        View mCustomView = mInflater.inflate(R.layout.add_friend_action_bar, null);
+        setMinimalWidthAsScreenWidth(mCustomView);
+        mActionBar.setCustomView(mCustomView);
+        mActionBar.setDisplayShowCustomEnabled(true);
+
+
+        ImageButton saveButton = (ImageButton) mCustomView.findViewById(R.id.save_button);
+        saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Refresh Clicked!",
-                        Toast.LENGTH_LONG).show();
+                onSave();
             }
         });
 
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(mCustomView);
-        actionBar.setBackgroundDrawable(new ColorDrawable(0xff05a8f5));
-        getMenuInflater().inflate(R.menu.menu_friend_edit, menu);
+        ImageButton cancelButton = (ImageButton) mCustomView.findViewById(R.id.cancel_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
 
-        return super.onCreateOptionsMenu(menu);
-       // return true;
+            @Override
+            public void onClick(View view) {
+                onCancel();
+            }
+        });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    public void onSaveContactClick(View view)
-    {
-        // выводим сообщение
-        TextView ji = (TextView)findViewById(R.id.fe_textViewEvents);
-        ji.setText("dfdd");
-        //Toast.makeText(this, "Зачем вы нажали?", Toast.LENGTH_SHORT).show();
+    public void onSave() {
+        Person person = getPersonDataFromView();
+        //todo save person
     }
 
-    public void onDiscardContactClick(View view)
-    {
-        // выводим сообщение
-        Toast.makeText(this, "Зачем вы dd?", Toast.LENGTH_SHORT).show();
+    public void onCancel() {
+        //todo close page
+    }
+
+    private void setMinimalWidthAsScreenWidth(View view) {
+        //set width as screen size for action bar
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+        view.setMinimumWidth(outMetrics.widthPixels);
+    }
+
+    public Person getPersonDataFromView() {
+        return null;
     }
 }
