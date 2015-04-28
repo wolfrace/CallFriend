@@ -12,25 +12,25 @@ import java.util.Date;
 @Data
 public class Event {
     private Integer id;
-    private Integer idPersonTemplate;
-    private Integer idPerson;
+    private Person person;
+    private PersonTemplate personTemplate;
     private String info;
     private Date date;
     private Status status;
 
-    public Event(Integer id, Integer idPerson, Integer idPersonTemplate, String info, Date date, Status status) {
+    public Event(Integer id, Person person, PersonTemplate personTemplate, String info, Date date, Status status) {
         this.id = id;
-        this.idPersonTemplate = idPersonTemplate;
-        this.idPerson = idPerson;
+        this.personTemplate = personTemplate;
+        this.person = person;
         this.info = info;
         this.date = date;
         this.status = status;
     }
 
-    public Event(Integer idPerson, Integer idPersonTemplate, String info, Date date, Status status) {
+    public Event(Person person, PersonTemplate personTemplate, String info, Date date, Status status) {
         this.id = 0;
-        this.idPersonTemplate = idPersonTemplate;
-        this.idPerson = idPerson;
+        this.personTemplate = personTemplate;
+        this.person = person;
         this.info = info;
         this.date = date;
         this.status = status;

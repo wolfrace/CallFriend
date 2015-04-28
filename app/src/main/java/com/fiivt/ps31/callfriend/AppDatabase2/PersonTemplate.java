@@ -42,8 +42,8 @@ public class PersonTemplate {
     }
 
     public Event generateEvent() {
-        Event event = new Event(person.getId(),
-                id,
+        Event event = new Event(person,
+                this,
                 generateInfo(person.getName(), eventTemplate.getInfo()),
                 generateDate(),
                 Status.EXPECTED

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
+import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,6 +112,7 @@ public class AppDb extends  Singleton {
                 + "' canModified='" + eventTemplate.isCanModified()
                 + "' defaultDate='" + eventTemplate.getDefaultDate().getTime()
                 + "' idIcon='" + eventTemplate.getIdIcon()
+                + "' WHERE idEventTemplate='" + eventTemplate.getId()
                 + "';");
     }
 
@@ -177,7 +179,6 @@ public class AppDb extends  Singleton {
     }
 
     // PersonTemplate API
-    // personTemplate(idPersonTemplate INTEGER, idPerson INTEGER, idTemplate INTEGER, customDate DATE, cooldown DATE);
 
     public void addPersonTemplate(PersonTemplate personTemplate) {
         db.execSQL("INSERT INTO personTemplate(idPerson, idTemplate, customDate, cooldown) VALUES('"
@@ -188,11 +189,12 @@ public class AppDb extends  Singleton {
     }
 
     public void updatePersonTemplate(PersonTemplate personTemplate) {
-        db.execSQL("UPDATE eventTemplate set"
-            + " idPerson='"     + personTemplate.getPerson().getId()
-            + "' idTemplate='"  + personTemplate.getEventTemplate().getId()
-            + "' customDate='"  + personTemplate.getCustomDate().getTime()
-            + "' cooldown='"    + personTemplate.getCooldown().getTime()
+        db.execSQL("UPDATE personTemplate set"
+            + " idPerson='"                 + personTemplate.getPerson().getId()
+            + "' idTemplate='"              + personTemplate.getEventTemplate().getId()
+            + "' customDate='"              + personTemplate.getCustomDate().getTime()
+            + "' cooldown='"                + personTemplate.getCooldown().getTime()
+            + "' WHERE idPersonTemplate='"  + personTemplate.getId()
             + "';");
     }
 
@@ -232,5 +234,62 @@ public class AppDb extends  Singleton {
         }
 
         return personTemplates;
+    }
+
+    // Event API
+
+    public void addEvent(Event event) {
+        db.execSQL("INSERT INTO event(idPerson, idPersonTemplate, info, date, status) VALUES('"
+            + event.getPerson().getId()             + "','"
+            + event.getPersonTemplate().getId()     + "','"
+            + event.getInfo()                       + "','"
+            + event.getDate().getTime()             + "','"
+            + Status.toInteger(event.getStatus())   + "');");
+    }
+
+    public void updateEvent(Event event) {
+        db.execSQL("UPDATE event set"
+            + " idPerson='"             + event.getPerson().getId()
+            + "' idPersonTemplate='"    + event.getPersonTemplate().getId()
+            + "' info='"                + event.getInfo()
+            + "' date='"                + event.getDate().getTime()
+            + "' status='"              + Status.toInteger(event.getStatus())
+            + "' WHERE idEvent='"       + event.getId()
+            + "';");
+    }
+
+    public void deleteEvent(Event event) {
+        db.execSQL("DELETE FROM event"
+                + " WHERE idEvent='" + event.getId()
+                + "';");
+    }
+
+    public Event getEvent(int id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idEvent='" + id + "';", null);
+        cursor.moveToNext();
+        Person person = getPerson(cursor.getInt(1));
+        PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+        return new Event(cursor.getInt(0), person,
+                personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+    }
+
+    public ArrayList<Event> getEvents(int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset > 0 : "Offset must be great than 0";
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit + " OFFSET " + offset, null);
+
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            Event event = new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            events.add(event);
+        }
+
+        return events;
     }
 }
