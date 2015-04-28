@@ -1,33 +1,34 @@
 package com.fiivt.ps31.callfriend;
 
-import android.content.Context;
+import android.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 public class EventsActivity extends ActionBarActivity {
 
     public AppDb database;
+
+    private View eventListEmptyNotify;
+    private EventsListView eventsListUrgently;
+    private EventsListView eventsListSoon;
 
     public void test(AppDb db) {
         Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
@@ -49,14 +50,16 @@ public class EventsActivity extends ActionBarActivity {
             List<Event> oldEvents = db.getExpiredEvents();
             List<Event> allEvents = db.getEvents();
 
-            Event e2 = new Event("Позвать в кино", new Date(), p2);
+            Event e2 = new Event("Позвать в кино", new Date(1430050904956L), p2);
             db.addEvent(e2);
 
-            Event e3 = new Event("Поздавить с днем вафли", new Date(), p3);
-            db.addEvent(e3);
 
-            Event e4 = new Event("Позвать в мак", new Date(), p3);
+            Event e4 = new Event("Позвать в мак", new Date(1450050904956L), p3);
             db.addEvent(e4);
+
+
+            Event e3 = new Event("Поздавить с днем вафли", new Date(1430450904956L), p3);
+            db.addEvent(e3);
 
 //            db.deleteEvent(allEvents.get(0).getId());
             allEvents = db.getEvents();
@@ -70,17 +73,111 @@ public class EventsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.events_activity);
+        eventListEmptyNotify = findViewById(R.id.events_not_existing_notify);
+        initEventsLists();
+
         database = new AppDb(this);
+        // todo Remove test
         test(database);
-        setContentView(R.layout.activity_main);
-
-        ListView eventsListView = (ListView) findViewById(R.id.events_list_view);
-        final List<Event> event = database.getEvents();
-        ArrayAdapter adapter = new MySimpleArrayAdapter(this, event);
-        eventsListView.setAdapter(adapter);
-
+        // test end
+        addEventsToView(database.getEvents());
     }
 
+    public void dismissEvent(Event event) {
+        //todo remove(update template) from db
+        removeEventFromView(event);
+    }
+
+    public void acceptEvent(Event event) {
+        //todo remove(update template) from db
+        removeEventFromView(event);
+    }
+
+    public void putOffEvent(Event event) {
+        event.putOff(TimeUnit.HOURS, 25);
+        //todo save into db
+        removeEventFromView(event);
+        addEventToView(event);
+    }
+
+    public void removeEventFromView(Event event) {
+        eventsListUrgently.removeById(event.getId());
+        eventsListSoon.removeById(event.getId());
+        notifyOnEventListChanged();
+    }
+
+    public void addEventToView(Event event) {
+        addEventsToView(Collections.singleton(event));
+    }
+
+    public void addEventsToView(Collection<Event> events) {
+        List<Event> soon = new ArrayList<Event>();
+        List<Event> urgently = new ArrayList<Event>();
+
+        for(Event event: events) {
+            if (event.getDaysLeft() <= 0) {
+                urgently.add(event);
+            } else {
+                soon.add(event);
+            }
+        }
+
+        if (!soon.isEmpty()) {
+            eventsListSoon.addAll(soon);
+        }
+
+        if (!urgently.isEmpty()) {
+            eventsListUrgently.addAll(urgently);
+        }
+        notifyOnEventListChanged();
+    }
+
+    private void notifyOnEventListChanged() {
+        boolean isEmpty = (eventsListSoon.isEmpty() && eventsListUrgently.isEmpty());
+        eventListEmptyNotify.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+    private void initEventsLists() {
+        OnEventClickListener eventClickListener = new OnEventClickListener() {
+            @Override
+            public void onClick(Event event) {
+                showEventActionsDialog(event);
+            }
+        };
+
+        eventsListUrgently = (EventsListView) findViewById(R.id.events_list_urgently);
+        eventsListSoon = (EventsListView) findViewById(R.id.events_list_soon);
+
+        eventsListSoon.setClickListener(eventClickListener);
+        eventsListUrgently.setClickListener(eventClickListener);
+    }
+
+    private void showEventActionsDialog(final Event event) {
+        FragmentManager manager = getFragmentManager();
+        EventActionDialog dialog = new EventActionDialog();
+        dialog.setClickListener(new EventActionDialog.EventActionClickListener() {
+            @Override
+            public void onClick(EventActionDialog.EventActionType actionType) {
+                processEventAction(event, actionType);
+            }
+        });
+        dialog.show(manager, "event-actions");
+    }
+
+    private void processEventAction(Event event, EventActionDialog.EventActionType actionType) {
+        switch (actionType) {
+            case PUT_OFF:
+                putOffEvent(event);
+                break;
+            case ACCEPT:
+                acceptEvent(event);
+                break;
+            case DISMISS:
+                dismissEvent(event);
+                break;
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -93,72 +190,6 @@ public class EventsActivity extends ActionBarActivity {
 //            }
 //        });
         return true;
-    }
-
-
-    @Data
-    static class EventViewHolder {
-        private TextView name;
-        private TextView title;
-        private ImageView image;
-        private TextView daysLeft;
-
-        public void setEventValues(Event event) {
-            name.setText(event.getPerson().getName());
-            title.setText(event.getTitle());
-            //image.setImageResource(R.mipmap.ic_user);
-        }
-    }
-
-    public class MySimpleArrayAdapter extends ArrayAdapter<Event> {
-        private final Context context;
-        private final List<Event> values;
-
-        public MySimpleArrayAdapter(Context context, List<Event> values) {
-            super(context, R.layout.row_list_contact, values);
-            this.context = context;
-            this.values = values;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = getViewWithHolder(convertView, parent);
-            EventViewHolder viewHolder = (EventViewHolder) view.getTag();
-            Event event = values.get(position);
-            viewHolder.setEventValues(values.get(position));
-            return view;
-        }
-
-        private View getViewWithHolder(View convertView, ViewGroup parent) {
-            if (convertView == null) {
-                View view = createNewView(parent);
-                initializeHolder(view);
-                return view;
-            } else {
-                return convertView;
-            }
-        }
-
-        private View createNewView(ViewGroup parent) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            return inflater.inflate(R.layout.row_list_contact, parent, false);
-        }
-
-        private EventViewHolder initializeHolder(View view) {
-            EventViewHolder holder = new EventViewHolder();
-            holder.setName((TextView) view.findViewById(R.id.event_list_contact_name));
-            holder.setTitle((TextView) view.findViewById(R.id.event_list_event_title));
-            holder.setDaysLeft((TextView) view.findViewById(R.id.events_days_left));
-            //holder.setImage((ImageView) view.findViewById(R.id.contactAvatar));
-            view.setTag(holder);
-            return holder;
-        }
-
-        @Override
-        public int getCount() {
-            return values.size();
-        }
-
     }
 
 
