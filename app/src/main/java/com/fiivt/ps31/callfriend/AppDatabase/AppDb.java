@@ -89,10 +89,65 @@ public class AppDb extends Singleton {
         return persons;
     }
 
+    public List<Person> getPersons(int limit) {
+        assert  limit > 0;
+        ArrayList<Person> persons = new ArrayList<Person>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit, null);
+
+        while(cursor.moveToNext()) {
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getString(3).equalsIgnoreCase("TRUE"));
+            persons.add(p);
+        }
+
+        return persons;
+    }
+
+    public List<Person> getPersons(int limit, int offset) {
+        assert  limit > 0;
+        assert  offset > 0;
+        ArrayList<Person> persons = new ArrayList<Person>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
+
+        while(cursor.moveToNext()) {
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), cursor.getString(3).equalsIgnoreCase("TRUE"));
+            persons.add(p);
+        }
+
+        return persons;
+    }
+
     public List<Event> getEvents() {
         ArrayList<Event> events = new ArrayList<Event>();
-
         Cursor cursor = db.rawQuery("SELECT * FROM event", null);
+
+        while(cursor.moveToNext()) {
+            Event e = new Event(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), this.getPerson(cursor.getInt(3)));
+            events.add(e);
+        }
+
+        return events;
+    }
+
+    public List<Event> getEvents(int limit) {
+        assert limit > 0;
+        ArrayList<Event> events = new ArrayList<Event>();
+        Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit, null);
+
+        while(cursor.moveToNext()) {
+            Event e = new Event(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), this.getPerson(cursor.getInt(3)));
+            events.add(e);
+        }
+
+        return events;
+    }
+
+    public List<Event> getEvents(int limit, int offset) {
+        assert limit > 0;
+        assert  offset > 0;
+        ArrayList<Event> events = new ArrayList<Event>();
+        Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
             Event e = new Event(cursor.getInt(0), cursor.getString(1), new Date(cursor.getLong(2)), this.getPerson(cursor.getInt(3)));

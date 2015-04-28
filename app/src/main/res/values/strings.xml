@@ -4,4 +4,15 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_friend_edit">FriendEdit</string>
+    <string name="action_friend_list">Contacts</string>
+    <string name="action_event_list">Events</string>
+    <string name="events_activity_title">События</string>
+    <string name="events_days_left_suffix">дн.</string>
+    <string name="event_list_title_urgently">Срочно</string>
+    <string name="event_list_title_soon">Скоро</string>
+
+    <string name="event_action_accept">Принять</string>
+    <string name="event_action_put_off">Отложить</string>
+    <string name="event_action_dismiss">Отклонить</string>
+    <string name="events_not_existing_notify">У вас нет новых событий.</string>
 </resources>
