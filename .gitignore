@@ -14,3 +14,6 @@ app/build/*
 /.idea/libraries
 .DS_Store
 /build
+app/.idea/
+app/local.properties
+app/gradle/
