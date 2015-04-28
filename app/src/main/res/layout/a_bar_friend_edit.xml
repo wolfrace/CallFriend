@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_marginTop="10px"
     android:layout_height="match_parent">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10px" >
+         >
 
-        <ImageView
+        <ImageButton
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="20dp"
             android:layout_gravity="start|bottom"
+            android:id="@+id/imgButtonSave"
             android:src="@drawable/ok_ico"/>
 
         <TextView
@@ -20,14 +23,16 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Добавить контакт"
+            android:textColor="@android:color/white"
             android:id="@+id/labelFriendEdit"
             android:layout_gravity="center" />
 
-        <ImageView
+        <ImageButton
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:src="@drawable/close_ico"
             android:layout_marginRight="20dp"
+            android:id="@+id/imgButtonDiscard"
             android:layout_gravity="end|bottom"/>
     </FrameLayout>
 

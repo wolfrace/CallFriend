@@ -11,6 +11,13 @@
     android:background="@android:color/white"
     android:textColor= "#737373">
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView" >
+        <RelativeLayout
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent">
     <FrameLayout
         android:layout_width="390dp"
         android:layout_height="250dp"
@@ -86,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/textView"
+                android:id="@+id/fe_textViewEvents"
                 android:layout_column="1"
                 android:layout_gravity="center_vertical"
                 android:clickable="true" />
@@ -102,4 +109,6 @@
         android:id="@+id/fe_dates"
         android:layout_marginLeft="20dp"
          />
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>
