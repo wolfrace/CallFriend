@@ -15,4 +15,7 @@
     <string name="event_action_put_off">Отложить</string>
     <string name="event_action_dismiss">Отклонить</string>
     <string name="events_not_existing_notify">У вас нет новых событий.</string>
+    <string name="save_button_title">Сохранить</string>
+    <string name="cancel_button_title">Отменить</string>
+    <string name="add_contact_layout_title">Добавить контакт</string>
 </resources>

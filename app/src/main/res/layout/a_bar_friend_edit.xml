@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_marginTop="10px"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start|bottom"
+        android:id="@+id/imgButtonSave"
+        android:background="@color/text_days_left_color_urgently"
+        android:layout_weight="0"
+        android:contentDescription="@string/save_button_title" />
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-         >
+        android:layout_height="match_parent"
+        android:textSize="@dimen/standard_text_size"
+        android:text="@string/add_contact_layout_title"
+        android:textAlignment="center"
+        android:id="@+id/labelFriendEdit"
+        android:textColor="@android:color/black"
+        android:layout_weight="1"
+        android:gravity="center" />
 
-        <ImageButton
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="start|bottom"
-            android:id="@+id/imgButtonSave"
-            android:src="@drawable/ok_ico"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Добавить контакт"
-            android:textColor="@android:color/white"
-            android:id="@+id/labelFriendEdit"
-            android:layout_gravity="center" />
-
-        <ImageButton
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/close_ico"
-            android:layout_marginRight="20dp"
-            android:id="@+id/imgButtonDiscard"
-            android:layout_gravity="end|bottom"/>
-    </FrameLayout>
+    <ImageButton
+        android:layout_width="48dp"
+        android:layout_height="match_parent"
+        android:background="@color/text_days_left_color_urgently"
+        android:id="@+id/imgButtonDiscard"
+        android:layout_weight="0"
+        android:contentDescription="@string/cancel_button_title" />
 
 </LinearLayout>
