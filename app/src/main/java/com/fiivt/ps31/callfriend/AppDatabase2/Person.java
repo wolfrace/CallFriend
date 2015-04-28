@@ -16,9 +16,9 @@ public class Person {
     private Integer id;
     private String name;
     private  boolean isMale;
-    private Image photo;
+    private byte[] photo;
 
-    public Person(String name, Image photo, boolean isMale)
+    public Person(String name, boolean isMale, byte[] photo)
     {
         this.id = 0;
         this.name = name;
@@ -26,7 +26,7 @@ public class Person {
         this.isMale = isMale;
     }
 
-    public Person(Integer id, String name, Image photo, boolean isMale)
+    public Person(Integer id, String name, boolean isMale, byte[] photo)
     {
         this.id = id;
         this.name = name;
