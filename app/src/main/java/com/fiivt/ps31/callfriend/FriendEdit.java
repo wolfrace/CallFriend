@@ -17,7 +17,7 @@ public class FriendEdit extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friend_edit);
+        setContentView(R.layout.friend_edit_activity);
         setCustomActionBar();
     }
 
@@ -28,7 +28,7 @@ public class FriendEdit extends ActionBarActivity {
         mActionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
-        View mCustomView = mInflater.inflate(R.layout.add_friend_action_bar, null);
+        View mCustomView = mInflater.inflate(R.layout.friend_edit_action_bar, null);
         setMinimalWidthAsScreenWidth(mCustomView);
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);

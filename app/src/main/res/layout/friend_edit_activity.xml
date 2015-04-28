@@ -1,0 +1,107 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@color/background_blue_light">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/friend_avatar"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/photo" />
+
+            </FrameLayout>
+
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fe_personalData"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="50dp">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                   >
+                    <FrameLayout
+                        android:layout_width="50dp"
+                        android:layout_height="50dp">
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imageView2"
+                            android:layout_column="0"
+                            android:layout_gravity="center"
+                            android:src="@drawable/human_ico"/>
+                    </FrameLayout>
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/friend_name_edit_text"
+                        android:layout_column="1"
+                        android:longClickable="false"
+                        android:singleLine="true"
+                        android:selectAllOnFocus="false"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:hint="@string/friend_name_hint" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <FrameLayout
+                        android:layout_width="50dp"
+                        android:layout_height="50dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/imageView3"
+                            android:layout_column="0"
+                            android:src="@drawable/calendar_ico"
+                            android:layout_gravity="center"/>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Medium Text"
+                        android:id="@+id/fe_textViewEvents"
+                        android:layout_column="1"
+                        android:layout_gravity="center_vertical"
+                        android:clickable="true" />
+
+                </TableRow>
+
+            </TableLayout>
+
+                <ListView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/significant_dates"
+                    android:layout_marginLeft="20dp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>
