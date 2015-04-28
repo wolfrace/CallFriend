@@ -175,4 +175,62 @@ public class AppDb extends  Singleton {
         return new EventTemplate(cursor.getInt(0), cursor.getString(1),
                 cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
     }
+
+    // PersonTemplate API
+    // personTemplate(idPersonTemplate INTEGER, idPerson INTEGER, idTemplate INTEGER, customDate DATE, cooldown DATE);
+
+    public void addPersonTemplate(PersonTemplate personTemplate) {
+        db.execSQL("INSERT INTO personTemplate(idPerson, idTemplate, customDate, cooldown) VALUES('"
+            + personTemplate.getPerson().getId()        + "','"
+            + personTemplate.getEventTemplate().getId() + "','"
+            + personTemplate.getCustomDate().getTime()  + "','"
+            + personTemplate.getCooldown().getTime()    + "');");
+    }
+
+    public void updatePersonTemplate(PersonTemplate personTemplate) {
+        db.execSQL("UPDATE eventTemplate set"
+            + " idPerson='"     + personTemplate.getPerson().getId()
+            + "' idTemplate='"  + personTemplate.getEventTemplate().getId()
+            + "' customDate='"  + personTemplate.getCustomDate().getTime()
+            + "' cooldown='"    + personTemplate.getCooldown().getTime()
+            + "';");
+    }
+
+    // Удалятся все запланированные по персональному шаблону события
+    public void deletePersonTemplate(PersonTemplate personTemplate) {
+        deleteEventsByPersonTemplate(personTemplate.getId());
+
+        db.execSQL("DELETE FROM personTemplate"
+                + " WHERE idPersonTemplate='" + personTemplate.getId()
+                + "';");
+    }
+
+    public PersonTemplate getPersonTemplate(int id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE idPersonTemplate='" + id + "';", null);
+        cursor.moveToNext();
+        Person person = getPerson(cursor.getInt(1));
+        EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+
+        return new PersonTemplate(cursor.getInt(0), person,
+                eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)));
+    }
+
+    public ArrayList<PersonTemplate> getPersonTemplates(int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset > 0 : "Offset must be great than 0";
+        ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate LIMIT " + limit + " OFFSET " + offset, null);
+
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+
+            PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
+                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)));
+            personTemplates.add(pt);
+        }
+
+        return personTemplates;
+    }
 }
