@@ -5,6 +5,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,12 +19,14 @@ import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 
 public class EventsActivity extends ActionBarActivity {
 
     public AppDb database;
 
+    private View eventListEmptyNotify;
     private EventsListView eventsListUrgently;
     private EventsListView eventsListSoon;
 
@@ -70,32 +74,44 @@ public class EventsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.events_activity);
+        eventListEmptyNotify = findViewById(R.id.events_not_existing_notify);
         initEventsLists();
 
         database = new AppDb(this);
         // todo Remove test
         test(database);
         // test end
-        addEvents(database.getEvents());
+        addEventsToView(database.getEvents());
     }
 
     public void dismissEvent(Event event) {
-        //todo remove(update) event from db and view
+        //todo remove(update template) from db
+        removeEventFromView(event);
     }
 
     public void acceptEvent(Event event) {
-        //todo remove(update) event from db and view
+        //todo remove(update template) from db
+        removeEventFromView(event);
     }
 
     public void putOffEvent(Event event) {
-        //todo 1) show time picker?; 2) update event in db; 3) update view;
+        event.putOff(TimeUnit.HOURS, 25);
+        //todo save into db
+        removeEventFromView(event);
+        addEventToView(event);
     }
 
-    public void addEvent(Event event) {
-        addEvents(Collections.singleton(event));
+    public void removeEventFromView(Event event) {
+        eventsListUrgently.removeById(event.getId());
+        eventsListSoon.removeById(event.getId());
+        notifyOnEventListChanged();
     }
 
-    public void addEvents(Collection<Event> events) {
+    public void addEventToView(Event event) {
+        addEventsToView(Collections.singleton(event));
+    }
+
+    public void addEventsToView(Collection<Event> events) {
         List<Event> soon = new ArrayList<Event>();
         List<Event> urgently = new ArrayList<Event>();
 
@@ -114,6 +130,12 @@ public class EventsActivity extends ActionBarActivity {
         if (!urgently.isEmpty()) {
             eventsListUrgently.addAll(urgently);
         }
+        notifyOnEventListChanged();
+    }
+
+    private void notifyOnEventListChanged() {
+        boolean isEmpty = (eventsListSoon.isEmpty() && eventsListUrgently.isEmpty());
+        eventListEmptyNotify.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
     private void initEventsLists() {

@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/events_not_existing_notify"
+        android:text="@string/events_not_existing_notify"
+        android:textColor="@color/text_color_light"
+        android:textSize="@dimen/standard_text_size"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        android:gravity="center" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">

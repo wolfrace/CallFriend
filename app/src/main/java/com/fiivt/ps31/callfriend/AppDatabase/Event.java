@@ -32,12 +32,21 @@ public class Event {
         if (date == null) {
             return 0;
         }
-        long timeLeft = date.getTime() - new Date().getTime();
+        long timeLeft = date.getTime() - System.currentTimeMillis();
         if (timeLeft > 0) {
             long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
             return (int) daysLeft;
         } else {
             return 0;
         }
+    }
+
+    public void putOff(TimeUnit unit, int amount) {
+        long delay = unit.toMillis(amount);
+        long dateAsMillis = System.currentTimeMillis();
+        if (date != null && dateAsMillis < date.getTime()) {
+            dateAsMillis = date.getTime();
+        }
+        date = new Date(dateAsMillis + delay);
     }
 }

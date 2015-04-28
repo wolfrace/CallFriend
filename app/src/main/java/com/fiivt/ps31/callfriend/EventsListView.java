@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,6 +37,10 @@ public class EventsListView extends LinearLayout {
             return (d1 == null) ? -1 : d1.compareTo(d2);
         }
     };
+
+    public boolean isEmpty() {
+        return eventAdapter.isEmpty();
+    }
 
     public interface OnEventClickListener {
         public void onClick(Event event);
@@ -60,6 +65,22 @@ public class EventsListView extends LinearLayout {
 
         processAttributes(context, attrs);
         initEventsList();
+    }
+
+    public void removeById(int id) {
+        boolean isRemoved = false;
+        Iterator<Event> it = eventAdapter.getValues().iterator();
+        while (it.hasNext()) {
+            Event event = it.next();
+            if (event.getId() == id) {
+                it.remove();
+                isRemoved = true;
+            }
+        }
+
+        if (isRemoved) {
+            notifyOnChanged();
+        }
     }
 
     public void setClickListener(OnEventClickListener listener) {
@@ -90,20 +111,20 @@ public class EventsListView extends LinearLayout {
     public void addAll(Collection<Event> events) {
         if (events != null && !events.isEmpty()) {
             eventAdapter.getValues().addAll(events);
-            eventAdapter.notifyDataSetChanged();
+            notifyOnChanged();
         }
     }
 
     public void add(Event event) {
         if (event != null) {
             eventAdapter.getValues().add(event);
-            eventAdapter.notifyDataSetChanged();
+            notifyOnChanged();
         }
     }
 
     private void initEventsList() {
         final ListView listView = (ListView) findViewById(R.id.events_list_view);
-        eventAdapter = new EventAdapter(getContext(), listView);
+        eventAdapter = new EventAdapter(getContext());
         listView.setAdapter(eventAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,6 +136,7 @@ public class EventsListView extends LinearLayout {
                 }
             }
         });
+        notifyOnChanged();
     }
 
     private void processAttributes(Context context, AttributeSet attrs) {
@@ -148,12 +170,20 @@ public class EventsListView extends LinearLayout {
         }
     }
 
+    private void notifyOnChanged() {
+        int visibility = eventAdapter.getValues().isEmpty()
+            ? View.GONE
+            : View.VISIBLE;
+        setVisibility(visibility);
+        eventAdapter.notifyDataSetChanged();
+    }
+
     public class EventAdapter extends ArrayAdapter<Event> {
         @Getter
         private final List<Event> values;
         private final Context context;
 
-        public EventAdapter(Context context, ListView listView) {
+        public EventAdapter(Context context) {
             super(context, R.layout.event_list_item);
             this.context = context;
             this.values = new ArrayList<Event>();
