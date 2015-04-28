@@ -16,7 +16,7 @@ public class EventTemplate {
     private boolean canModified;
 
 
-    public EventTemplate(Integer id, String info, Date defaultDate, Integer idIcon, boolean canModified) {
+    public EventTemplate(Integer id, String info, boolean canModified, Date defaultDate, Integer idIcon) {
         this.id = id;
         this.info = info;
         this.defaultDate = defaultDate;
@@ -24,7 +24,7 @@ public class EventTemplate {
         this.canModified = canModified;
     }
 
-    public EventTemplate(String info, Date defaultDate, Integer idIcon, boolean canModified) {
+    public EventTemplate(String info, boolean canModified, Date defaultDate, Integer idIcon) {
         this.id = 0;
         this.info = info;
         this.defaultDate = defaultDate;

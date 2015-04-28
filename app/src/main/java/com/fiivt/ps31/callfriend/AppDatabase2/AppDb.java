@@ -3,8 +3,6 @@ package com.fiivt.ps31.callfriend.AppDatabase2;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.fiivt.ps31.callfriend.AppDatabase.*;
-import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 
 import java.util.ArrayList;
@@ -55,14 +53,14 @@ public class AppDb extends  Singleton {
     // ”далит все персонализированные шаблоны и запланированные событи€
     public void deletePerson(Person person) {
         deleteEventsByPerson(person);
-        deletePersonEventsByPerson(person);
+        deletePersonTemplatesByPerson(person);
 
         db.execSQL("DELETE FROM person"
             + " WHERE idPerson='" + person.getId()
             + "';");
     }
 
-    private void deletePersonEventsByPerson(Person person) {
+    private void deletePersonTemplatesByPerson(Person person) {
         db.execSQL("DELETE FROM personTemplate"
             + " WHERE idPerson='" + person.getId()
             + "';");
@@ -74,24 +72,25 @@ public class AppDb extends  Singleton {
             + "';");
     }
 
-    public List<Person> getPersons(int limit) {
-        assert limit > 0;
-        ArrayList<Person> person = new ArrayList<Person>();
+    public List<Person> getPersons(int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset > 0 : "Offset must be great than 0";
+        ArrayList<Person> persons = new ArrayList<Person>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
             Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getBlob(3));
-            person.add(p);
+            persons.add(p);
         }
 
-        return person;
+        return persons;
     }
 
-    public Person getPerson(Integer id) {
+    public Person getPerson(int id) {
         Cursor cursor = db.rawQuery("SELECT * FROM person WHERE idPerson='" + id + "';", null);
         cursor.moveToNext();
-        Person p = new Person(cursor.getInt(0)
+        return new Person(cursor.getInt(0)
                 , cursor.getString(1)
                 , cursor.getString(2).equalsIgnoreCase("TRUE")
                 , cursor.getBlob(3));
@@ -100,25 +99,80 @@ public class AppDb extends  Singleton {
     // Templates API
     public void AddEventTemplate(EventTemplate eventTemplate) {
         db.execSQL("INSERT INTO eventTemplate(info, canModified, defaultDate, idIcon) VALUES('"
-            + eventTemplate.getInfo()                   + "','"
-            + eventTemplate.isCanModified()             + "','"
-            + eventTemplate.getDefaultDate().getTime()  + "','"
-            + eventTemplate.getIdIcon()                 + "');");
+                + eventTemplate.getInfo() + "','"
+                + eventTemplate.isCanModified() + "','"
+                + eventTemplate.getDefaultDate().getTime() + "','"
+                + eventTemplate.getIdIcon() + "');");
     }
 
     public void updateEventTemplate(EventTemplate eventTemplate) {
-
+        db.execSQL("UPDATE eventTemplate set"
+                + " info='" + eventTemplate.getInfo()
+                + "' canModified='" + eventTemplate.isCanModified()
+                + "' defaultDate='" + eventTemplate.getDefaultDate().getTime()
+                + "' idIcon='" + eventTemplate.getIdIcon()
+                + "';");
     }
 
+    // ”дал€тс€ все персонализированные шаблоны и запланированыые событи€ по ним
     public void deleteEventTemplate(EventTemplate eventTemplate) {
+        deletePersonTemplatesByEventTemplate(eventTemplate);
 
+        db.execSQL("DELETE FROM eventTemplate"
+                + " WHERE idEventTemplate='" + eventTemplate.getId()
+                + "';");
     }
 
-    public List<EventTemplate> getEventTemplates() {
-        return null;
+    private void deleteEventsByPersonTemplate(int id) {
+        db.execSQL("DELETE FROM event"
+                + " WHERE idPerson='" + id
+                + "';");
     }
 
-    public EventTemplate getEventTemplate() {
-        return null;
+    // ”дал€тс€ все запланированные по персональным шаблонам событи€
+    private void deletePersonTemplatesByEventTemplate(EventTemplate eventTemplate) {
+        ArrayList<Integer> personTemplateIds = getPersonTemplateIdsByEventTemplate(eventTemplate);
+        for (Integer id : personTemplateIds) {
+            deleteEventsByPersonTemplate(id);
+        }
+
+        db.execSQL("DELETE FROM personTemplate"
+                + " WHERE idTemplate='" + eventTemplate.getId()
+                + "';");
+    }
+
+    private ArrayList<Integer> getPersonTemplateIdsByEventTemplate(EventTemplate eventTemplate) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+
+        Cursor cursor = db.rawQuery("SELECT idPersonTemplate FROM personTemplate WHERE idTemplate='" + eventTemplate.getId() + "';", null);
+
+        while(cursor.moveToNext()) {
+            result.add(cursor.getInt(0));
+        }
+
+        return result;
+    }
+
+    public List<EventTemplate> getEventTemplates(int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset > 0 : "Offset must be great than 0";
+        ArrayList<EventTemplate> eventTemplates = new ArrayList<EventTemplate>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate LIMIT " + limit + " OFFSET " + offset, null);
+
+        while(cursor.moveToNext()) {
+            EventTemplate et = new EventTemplate(cursor.getInt(0), cursor.getString(1),
+                    cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
+            eventTemplates.add(et);
+        }
+
+        return eventTemplates;
+    }
+
+    public EventTemplate getEventTemplate(int id) {
+        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate  WHERE idEventTemplate='" + id + "';", null);
+        cursor.moveToNext();
+        return new EventTemplate(cursor.getInt(0), cursor.getString(1),
+                cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
     }
 }
