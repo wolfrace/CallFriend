@@ -32,10 +32,34 @@ public class PersonActivity extends Activity {
         Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
         Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
         Person tmpPerson3 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson4 = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson5 = new Person("Lena Lobkova", new Date(), false);
+        Person tmpPerson6 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson7 = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson8 = new Person("Lena Lobkova", new Date(), false);
+        Person tmpPerson9 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson10 = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson11 = new Person("Lena Lobkova", new Date(), false);
+        Person tmpPerson12 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson13 = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson14 = new Person("Lena Lobkova", new Date(), false);
+        Person tmpPerson15 = new Person("Danil Lobkov", new Date(), true);
 
         db.addPerson(tmpPerson);
         db.addPerson(tmpPerson2);
         db.addPerson(tmpPerson3);
+        db.addPerson(tmpPerson4);
+        db.addPerson(tmpPerson5);
+        db.addPerson(tmpPerson6);
+        db.addPerson(tmpPerson7);
+        db.addPerson(tmpPerson8);
+        db.addPerson(tmpPerson9);
+        db.addPerson(tmpPerson10);
+        db.addPerson(tmpPerson11);
+        db.addPerson(tmpPerson12);
+        db.addPerson(tmpPerson13);
+        db.addPerson(tmpPerson14);
+        db.addPerson(tmpPerson15);
 
         List<Person> persons = db.getPersons();
         {

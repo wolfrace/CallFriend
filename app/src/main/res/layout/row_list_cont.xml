@@ -2,19 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="fill_parent"
-              android:layout_height="60dp" >
+              android:layout_height="56dp" >
 
     <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/profile_image"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:src="@color/avatar_holder_background_color"
             app:border_width="0dp"
             app:border_color="#FF000000"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp" />
+            android:layout_marginTop = "8dp"
+            android:layout_marginBottom = "8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp" />
 
     <LinearLayout
             android:orientation="vertical"

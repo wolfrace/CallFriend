@@ -5,7 +5,10 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".PersonActivity">
+        tools:context=".PersonActivity"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        >
 
         <ListView
                 android:layout_width="fill_parent"
@@ -20,7 +23,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                                 >
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -29,8 +32,6 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_person_add_white_36dp"
                 android:layout_centerInParent="true"
-
-
                />
 
 
