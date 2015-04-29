@@ -27,78 +27,101 @@
 
             </FrameLayout>
 
-            <TableLayout
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@color/circle_button_color"
+                        android:layout_width="72dp"
+                        android:layout_height="50dp" />
+
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/friend_name_edit_text"
+                        android:singleLine="true"
+                        android:textColor="@color/text_color_secondary"
+                        android:textSize="@dimen/standard_text_size"
+                        android:hint="@string/friend_name_hint"
+                        android:inputType="textPersonName" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:background="@color/circle_button_color"
+                        android:layout_width="72dp"
+                        android:layout_height="50dp" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <TextView
+                            android:layout_width="fill_parent"
+                            android:layout_height="0dp"
+                            android:textSize="@dimen/standard_text_size"
+                            android:textColor="@color/text_color_darkness"
+                            android:text="@string/significant_events_title"
+                            android:id="@+id/fe_textViewEvents"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:layout_marginLeft="12dp" />
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#32000000"
+                            android:layout_marginBottom="2dp"
+                            android:layout_marginLeft="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/fe_personalData"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="50dp">
+                android:id="@+id/significant_events_list"/>
 
-                <TableRow
+            <LinearLayout
+                android:id="@+id/add_significant_event_button"
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@color/circle_button_color"
+                    android:layout_width="72dp"
+                    android:layout_height="50dp" />
+
+                <TextView
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                   >
-                    <FrameLayout
-                        android:layout_width="50dp"
-                        android:layout_height="50dp">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/imageView2"
-                            android:layout_column="0"
-                            android:layout_gravity="center"
-                            android:src="@drawable/human_ico"/>
-                    </FrameLayout>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="textPersonName"
-                        android:ems="10"
-                        android:id="@+id/friend_name_edit_text"
-                        android:layout_column="1"
-                        android:longClickable="false"
-                        android:singleLine="true"
-                        android:selectAllOnFocus="false"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:hint="@string/friend_name_hint" />
-                </TableRow>
+                    android:layout_height="fill_parent"
+                    android:text="@string/add_significant_event_button_text"
+                    android:textColor="@color/text_color_secondary"
+                    android:textSize="@dimen/standard_text_size"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="12dp" />
 
-                <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
 
-                    <FrameLayout
-                        android:layout_width="50dp"
-                        android:layout_height="50dp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/imageView3"
-                            android:layout_column="0"
-                            android:src="@drawable/calendar_ico"
-                            android:layout_gravity="center"/>
-                    </FrameLayout>
-
-                    <TextView
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Medium Text"
-                        android:id="@+id/fe_textViewEvents"
-                        android:layout_column="1"
-                        android:layout_gravity="center_vertical"
-                        android:clickable="true" />
-
-                </TableRow>
-
-            </TableLayout>
-
-                <ListView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/significant_dates"
-                    android:layout_marginLeft="20dp" />
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -19,4 +19,6 @@
     <string name="cancel_button_title">Отменить</string>
     <string name="add_contact_layout_title">Добавить контакт</string>
     <string name="friend_name_hint">Имя контакта</string>
+    <string name="significant_events_title">Значимые события</string>
+    <string name="add_significant_event_button_text">Добавить особое событие</string>
 </resources>
