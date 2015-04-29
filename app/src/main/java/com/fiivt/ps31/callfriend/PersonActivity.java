@@ -73,7 +73,7 @@ public class PersonActivity extends Activity {
         test(database);
         setContentView(R.layout.person_list_layout);
 
-        CircleImageView addPersonButton = (CircleImageView)findViewById(R.id.person_add_image);
+        ImageView addPersonButton = (ImageView)findViewById(R.id.person_add_image);
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
