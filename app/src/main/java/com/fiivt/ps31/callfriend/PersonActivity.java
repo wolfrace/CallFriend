@@ -3,6 +3,7 @@ package com.fiivt.ps31.callfriend;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -101,6 +102,7 @@ public class PersonActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+               //addPersonButton.setBackgroundColor(Color.GRAY);
                Intent intent = new Intent(PersonActivity.this, EventsActivity.class);
                 startActivity(intent);
             }
