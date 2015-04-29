@@ -33,17 +33,17 @@ public class PersonActivity extends Activity {
         Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
         Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
         Person tmpPerson3 = new Person("Danil Lobkov", new Date(), true);
-        Person tmpPerson4 = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson5 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson6 = new Person("Danil Lobkov", new Date(), true);
-        Person tmpPerson7 = new Person("Kolya Lobkov", new Date(), true);
+        Person tmpPerson4 = new Person("Nikolay Lobkov", new Date(), true);
+        Person tmpPerson5 = new Person("Mikhail Lobkova", new Date(), false);
+        Person tmpPerson6 = new Person("Andrey Lobkov", new Date(), true);
+        Person tmpPerson7 = new Person("Grisha Lobkov", new Date(), true);
         Person tmpPerson8 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson9 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson9 = new Person("Sobaka Lobkova", new Date(), true);
         Person tmpPerson10 = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson11 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson12 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson11 = new Person("Lucya Lobkova", new Date(), false);
+        Person tmpPerson12 = new Person("Egor Lobkov", new Date(), true);
         Person tmpPerson13 = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson14 = new Person("Lena Lobkova", new Date(), false);
+        Person tmpPerson14 = new Person("Alexander Lobkova", new Date(), false);
         Person tmpPerson15 = new Person("Danil Lobkov", new Date(), true);
 
         db.addPerson(tmpPerson);
@@ -102,8 +102,8 @@ public class PersonActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //addPersonButton.setBackgroundColor(Color.GRAY);
-               Intent intent = new Intent(PersonActivity.this, EventsActivity.class);
+               //addPersonButton.setBackgroundColor();
+               Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
         });
