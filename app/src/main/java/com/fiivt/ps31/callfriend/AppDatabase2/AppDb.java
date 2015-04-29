@@ -1,11 +1,13 @@
 package com.fiivt.ps31.callfriend.AppDatabase2;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,10 +38,13 @@ public class AppDb extends  Singleton {
 
     //  Persons API
     public void addPerson(Person person) {
-        db.execSQL("INSERT INTO person(name, isMale, photo) VALUES('"
-            + person.getName()  + "','"
-            + person.isMale()   + "','"
-            + person.getIdPhoto() + "');");
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("name", person.getName());
+        insertValues.put("isMale", person.isMale());
+        insertValues.put("photo", person.getIdPhoto());
+
+        long id = db.insert("person", null, insertValues);
+        person.setId((int)id);
     }
 
     public void updatePerson(Person person) {
@@ -99,11 +104,14 @@ public class AppDb extends  Singleton {
 
     // Templates API
     public void addEventTemplate(EventTemplate eventTemplate) {
-        db.execSQL("INSERT INTO eventTemplate(info, canModified, defaultDate, idIcon) VALUES('"
-                + eventTemplate.getInfo() + "','"
-                + eventTemplate.isCanModified() + "','"
-                + eventTemplate.getDefaultDate().getTime() + "','"
-                + eventTemplate.getIdIcon() + "');");
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("info", eventTemplate.getInfo());
+        insertValues.put("canModified", eventTemplate.isCanModified());
+        insertValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
+        insertValues.put("idIcon", eventTemplate.getIdIcon());
+
+        long id = db.insert("eventTemplate", null, insertValues);
+        eventTemplate.setId((int) id);
     }
 
     public void updateEventTemplate(EventTemplate eventTemplate) {
@@ -181,11 +189,14 @@ public class AppDb extends  Singleton {
     // PersonTemplate API
 
     public void addPersonTemplate(PersonTemplate personTemplate) {
-        db.execSQL("INSERT INTO personTemplate(idPerson, idTemplate, customDate, cooldown) VALUES('"
-            + personTemplate.getPerson().getId()        + "','"
-            + personTemplate.getEventTemplate().getId() + "','"
-            + personTemplate.getCustomDate().getTime()  + "','"
-            + personTemplate.getCooldown().getTime()    + "');");
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("idPerson", personTemplate.getPerson().getId());
+        insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        insertValues.put("customDate", personTemplate.getCustomDate().getTime());
+        insertValues.put("cooldown", personTemplate.getCooldown().getTime());
+
+        long id = db.insert("personTemplate", null, insertValues);
+        personTemplate.setId((int) id);
     }
 
     public void updatePersonTemplate(PersonTemplate personTemplate) {
@@ -240,12 +251,15 @@ public class AppDb extends  Singleton {
     // Event API
 
     public void addEvent(Event event) {
-        db.execSQL("INSERT INTO event(idPerson, idPersonTemplate, info, date, status) VALUES('"
-            + event.getPerson().getId()             + "','"
-            + event.getPersonTemplate().getId()     + "','"
-            + event.getInfo()                       + "','"
-            + event.getDate().getTime()             + "','"
-            + Status.toInteger(event.getStatus())   + "');");
+        ContentValues insertValues = new ContentValues();
+        insertValues.put("idPerson", event.getPerson().getId());
+        insertValues.put("idPersonTemplate", event.getPersonTemplate().getId());
+        insertValues.put("info", event.getInfo());
+        insertValues.put("date", event.getDate().getTime());
+        insertValues.put("status", Status.toInteger(event.getStatus()));
+
+        long id = db.insert("event", null, insertValues);
+        event.setId((int)id);
     }
 
     public void updateEvent(Event event) {
