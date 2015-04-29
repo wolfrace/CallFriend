@@ -39,14 +39,14 @@ public class AppDb extends  Singleton {
         db.execSQL("INSERT INTO person(name, isMale, photo) VALUES('"
             + person.getName()  + "','"
             + person.isMale()   + "','"
-            + person.getPhoto() + "');");
+            + person.getIdPhoto() + "');");
     }
 
     public void updatePerson(Person person) {
         db.execSQL("UPDATE person set"
             + " name='"             + person.getName()
             + "' isMale='"          + person.isMale()
-            + "' photo='"           + person.getPhoto()
+            + "' photo='"           + person.getIdPhoto()
             + "' WHERE idPerson='"  + person.getId()
             + "';");
     }
@@ -75,13 +75,13 @@ public class AppDb extends  Singleton {
 
     public List<Person> getPersons(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
-        assert  offset > 0 : "Offset must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Person> persons = new ArrayList<Person>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getBlob(3));
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
             persons.add(p);
         }
 
@@ -94,11 +94,11 @@ public class AppDb extends  Singleton {
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
                 , cursor.getString(2).equalsIgnoreCase("TRUE")
-                , cursor.getBlob(3));
+                , cursor.getInt(3));
     }
 
     // Templates API
-    public void AddEventTemplate(EventTemplate eventTemplate) {
+    public void addEventTemplate(EventTemplate eventTemplate) {
         db.execSQL("INSERT INTO eventTemplate(info, canModified, defaultDate, idIcon) VALUES('"
                 + eventTemplate.getInfo() + "','"
                 + eventTemplate.isCanModified() + "','"
@@ -112,7 +112,7 @@ public class AppDb extends  Singleton {
                 + "' canModified='" + eventTemplate.isCanModified()
                 + "' defaultDate='" + eventTemplate.getDefaultDate().getTime()
                 + "' idIcon='" + eventTemplate.getIdIcon()
-                + "' WHERE idEventTemplate='" + eventTemplate.getId()
+                + "' WHERE idTemplate='" + eventTemplate.getId()
                 + "';");
     }
 
@@ -121,7 +121,7 @@ public class AppDb extends  Singleton {
         deletePersonTemplatesByEventTemplate(eventTemplate);
 
         db.execSQL("DELETE FROM eventTemplate"
-                + " WHERE idEventTemplate='" + eventTemplate.getId()
+                + " WHERE idTemplate='" + eventTemplate.getId()
                 + "';");
     }
 
@@ -157,7 +157,7 @@ public class AppDb extends  Singleton {
 
     public List<EventTemplate> getEventTemplates(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
-        assert  offset > 0 : "Offset must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<EventTemplate> eventTemplates = new ArrayList<EventTemplate>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate LIMIT " + limit + " OFFSET " + offset, null);
@@ -172,7 +172,7 @@ public class AppDb extends  Singleton {
     }
 
     public EventTemplate getEventTemplate(int id) {
-        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate  WHERE idEventTemplate='" + id + "';", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate WHERE idTemplate='" + id + "'", null);
         cursor.moveToNext();
         return new EventTemplate(cursor.getInt(0), cursor.getString(1),
                 cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
@@ -208,8 +208,9 @@ public class AppDb extends  Singleton {
     }
 
     public PersonTemplate getPersonTemplate(int id) {
-        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE idPersonTemplate='" + id + "';", null);
-        cursor.moveToNext();
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE idPersonTemplate='" + id + "'", null);
+        if (!cursor.moveToNext())
+            return null;
         Person person = getPerson(cursor.getInt(1));
         EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
 
@@ -219,7 +220,7 @@ public class AppDb extends  Singleton {
 
     public ArrayList<PersonTemplate> getPersonTemplates(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
-        assert  offset > 0 : "Offset must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM personTemplate LIMIT " + limit + " OFFSET " + offset, null);
@@ -276,7 +277,7 @@ public class AppDb extends  Singleton {
 
     public ArrayList<Event> getEvents(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
-        assert  offset > 0 : "Offset must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Event> events = new ArrayList<Event>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit + " OFFSET " + offset, null);

@@ -16,21 +16,21 @@ public class Person {
     private Integer id;
     private String name;
     private  boolean isMale;
-    private byte[] photo;
+    private int idPhoto;
 
-    public Person(String name, boolean isMale, byte[] photo)
+    public Person(String name, boolean isMale, int idPhoto)
     {
         this.id = 0;
         this.name = name;
-        this.photo = photo;
+        this.idPhoto = idPhoto;
         this.isMale = isMale;
     }
 
-    public Person(Integer id, String name, boolean isMale, byte[] photo)
+    public Person(Integer id, String name, boolean isMale, int idPhoto)
     {
         this.id = id;
         this.name = name;
-        this.photo = photo;
+        this.idPhoto = idPhoto;
         this.isMale = isMale;
     }
 }

@@ -6,16 +6,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase.Event;
-import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase2.*;
 import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
 
 import java.util.Date;
@@ -31,42 +28,59 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListSoon;
 
     public void test(AppDb db) {
-        Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson3 = new Person("Danil Lobkov", new Date(), true);
+        Person tmpPerson = new Person("Kolya Lobkov", true, 1);
+        Person tmpPerson2 = new Person("Lena Lobkova", false, 2);
+        Person tmpPerson3 = new Person("Danil Lobkov", true, 3);
 
         db.addPerson(tmpPerson);
         db.addPerson(tmpPerson2);
         db.addPerson(tmpPerson3);
 
-        List<Person> persons = db.getPersons();
+        List<Person> persons = db.getPersons(100, 0);
         {
+            EventTemplate et = new EventTemplate("Поздравить с днем вафли", true, new Date(), 0);
+            EventTemplate et2 = new EventTemplate("Позвать синячить", true, new Date(), 0);
+            db.addEventTemplate(et);
+            db.addEventTemplate(et2);
+
+            et = db.getEventTemplate(1);
+            et2 = db.getEventTemplate(2);
+
+
             Person p = db.getPerson(1);
             Person p2 = db.getPerson(2);
             Person p3 = db.getPerson(3);
-            Event e = new Event("Поздавить с днем вафли", new Date(), p);
+
+            PersonTemplate pt = new PersonTemplate(p, et, new Date(), new Date(TimeUnit.DAYS.toMillis(1)));
+            PersonTemplate pt2 = new PersonTemplate(p2, et, new Date(), new Date(TimeUnit.DAYS.toMillis(2)));
+            PersonTemplate pt3 = new PersonTemplate(p3, et, new Date(), new Date(TimeUnit.DAYS.toMillis(3)));
+            PersonTemplate pt4 = new PersonTemplate(p3, et2, new Date(), new Date(TimeUnit.DAYS.toMillis(3)));
+
+            db.addPersonTemplate(pt);
+            db.addPersonTemplate(pt2);
+            db.addPersonTemplate(pt3);
+            db.addPersonTemplate(pt4);
+
+            pt = db.getPersonTemplate(1);
+            pt2 = db.getPersonTemplate(2);
+            pt3 = db.getPersonTemplate(3);
+            pt4 = db.getPersonTemplate(4);
+
+            Event e = pt.generateEvent();
             db.addEvent(e);
 
-            List<Event> oldEvents = db.getExpiredEvents();
-            List<Event> allEvents = db.getEvents();
+            List<Event> allEvents = db.getEvents(Integer.MAX_VALUE, 0);
 
-            Event e2 = new Event("Позвать в кино", new Date(1430050904956L), p2);
+            Event e2 = pt2.generateEvent();
             db.addEvent(e2);
 
 
-            Event e4 = new Event("Позвать в мак", new Date(1450050904956L), p3);
+            Event e4 = pt4.generateEvent();
             db.addEvent(e4);
 
 
-            Event e3 = new Event("Поздавить с днем вафли", new Date(1430450904956L), p3);
+            Event e3 = pt3.generateEvent();
             db.addEvent(e3);
-
-//            db.deleteEvent(allEvents.get(0).getId());
-            allEvents = db.getEvents();
-
-//            db.deletePerson(p3.getId());
-            persons = db.getPersons();
-            allEvents = db.getEvents();
         }
     }
 
@@ -81,7 +95,7 @@ public class EventsActivity extends ActionBarActivity {
         // todo Remove test
         test(database);
         // test end
-        addEventsToView(database.getEvents());
+        addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
     }
 
     public void dismissEvent(Event event) {

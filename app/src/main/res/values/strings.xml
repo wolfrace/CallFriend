@@ -3,6 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_friend_edit">FriendEdit</string>
     <string name="action_friend_list">Contacts</string>
     <string name="action_event_list">Events</string>
     <string name="events_activity_title">События</string>
@@ -15,4 +16,10 @@
     <string name="event_action_put_off">Отложить</string>
     <string name="event_action_dismiss">Отклонить</string>
     <string name="events_not_existing_notify">У вас нет новых событий.</string>
+    <string name="save_button_title">Сохранить</string>
+    <string name="cancel_button_title">Отменить</string>
+    <string name="add_contact_layout_title">Добавить контакт</string>
+    <string name="friend_name_hint">Имя контакта</string>
+    <string name="significant_events_title">Значимые события</string>
+    <string name="add_significant_event_button_text">Добавить особое событие</string>
 </resources>

@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase2.Event;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -163,7 +163,7 @@ public class EventsListView extends LinearLayout {
 
         public void setEventValues(Event event) {
             name.setText(event.getPerson().getName());
-            title.setText(event.getTitle());
+            title.setText(event.getInfo());
             daysLeft.setText(Integer.toString(event.getDaysLeft()));
             //personImage.setImageResource();
             //eventImage.setImageResource();
