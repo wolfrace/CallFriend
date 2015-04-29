@@ -9,7 +9,15 @@
         android:theme="@style/CustomActionBarTheme" >
         <activity
             android:name=".PersonActivity"
-            android:label="@string/events_activity_title" >
+            android:label="@string/persons_activity_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".EventsActivity"
+                android:label="@string/events_activity_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

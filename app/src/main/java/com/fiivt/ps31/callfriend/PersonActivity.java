@@ -2,20 +2,21 @@ package com.fiivt.ps31.callfriend;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import android.view.Gravity;
+import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 
+import java.io.Console;
 import java.util.Date;
 import java.util.List;
 
@@ -65,12 +66,21 @@ public class PersonActivity extends Activity {
         }
     }
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
         test(database);
         setContentView(R.layout.person_list_layout);
 
+        CircleImageView addPersonButton = (CircleImageView)findViewById(R.id.person_add_image);
+        addPersonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               Intent intent = new Intent(PersonActivity.this, EventsActivity.class);
+                startActivity(intent);
+            }
+        });
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
         final List<Person> person = database.getPersons();
         ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
@@ -88,6 +98,7 @@ public class PersonActivity extends Activity {
 //        });
         return true;
     }
+
 
     @Data
     static class PersonViewHolder {
@@ -146,5 +157,14 @@ public class PersonActivity extends Activity {
         public int getCount() {
             return values.size();
         }
+    }
+
+    public void buttonAddOnClick(View v)
+    {
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context,
+                "This is Toast Notification", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 }
