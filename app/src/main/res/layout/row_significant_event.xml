@@ -9,13 +9,13 @@
     <CheckBox
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:id="@+id/checkBox"
+        android:id="@+id/significant_event_checkbox"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:button="@drawable/checkbox"
         android:layout_marginLeft="16dp" />
 
     <TextView
-        android:id="@+id/significant_event_name"
+        android:id="@+id/significant_event_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Example TEXT HERE!"
@@ -29,7 +29,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:id="@+id/significant_event_image"
+        android:id="@+id/significant_event_icon"
         android:src="@color/circle_button_color"
         android:layout_marginRight="16dp" />
 
