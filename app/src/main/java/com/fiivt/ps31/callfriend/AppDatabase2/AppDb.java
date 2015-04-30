@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
+import lombok.ToString;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
@@ -48,12 +49,12 @@ public class AppDb extends  Singleton {
     }
 
     public void updatePerson(Person person) {
-        db.execSQL("UPDATE person set"
-            + " name='"             + person.getName()
-            + "' isMale='"          + person.isMale()
-            + "' photo='"           + person.getIdPhoto()
-            + "' WHERE idPerson='"  + person.getId()
-            + "';");
+        ContentValues newValues = new ContentValues();
+        newValues.put("name", person.getName());
+        newValues.put("isMale", person.getIdPhoto());
+        newValues.put("photo", person.getName());
+
+        db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
     // Удалит все персонализированные шаблоны и запланированные события
@@ -61,21 +62,15 @@ public class AppDb extends  Singleton {
         deleteEventsByPerson(person);
         deletePersonTemplatesByPerson(person);
 
-        db.execSQL("DELETE FROM person"
-            + " WHERE idPerson='" + person.getId()
-            + "';");
+        db.delete("person", "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
     private void deletePersonTemplatesByPerson(Person person) {
-        db.execSQL("DELETE FROM personTemplate"
-            + " WHERE idPerson='" + person.getId()
-            + "';");
+        db.delete("personTemplate", "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
     private void deleteEventsByPerson(Person person) {
-        db.execSQL("DELETE FROM event"
-            + " WHERE idPerson='" + person.getId()
-            + "';");
+        db.delete("event", "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
     public List<Person> getPersons(int limit, int offset) {
@@ -115,28 +110,24 @@ public class AppDb extends  Singleton {
     }
 
     public void updateEventTemplate(EventTemplate eventTemplate) {
-        db.execSQL("UPDATE eventTemplate set"
-                + " info='" + eventTemplate.getInfo()
-                + "' canModified='" + eventTemplate.isCanModified()
-                + "' defaultDate='" + eventTemplate.getDefaultDate().getTime()
-                + "' idIcon='" + eventTemplate.getIdIcon()
-                + "' WHERE idTemplate='" + eventTemplate.getId()
-                + "';");
+        ContentValues newValues = new ContentValues();
+        newValues.put("info", eventTemplate.getInfo());
+        newValues.put("canModified", eventTemplate.isCanModified());
+        newValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
+        newValues.put("idIcon", eventTemplate.getIdIcon());
+
+        db.update("eventTemplate", newValues, "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
     }
 
     // Удалятся все персонализированные шаблоны и запланированыые события по ним
     public void deleteEventTemplate(EventTemplate eventTemplate) {
         deletePersonTemplatesByEventTemplate(eventTemplate);
 
-        db.execSQL("DELETE FROM eventTemplate"
-                + " WHERE idTemplate='" + eventTemplate.getId()
-                + "';");
+        db.delete("eventTemplate", "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
     }
 
     private void deleteEventsByPersonTemplate(int id) {
-        db.execSQL("DELETE FROM event"
-                + " WHERE idPerson='" + id
-                + "';");
+        db.delete("event", "idPerson=".concat(Integer.toString(id)), null);
     }
 
     // Удалятся все запланированные по персональным шаблонам события
@@ -146,9 +137,7 @@ public class AppDb extends  Singleton {
             deleteEventsByPersonTemplate(id);
         }
 
-        db.execSQL("DELETE FROM personTemplate"
-                + " WHERE idTemplate='" + eventTemplate.getId()
-                + "';");
+        db.delete("personTemplate", "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
     }
 
     private ArrayList<Integer> getPersonTemplateIdsByEventTemplate(EventTemplate eventTemplate) {
@@ -200,22 +189,20 @@ public class AppDb extends  Singleton {
     }
 
     public void updatePersonTemplate(PersonTemplate personTemplate) {
-        db.execSQL("UPDATE personTemplate set"
-            + " idPerson='"                 + personTemplate.getPerson().getId()
-            + "' idTemplate='"              + personTemplate.getEventTemplate().getId()
-            + "' customDate='"              + personTemplate.getCustomDate().getTime()
-            + "' cooldown='"                + personTemplate.getCooldown().getTime()
-            + "' WHERE idPersonTemplate='"  + personTemplate.getId()
-            + "';");
+        ContentValues newValues = new ContentValues();
+        newValues.put("idPerson", personTemplate.getPerson().getId());
+        newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        newValues.put("customDate", personTemplate.getCustomDate().getTime());
+        newValues.put("cooldown", personTemplate.getCooldown().getTime());
+
+        db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
 
     // Удалятся все запланированные по персональному шаблону события
     public void deletePersonTemplate(PersonTemplate personTemplate) {
         deleteEventsByPersonTemplate(personTemplate.getId());
 
-        db.execSQL("DELETE FROM personTemplate"
-                + " WHERE idPersonTemplate='" + personTemplate.getId()
-                + "';");
+        db.delete("personTemplate", "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
 
     public PersonTemplate getPersonTemplate(int id) {
@@ -259,24 +246,22 @@ public class AppDb extends  Singleton {
         insertValues.put("status", Status.toInteger(event.getStatus()));
 
         long id = db.insert("event", null, insertValues);
-        event.setId((int)id);
+        event.setId((int) id);
     }
 
     public void updateEvent(Event event) {
-        db.execSQL("UPDATE event set"
-            + " idPerson='"             + event.getPerson().getId()
-            + "' idPersonTemplate='"    + event.getPersonTemplate().getId()
-            + "' info='"                + event.getInfo()
-            + "' date='"                + event.getDate().getTime()
-            + "' status='"              + Status.toInteger(event.getStatus())
-            + "' WHERE idEvent='"       + event.getId()
-            + "';");
+        ContentValues newValues = new ContentValues();
+        newValues.put("idPerson", event.getPerson().getId());
+        newValues.put("idPersonTemplate", event.getPersonTemplate().getId());
+        newValues.put("info", event.getInfo());
+        newValues.put("date", event.getDate().getTime());
+        newValues.put("status", Status.toInteger(event.getStatus()));
+
+        db.update("event", newValues, "idEvent=".concat(Integer.toString(event.getId())), null);
     }
 
     public void deleteEvent(Event event) {
-        db.execSQL("DELETE FROM event"
-                + " WHERE idEvent='" + event.getId()
-                + "';");
+        db.delete("event", "idEvent=".concat(Integer.toString(event.getId())), null);
     }
 
     public Event getEvent(int id) {
