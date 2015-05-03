@@ -10,10 +10,12 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import android.view.Gravity;
+import com.shamanland.fab.FloatingActionButton;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 
@@ -98,7 +100,7 @@ public class PersonActivity extends Activity {
         test(database);
         setContentView(R.layout.person_list_layout);
 
-        ImageView addPersonButton = (ImageView)findViewById(R.id.person_add_image);
+        CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
