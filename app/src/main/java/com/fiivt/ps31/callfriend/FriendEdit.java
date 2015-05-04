@@ -74,7 +74,6 @@ public class FriendEdit extends ActionBarActivity {
                 onCreateNewSignificantEvent();
             }
         });
-        createNewSignificantEventButton.startAnimation();
 
         View changeAvatarButton = findViewById(R.id.change_avatar_button);
         changeAvatarButton.setOnClickListener(new View.OnClickListener() {
