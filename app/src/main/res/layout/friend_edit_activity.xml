@@ -119,18 +119,21 @@
                     app:cb_pressedRingWidth="8dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="16dp"
-                    android:layout_marginTop="218dp"/>
+                    android:layout_marginTop="218dp"
+                    android:id="@+id/change_avatar_button" />
 
             </RelativeLayout>
 
             <com.fiivt.ps31.callfriend.ExpandedListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:focusable="false"
                 android:divider="@null"
                 android:id="@+id/significant_events_list"/>
 
             <LinearLayout
                 android:id="@+id/add_significant_event_button"
+                android:clickable="true"
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">

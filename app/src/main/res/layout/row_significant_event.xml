@@ -2,15 +2,18 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="fill_parent"
     android:layout_height="48dp"
+    android:layout_width="fill_parent"
     android:gravity="center_vertical">
 
     <CheckBox
+        android:id="@+id/significant_event_checkbox"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:id="@+id/significant_event_checkbox"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textSize="@dimen/standard_text_size"
         android:button="@drawable/checkbox"
         android:layout_marginLeft="16dp" />
 

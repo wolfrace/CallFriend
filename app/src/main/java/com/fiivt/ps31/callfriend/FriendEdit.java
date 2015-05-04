@@ -5,10 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -58,9 +60,29 @@ public class FriendEdit extends ActionBarActivity {
         setContentView(R.layout.friend_edit_activity);
         setCustomActionBar();
 
+        initButtons();
         initEventsList();
         nameView = (EditText) findViewById(R.id.friend_name_edit_text);
         avatarView = (CircleImageView) findViewById(R.id.friend_avatar);
+    }
+
+    private void initButtons() {
+        View createNewSignificantEventButton = findViewById(R.id.add_significant_event_button);
+        createNewSignificantEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onCreateNewSignificantEvent();
+            }
+        });
+        createNewSignificantEventButton.startAnimation();
+
+        View changeAvatarButton = findViewById(R.id.change_avatar_button);
+        changeAvatarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onChangeAvatar();
+            }
+        });
     }
 
     private void setPersonDataOnView(Person person, List<SignificantEvent> events) {
@@ -74,10 +96,7 @@ public class FriendEdit extends ActionBarActivity {
     }
 
     private void initEventsList() {
-        ListView eventList = (ListView) findViewById(R.id.significant_events_list);
-        eventsAdapter = new SignificantEventAdapter(getApplicationContext());
-        eventList.setAdapter(eventsAdapter);
-
+        ExpandedListView eventList = (ExpandedListView) findViewById(R.id.significant_events_list);
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -85,6 +104,16 @@ public class FriendEdit extends ActionBarActivity {
                 onEventClick(event);
             }
         });
+        eventsAdapter = new SignificantEventAdapter(getApplicationContext());
+        eventList.setAdapter(eventsAdapter);
+    }
+
+    private void onChangeAvatar() {
+        //todo set avatar ???
+    }
+
+    private void onCreateNewSignificantEvent() {
+        // todo create new significant date
     }
 
     private void onEventClick(SignificantEvent event) {
@@ -165,7 +194,7 @@ public class FriendEdit extends ActionBarActivity {
 
         public void setEventValues(SignificantEvent event) {
             title.setText(event.getTitle());
-            checkBox.setChecked(event.isEnabled());
+            //checkBox.setChecked(event.isEnabled());
             //icon.setImageResource(); todo set image
         }
     }
@@ -209,9 +238,14 @@ public class FriendEdit extends ActionBarActivity {
             SignificantEventHolder holder = new SignificantEventHolder();
             holder.setIcon((CircleImageView) view.findViewById(R.id.significant_event_icon));
             holder.setTitle((TextView) view.findViewById(R.id.significant_event_title));
-            holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
+            //holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
             view.setTag(holder);
             return holder;
+        }
+
+        @Override
+        public SignificantEvent getItem(int position) {
+            return values.get(position);
         }
 
         @Override
