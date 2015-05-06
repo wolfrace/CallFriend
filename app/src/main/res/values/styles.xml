@@ -18,15 +18,4 @@
         <item name="android:background">@color/color_primary</item>
     </style>
 
-    <color name="color_primary_dark">#0288d1</color>
-    <color name="color_primary">#03a9f5</color>
-    <color name="text_color_primary">#ffffff</color>
-    <color name="text_color">#333333</color>
-    <color name="text_color_light">#cccccc</color>
-    <color name="window_background">#ffffff</color>
-    <color name="circle_button_color">#ff4181</color>
-    <color name="text_days_left_color_urgently">#ff80ab</color>
-    <color name="text_days_left_color_soon">@color/text_color_light</color>
-    <color name="avatar_holder_background_color">@color/text_color_light</color>
-
 </resources>
