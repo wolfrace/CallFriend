@@ -21,4 +21,8 @@
     <string name="friend_name_hint">Имя контакта</string>
     <string name="significant_events_title">Значимые события</string>
     <string name="add_significant_event_button_text">Добавить особое событие</string>
+
+    <string name="startEventService">Start Event Service</string>
+    <string name="stopEventService">Stop Event Service</string>
+
 </resources>

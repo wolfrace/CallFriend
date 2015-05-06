@@ -1,7 +1,9 @@
 package com.fiivt.ps31.callfriend;
 
 import android.app.ActionBar;
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fiivt.ps31.callfriend.Service.EventService;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 import lombok.Getter;
@@ -37,6 +40,9 @@ public class FriendEdit extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //test
+        startService(new Intent(this, EventService.class));
+
         super.onCreate(savedInstanceState);
         initView();
         //todo get Person info/significant events (now only test data)
