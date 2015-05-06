@@ -1,28 +1,28 @@
 package com.fiivt.ps31.callfriend;
 
 import android.app.ActionBar;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,6 +45,7 @@ public class FriendEdit extends ActionBarActivity {
         List<SignificantEvent> events = new ArrayList<SignificantEvent>();
         for (int i = 0; i++ < 10;) {
             SignificantEvent event = new SignificantEvent();
+            event.setId(i);
             event.setDate(new Date(System.currentTimeMillis() + (i * 1000000)));
             event.setTitle((i % 2 == 0) ? "Best title eve " + i + " !!!" : "Short " + i);
             event.setEnabled(i % 3 == 0);
@@ -100,7 +101,7 @@ public class FriendEdit extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 SignificantEvent event = eventsAdapter.getItem(position);
-                onEventClick(event);
+                onEventEditClick(event);
             }
         });
         eventsAdapter = new SignificantEventAdapter(getApplicationContext());
@@ -115,9 +116,40 @@ public class FriendEdit extends ActionBarActivity {
         // todo create new significant date
     }
 
-    private void onEventClick(SignificantEvent event) {
-        //todo open 'select action' dialog fragment or 'edit event' dialog fragment
-        //todo check ?? it's work?
+    private void onDeleteSignificantEvent(SignificantEvent event) {
+        //todo delete from db ??
+        eventsAdapter.deleteEvent(event);
+    }
+
+    private void onSignificantEventEdit(SignificantEvent event) {
+        showSignificantEventEditDialog(event);
+    }
+
+    private void onEventEnableClick(SignificantEvent event) {
+    }
+
+    private void showSignificantEventEditDialog(SignificantEvent event) {
+        FragmentManager manager = getFragmentManager();
+        SignificantEventEditDialog dialog = new SignificantEventEditDialog();
+        dialog.show(manager, "sgnEventEdtDlg");
+    }
+
+    private void onEventEditClick(final SignificantEvent event) {
+        FragmentManager manager = getFragmentManager();
+        SignificantEventActionDialog dialog = new SignificantEventActionDialog();
+
+        dialog.setListener(new SignificantEventActionDialog.OnSignificantEventActionClick() {
+            @Override
+            public void onEditClick() {
+                onSignificantEventEdit(event);
+            }
+
+            @Override
+            public void onDeleteClick() {
+                onDeleteSignificantEvent(event);
+            }
+        });
+        dialog.show(manager, "sgnEventActDlg");
     }
 
     @SuppressWarnings("all")
@@ -177,6 +209,7 @@ public class FriendEdit extends ActionBarActivity {
     @Data
     @NoArgsConstructor
     public static class SignificantEvent {
+        private int id;
         private String title;
         //todo add event icon
         private Date date;
@@ -187,13 +220,14 @@ public class FriendEdit extends ActionBarActivity {
     @Data
     @NoArgsConstructor
     private static class SignificantEventHolder {
+        View enableEventButton;
         TextView title;
         CheckBox checkBox;
         CircleImageView icon;
 
         public void setEventValues(SignificantEvent event) {
             title.setText(event.getTitle());
-            //checkBox.setChecked(event.isEnabled());
+            checkBox.setChecked(event.isEnabled());
             //icon.setImageResource(); todo set image
         }
     }
@@ -215,7 +249,18 @@ public class FriendEdit extends ActionBarActivity {
             SignificantEventHolder viewHolder = (SignificantEventHolder) view.getTag();
             SignificantEvent event = values.get(position);
             viewHolder.setEventValues(event);
+            processEnableEventButtonClick(viewHolder, position);
             return view;
+        }
+
+        private void processEnableEventButtonClick(SignificantEventHolder viewHolder, final int eventPosition) {
+            viewHolder.getEnableEventButton().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SignificantEvent event = getItem(eventPosition);
+                    onEventEnableClick(event);
+                }
+            });
         }
 
         private View getViewWithHolder(View convertView, ViewGroup parent) {
@@ -237,7 +282,8 @@ public class FriendEdit extends ActionBarActivity {
             SignificantEventHolder holder = new SignificantEventHolder();
             holder.setIcon((CircleImageView) view.findViewById(R.id.significant_event_icon));
             holder.setTitle((TextView) view.findViewById(R.id.significant_event_title));
-            //holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
+            holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
+            holder.setEnableEventButton(view.findViewById(R.id.enable_significant_event_button));
             view.setTag(holder);
             return holder;
         }
@@ -252,6 +298,21 @@ public class FriendEdit extends ActionBarActivity {
             return values.size();
         }
 
+        public void deleteEvent(SignificantEvent event) {
+            boolean isChanged = false;
+            Iterator<SignificantEvent> it = values.iterator();
+            while (it.hasNext()) {
+                SignificantEvent next = it.next();
+                if (next.getId() == event.getId()) {
+                    it.remove();
+                    isChanged = true;
+                }
+            }
+
+            if (isChanged) {
+                notifyDataSetChanged();
+            }
+        }
     }
 
 }
