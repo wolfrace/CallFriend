@@ -100,7 +100,7 @@
 
             </LinearLayout>
 
-            <com.fiivt.ps31.callfriend.ExpandedListView
+            <com.fiivt.ps31.callfriend.Utils.ExpandedListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:divider="@null"

@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fiivt.ps31.callfriend.R;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -24,5 +24,6 @@
 
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
+    <string name="title_activity_vkontakte">VkontakteActivity</string>
 
 </resources>

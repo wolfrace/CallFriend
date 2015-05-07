@@ -25,14 +25,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                    <com.fiivt.ps31.callfriend.EventsListView
+                    <com.fiivt.ps31.callfriend.Activities.EventsListView
                         app:dayLeftColor="@color/text_days_left_color_urgently"
                         app:titleText="@string/event_list_title_urgently"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/events_list_urgently"/>
 
-                    <com.fiivt.ps31.callfriend.EventsListView
+                    <com.fiivt.ps31.callfriend.Activities.EventsListView
                         app:dayLeftColor="@color/text_days_left_color_soon"
                         app:titleText="@string/event_list_title_soon"
                         android:layout_width="match_parent"

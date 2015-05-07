@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend.AppDatabase2;
+package com.fiivt.ps31.callfriend.AppDatabase;
 
 import com.fiivt.ps31.callfriend.Utils.Status;
 import lombok.Data;

@@ -34,6 +34,18 @@ public class EventService extends Service {
     }
 
     void someTask() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                generateEvents();
+                //temp
+                stopSelf();
+            }
+        }).start();
+    }
+
+    public void generateEvents() {
+        Log.e(LOG_TAG, "generateEventsFromEventService");
     }
 
 }

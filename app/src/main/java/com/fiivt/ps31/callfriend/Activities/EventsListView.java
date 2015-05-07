@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.fiivt.ps31.callfriend.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 import lombok.Getter;

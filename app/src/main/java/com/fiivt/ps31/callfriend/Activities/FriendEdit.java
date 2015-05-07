@@ -1,7 +1,6 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.ActionBar;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,12 +18,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Service.EventService;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;

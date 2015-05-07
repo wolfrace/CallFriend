@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend.AppDatabase2;
+package com.fiivt.ps31.callfriend.AppDatabase;
 
 /**
  * Created by Egor on 23.04.2015.

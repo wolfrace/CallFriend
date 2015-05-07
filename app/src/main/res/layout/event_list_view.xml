@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <com.fiivt.ps31.callfriend.EventsListView
+    <com.fiivt.ps31.callfriend.Activities.EventsListView
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
         custom:titleText="Next events"
