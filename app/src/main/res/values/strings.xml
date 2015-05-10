@@ -25,5 +25,10 @@
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
     <string name="title_activity_vkontakte">VkontakteActivity</string>
+    <string name="import_from_vk">Импортировать друзей из ВКонтакте</string>
+    <string name="import_category">Импорт</string>
+    <string name="enable_push">Включить push-уведомления</string>
+    <string name="notifications_category">Уведомления</string>
+    <string name="title_activity_preferences">Preferences</string>
 
 </resources>

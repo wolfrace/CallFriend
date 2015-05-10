@@ -9,7 +9,7 @@ import com.vk.sdk.*;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
 
-// Отпечаток сертификата для Android:
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
 // BB58C88B1C43570A79DC1043794830D377702F12
 
@@ -61,7 +61,6 @@ public class VkontakteActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         VKUIHelper.onCreate(this);
-        // Инициализация приложения...
         VKSdk.initialize(sdkListener, VK_APP_ID, VKAccessToken.tokenFromSharedPreferences(this, VK_ACCESS_TOKEN));
         //setContentView(R.layout.vk_share_dialog);
         //VKSdk.authorize(VK_SCOPE, true, true);
