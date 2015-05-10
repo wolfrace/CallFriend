@@ -17,13 +17,14 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
@@ -31,11 +32,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-public class FriendEdit extends ActionBarActivity {
+public class FriendEdit extends ActionBarActivity implements OnDataSetChangedListener {
 
     private EditText nameView;
     private CircleImageView avatarView;
     private SignificantEventAdapter eventsAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class FriendEdit extends ActionBarActivity {
             event.setDate(new Date(System.currentTimeMillis() + (i * 1000000)));
             event.setTitle((i % 2 == 0) ? "Best title eve " + i + " !!!" : "Short " + i);
             event.setEnabled(i % 3 == 0);
+            event.setReminderTime(TimeUnit.DAYS.toMillis(7));
             events.add(event);
         }
 
@@ -131,6 +134,15 @@ public class FriendEdit extends ActionBarActivity {
     private void showSignificantEventEditDialog(SignificantEvent event) {
         FragmentManager manager = getFragmentManager();
         SignificantEventEditDialog dialog = new SignificantEventEditDialog();
+
+        Bundle args = new Bundle();
+        args.putInt("id", event.getId());
+        args.putString("eventName", event.getTitle());
+        args.putSerializable("eventDate", event.getDate());
+        args.putLong("reminderTime", event.getReminderTime());
+
+        dialog.setArguments(args);
+        dialog.setListener(this);
         dialog.show(manager, "sgnEventEdtDlg");
     }
 
@@ -206,6 +218,19 @@ public class FriendEdit extends ActionBarActivity {
         return null;
     }
 
+    @Override
+    public void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime) {
+        SignificantEvent event = eventsAdapter.getItemById(eventId);
+        if (event == null) return;
+
+        event.setTitle(eventName);
+        event.setDate(eventDate);
+        event.setReminderTime(reminderTime);
+
+        eventsAdapter.notifyDataSetChanged();
+        // todo save changed significant event to db
+    }
+
     @Data
     @NoArgsConstructor
     public static class SignificantEvent {
@@ -214,6 +239,7 @@ public class FriendEdit extends ActionBarActivity {
         //todo add event icon
         private Date date;
         private boolean enabled;
+        private long reminderTime;
     }
 
 
@@ -312,6 +338,15 @@ public class FriendEdit extends ActionBarActivity {
             if (isChanged) {
                 notifyDataSetChanged();
             }
+        }
+
+        public SignificantEvent getItemById(int eventId) {
+            for (SignificantEvent event: values) {
+                if (event.getId() == eventId) {
+                    return event;
+                }
+            }
+            return null;
         }
     }
 

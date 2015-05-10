@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -22,6 +21,7 @@ import lombok.Setter;
 
 public class SignificantEventEditDialog extends DialogFragment {
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
     private final long[] spinnerItemIdToReminderTime = {
             TimeUnit.DAYS.toMillis(1),
             TimeUnit.DAYS.toMillis(2),
@@ -33,14 +33,26 @@ public class SignificantEventEditDialog extends DialogFragment {
     private EditText eventNameText;
     private EditText eventDateText;
     private Spinner reminderTimeSpinner;
+    private int eventId;
 
-    public long getReminderTime() {
+    private long getReminderTime() {
         long id = reminderTimeSpinner.getSelectedItemId();
         return spinnerItemIdToReminderTime[(int) id];
     }
 
+    private int getReminderTimeSpinnerIdByTime(long delta) {
+        int id = 0;
+        while(id < spinnerItemIdToReminderTime.length) {
+            if (spinnerItemIdToReminderTime[id] >= delta) {
+                break;
+            }
+            ++id;
+        }
+        return id;
+    }
+
     public interface OnDataSetChangedListener {
-        void onDataSetChanged(String eventName, Date eventDate, long reminderTime);
+        void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime);
     }
 
     @Override
@@ -52,6 +64,10 @@ public class SignificantEventEditDialog extends DialogFragment {
         eventDateText = (EditText) view.findViewById(R.id.significant_event_date);
         reminderTimeSpinner = (Spinner) view.findViewById(R.id.reminder_time_spinner);
 
+        Bundle args = getArguments();
+        if (args != null) {
+            setEventData(args);
+        }
 
         bindButtonEventsListeners(view);
         return view;
@@ -64,9 +80,7 @@ public class SignificantEventEditDialog extends DialogFragment {
                 showDatePickerFragment(new DatePickerFragment.OnDateSetListener() {
                     @Override
                     public void onDateSet(Date date) {
-                        String dateAsText = new SimpleDateFormat("MM/dd/yyyy", Locale.US).format(date);
-                        eventDateText.setText(dateAsText);
-                        eventDateText.setTag(date);
+                        setEventDate(date);
                     }
                 });
             }
@@ -102,7 +116,7 @@ public class SignificantEventEditDialog extends DialogFragment {
         }
 
         if (listener != null) {
-            listener.onDataSetChanged(name, date, reminderTime);
+            listener.onDataSetChanged(eventId, name, date, reminderTime);
         }
         getDialog().dismiss();
     }
@@ -111,6 +125,27 @@ public class SignificantEventEditDialog extends DialogFragment {
     @SuppressWarnings("all")
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void setEventData(Bundle args) {
+        eventId = args.getInt("id");
+        long time = args.getLong("reminderTime");
+        String name = args.getString("eventName");
+        Date date = (Date) args.getSerializable("eventDate");
+
+        setEventDate(date);
+        eventNameText.setText(name);
+
+        int spinnerElementId = getReminderTimeSpinnerIdByTime(time);
+        reminderTimeSpinner.setSelection(spinnerElementId);
+    }
+
+    private void setEventDate(Date date) {
+        if (date != null) {
+            String dateAsText = DATE_FORMAT.format(date);
+            eventDateText.setText(dateAsText);
+            eventDateText.setTag(date);
+        }
     }
 
     public void showDatePickerFragment(DatePickerFragment.OnDateSetListener listener) {
