@@ -53,13 +53,13 @@ public class VkontakteActivity extends Activity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             newToken.saveTokenToSharedPreferences(VkontakteActivity.this, VK_ACCESS_TOKEN);
-            Intent i = new Intent(VkontakteActivity.this, FriendEdit.class);
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             startActivity(i);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            Intent i = new Intent(VkontakteActivity.this, FriendEdit.class);
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             startActivity(i);
         }
     };
@@ -99,6 +99,8 @@ public class VkontakteActivity extends Activity {
         if (response != null) {
             try {
                 AppDb appDb = new AppDb(this);
+                // TO DELETE
+                appDb.clearDb(this);
 
                 JSONObject json = response.json;
                 JSONObject ara = json.getJSONObject("response");

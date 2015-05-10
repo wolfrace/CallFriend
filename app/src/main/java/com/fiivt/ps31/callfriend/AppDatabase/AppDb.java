@@ -19,7 +19,7 @@ public class AppDb extends  Singleton {
     private String dbPath = "AppDb_new.db";
 
     public AppDb(Context c) {
-        c.deleteDatabase(dbPath); // dropbase
+        //c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
         // Персона имеет имя, пол, фотографию
         db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
@@ -34,6 +34,9 @@ public class AppDb extends  Singleton {
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idEvent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idPersonTemplate INTEGER, info VARCHAR, date DATE, status INTEGER);");
     }
 
+    public void clearDb(Context c) {
+        c.deleteDatabase(dbPath); // dropbase
+    }
 
     //  Persons API
     public void addPerson(Person person) {

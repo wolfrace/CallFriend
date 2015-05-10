@@ -1,9 +1,8 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,11 +14,9 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import android.view.Gravity;
-import com.shamanland.fab.FloatingActionButton;
-import de.hdodenhof.circleimageview.CircleImageView;
+import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
 
-import java.io.Console;
 import java.util.Date;
 import java.util.List;
 
@@ -31,73 +28,10 @@ public class PersonActivity extends Activity {
 
     public AppDb database;
 
-    public void test(AppDb db) {
-        Person tmpPerson = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson2 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson3 = new Person("Danil Lobkov", new Date(), true);
-        Person tmpPerson4 = new Person("Nikolay Lobkov", new Date(), true);
-        Person tmpPerson5 = new Person("Mikhail Lobkova", new Date(), false);
-        Person tmpPerson6 = new Person("Andrey Lobkov", new Date(), true);
-        Person tmpPerson7 = new Person("Grisha Lobkov", new Date(), true);
-        Person tmpPerson8 = new Person("Lena Lobkova", new Date(), false);
-        Person tmpPerson9 = new Person("Sobaka Lobkova", new Date(), true);
-        Person tmpPerson10 = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson11 = new Person("Lucya Lobkova", new Date(), false);
-        Person tmpPerson12 = new Person("Egor Lobkov", new Date(), true);
-        Person tmpPerson13 = new Person("Kolya Lobkov", new Date(), true);
-        Person tmpPerson14 = new Person("Alexander Lobkova", new Date(), false);
-        Person tmpPerson15 = new Person("Danil Lobkov", new Date(), true);
-
-        db.addPerson(tmpPerson);
-        db.addPerson(tmpPerson2);
-        db.addPerson(tmpPerson3);
-        db.addPerson(tmpPerson4);
-        db.addPerson(tmpPerson5);
-        db.addPerson(tmpPerson6);
-        db.addPerson(tmpPerson7);
-        db.addPerson(tmpPerson8);
-        db.addPerson(tmpPerson9);
-        db.addPerson(tmpPerson10);
-        db.addPerson(tmpPerson11);
-        db.addPerson(tmpPerson12);
-        db.addPerson(tmpPerson13);
-        db.addPerson(tmpPerson14);
-        db.addPerson(tmpPerson15);
-
-        List<Person> persons = db.getPersons();
-        {
-            Person p = db.getPerson(1);
-            Person p2 = db.getPerson(2);
-            Person p3 = db.getPerson(3);
-            Event e = new Event("Поздавить с днем вафли", new Date(), p);
-            db.addEvent(e);
-
-            List<Event> oldEvents = db.getExpiredEvents();
-            List<Event> allEvents = db.getEvents();
-
-            Event e2 = new Event("Позвать в кино", new Date(), p2);
-            db.addEvent(e2);
-
-            Event e3 = new Event("Поздавить с днем вафли", new Date(), p3);
-            db.addEvent(e3);
-
-            Event e4 = new Event("Позвать в мак", new Date(), p3);
-            db.addEvent(e4);
-
-//            db.deleteEvent(allEvents.get(0).getId());
-            allEvents = db.getEvents();
-
-//            db.deletePerson(p3.getId());
-            persons = db.getPersons();
-            allEvents = db.getEvents();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
-        test(database);
         setContentView(R.layout.person_list_layout);
 
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
@@ -110,7 +44,7 @@ public class PersonActivity extends Activity {
             }
         });
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
-        final List<Person> person = database.getPersons();
+        final List<Person> person = database.getPersons(100, 0);
         ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
         personsListView.setAdapter(personAdapter);
     }
