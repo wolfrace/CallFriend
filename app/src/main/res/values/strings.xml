@@ -21,4 +21,9 @@
     <string name="friend_name_hint">Имя контакта</string>
     <string name="significant_events_title">Значимые события</string>
     <string name="add_significant_event_button_text">Добавить особое событие</string>
+    <string name="significant_event_name_hint">Название замечания</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">ОТМЕНА</string>
+    <string name="significant_event_date_hint">Дата</string>
+    <string name="empty_event_name_hint">Название события не может быть пустым</string>
 </resources>
