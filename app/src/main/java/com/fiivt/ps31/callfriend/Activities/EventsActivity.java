@@ -27,50 +27,6 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListUrgently;
     private EventsListView eventsListSoon;
 
-    public void test(AppDb db) {
-        Person p = new Person("Kolya Lobkov", true, 1);
-        Person p2 = new Person("Lena Lobkova", false, 2);
-        Person p3 = new Person("Danil Lobkov", true, 3);
-
-        db.addPerson(p);
-        db.addPerson(p2);
-        db.addPerson(p3);
-
-        List<Person> persons = db.getPersons(100, 0);
-        {
-            EventTemplate et = new EventTemplate("Поздравить с днем вафли", true, new Date(), 0);
-            EventTemplate et2 = new EventTemplate("Позвать синячить", true, new Date(), 0);
-            db.addEventTemplate(et);
-            db.addEventTemplate(et2);
-
-            PersonTemplate pt = new PersonTemplate(p, et, new Date(), new Date(TimeUnit.DAYS.toMillis(1)));
-            PersonTemplate pt2 = new PersonTemplate(p2, et, new Date(), new Date(TimeUnit.DAYS.toMillis(2)));
-            PersonTemplate pt3 = new PersonTemplate(p3, et, new Date(), new Date(TimeUnit.DAYS.toMillis(3)));
-            PersonTemplate pt4 = new PersonTemplate(p3, et2, new Date(), new Date(TimeUnit.DAYS.toMillis(3)));
-
-            db.addPersonTemplate(pt);
-            db.addPersonTemplate(pt2);
-            db.addPersonTemplate(pt3);
-            db.addPersonTemplate(pt4);
-
-            Event e = pt.generateEvent();
-            db.addEvent(e);
-
-            List<Event> allEvents = db.getEvents(Integer.MAX_VALUE, 0);
-
-            Event e2 = pt2.generateEvent();
-            db.addEvent(e2);
-
-
-            Event e4 = pt4.generateEvent();
-            db.addEvent(e4);
-
-
-            Event e3 = pt3.generateEvent();
-            db.addEvent(e3);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +35,6 @@ public class EventsActivity extends ActionBarActivity {
         initEventsLists();
 
         database = new AppDb(this);
-        // todo Remove test
-        test(database);
         // test end
         addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
     }

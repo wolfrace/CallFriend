@@ -4,6 +4,13 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Egor on 06.05.2015.
@@ -11,6 +18,7 @@ import android.util.Log;
 public class EventService extends Service {
 
     final String LOG_TAG = "EventServiceLogs";
+    private Date lastDateGenerate;
 
     public void onCreate() {
         super.onCreate();
@@ -37,15 +45,30 @@ public class EventService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                generateEvents();
+                if (lastDateGenerate != null && TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastDateGenerate.getTime()) > 1) {
+                    lastDateGenerate = new Date();
+                    generateEvents();
+                }
+
                 //temp
                 stopSelf();
             }
         }).start();
     }
 
+    private final static int generateForXdays = 30;
     public void generateEvents() {
         Log.e(LOG_TAG, "generateEventsFromEventService");
+
+        AppDb appDb = new AppDb(this);
+        List<PersonTemplate> personTemplates = appDb.getPersonTemplates(10000, 0);
+        for (int i = 0; i < personTemplates.size(); ++i) {
+            Event lastEvent = appDb.getLastEventByPersonTemplate(personTemplates.get(i).getId());
+            while (lastEvent.getDaysLeft() < generateForXdays) {
+                lastEvent = personTemplates.get(i).generateEvent(lastEvent.getDate());
+                appDb.addEvent(lastEvent);
+            }
+        }
     }
 
 }

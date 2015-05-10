@@ -37,15 +37,15 @@ public class PersonTemplate {
     }
 
     // TODO
-    private Date generateDate() {
-        return new Date(customDate.getTime() + cooldown.getTime());
+    private Date generateDate(Date lastDate) {
+        return new Date(lastDate.getTime() + cooldown.getTime());
     }
 
-    public Event generateEvent() {
+    public Event generateEvent(Date lastDate) {
         Event event = new Event(person,
                 this,
                 generateInfo(person.getName(), eventTemplate.getInfo()),
-                generateDate(),
+                generateDate(lastDate),
                 Status.EXPECTED
         );
         return event;
