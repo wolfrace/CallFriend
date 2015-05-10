@@ -14,11 +14,11 @@
         <activity
                 android:name=".Activities.Preferences"
                 android:label="Preferences">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
@@ -61,11 +61,11 @@
         <activity
             android:name=".Activities.VkontakteActivity"
             android:label="@string/title_activity_vkontakte" >
-<!--            <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
     </application>
 

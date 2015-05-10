@@ -1,9 +1,11 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,7 @@ public class Preferences extends PreferenceActivity {
 
         View footerView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.button_import_vk, null, false);
 
+        // dont work
         Button login = (Button) footerView.findViewById(R.id.buttonImportVk);
         login.setOnClickListener(new View.OnClickListener() {
             @Override
