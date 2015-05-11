@@ -1,11 +1,12 @@
-package com.fiivt.ps31.callfriend.AppDatabase;
+package com.fiivt.ps31.callfriend.AppDatabase2;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
@@ -21,7 +22,7 @@ public class AppDb extends  Singleton {
     private String dbPath = "AppDb_new.db";
 
     public AppDb(Context c) {
-        //c.deleteDatabase(dbPath); // dropbase
+        c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
 
@@ -32,44 +33,43 @@ public class AppDb extends  Singleton {
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idEvent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idPersonTemplate INTEGER, info VARCHAR, date DATE, status INTEGER);");
     }
 
-    public void clearDb(Context c) {
-        c.deleteDatabase(dbPath); // dropbase
-    }
 
     //  Persons API
     public void addPerson(Person person) {
-        ContentValues insertValues = new ContentValues();
-        insertValues.put("name", person.getName());
-        insertValues.put("isMale", person.isMale());
-        insertValues.put("photo", person.getIdPhoto());
-
-        long id = db.insert("person", null, insertValues);
-        person.setId((int)id);
+        db.execSQL("INSERT INTO person(name, isMale, photo) VALUES('"
+            + person.getName()  + "','"
+            + person.isMale()   + "','"
+            + person.getIdPhoto() + "');");
     }
 
     public void updatePerson(Person person) {
-        ContentValues newValues = new ContentValues();
-        newValues.put("name", person.getName());
-        newValues.put("isMale", person.getIdPhoto());
-        newValues.put("photo", person.getName());
-
-        db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
+        db.execSQL("UPDATE person set"
+            + " name='"             + person.getName()
+            + "' isMale='"          + person.isMale()
+            + "' photo='"           + person.getIdPhoto()
+            + "' WHERE idPerson='"  + person.getId()
+            + "';");
     }
 
-    // ������ ��� ������������������� ������� � ��������������� �������
     public void deletePerson(Person person) {
         deleteEventsByPerson(person);
         deletePersonTemplatesByPerson(person);
 
-        db.delete("person", "idPerson=".concat(Integer.toString(person.getId())), null);
+        db.execSQL("DELETE FROM person"
+            + " WHERE idPerson='" + person.getId()
+            + "';");
     }
 
     private void deletePersonTemplatesByPerson(Person person) {
-        db.delete("personTemplate", "idPerson=".concat(Integer.toString(person.getId())), null);
+        db.execSQL("DELETE FROM personTemplate"
+            + " WHERE idPerson='" + person.getId()
+            + "';");
     }
 
     private void deleteEventsByPerson(Person person) {
-        db.delete("event", "idPerson=".concat(Integer.toString(person.getId())), null);
+        db.execSQL("DELETE FROM event"
+            + " WHERE idPerson='" + person.getId()
+            + "';");
     }
 
     public List<Person> getPersons(int limit, int offset) {
@@ -80,11 +80,8 @@ public class AppDb extends  Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0)
-                    , cursor.getString(1)
-                    , "description"
-                    , cursor.getString(2).equalsIgnoreCase("TRUE")
-                    , cursor.getInt(3));
+            //todo mock
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), "description", cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
             persons.add(p);
         }
 
@@ -94,6 +91,7 @@ public class AppDb extends  Singleton {
     public Person getPerson(int id) {
         Cursor cursor = db.rawQuery("SELECT * FROM person WHERE idPerson='" + id + "';", null);
         cursor.moveToNext();
+        //todo fix mock
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
                 , "description"
@@ -103,35 +101,36 @@ public class AppDb extends  Singleton {
 
     // Templates API
     public void addEventTemplate(EventTemplate eventTemplate) {
-        ContentValues insertValues = new ContentValues();
-        insertValues.put("info", eventTemplate.getInfo());
-        insertValues.put("canModified", eventTemplate.isCanModified());
-        insertValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
-        insertValues.put("idIcon", eventTemplate.getIdIcon());
-
-        long id = db.insert("eventTemplate", null, insertValues);
-        eventTemplate.setId((int) id);
+        db.execSQL("INSERT INTO eventTemplate(info, canModified, defaultDate, idIcon) VALUES('"
+                + eventTemplate.getInfo() + "','"
+                + eventTemplate.isCanModified() + "','"
+                + eventTemplate.getDefaultDate().getTime() + "','"
+                + eventTemplate.getIdIcon() + "');");
     }
 
     public void updateEventTemplate(EventTemplate eventTemplate) {
-        ContentValues newValues = new ContentValues();
-        newValues.put("info", eventTemplate.getInfo());
-        newValues.put("canModified", eventTemplate.isCanModified());
-        newValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
-        newValues.put("idIcon", eventTemplate.getIdIcon());
-
-        db.update("eventTemplate", newValues, "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
+        db.execSQL("UPDATE eventTemplate set"
+                + " info='" + eventTemplate.getInfo()
+                + "' canModified='" + eventTemplate.isCanModified()
+                + "' defaultDate='" + eventTemplate.getDefaultDate().getTime()
+                + "' idIcon='" + eventTemplate.getIdIcon()
+                + "' WHERE idTemplate='" + eventTemplate.getId()
+                + "';");
     }
 
     // �������� ��� ������������������� ������� � ��������������� ������� �� ���
     public void deleteEventTemplate(EventTemplate eventTemplate) {
         deletePersonTemplatesByEventTemplate(eventTemplate);
 
-        db.delete("eventTemplate", "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
+        db.execSQL("DELETE FROM eventTemplate"
+                + " WHERE idTemplate='" + eventTemplate.getId()
+                + "';");
     }
 
     private void deleteEventsByPersonTemplate(int id) {
-        db.delete("event", "idPerson=".concat(Integer.toString(id)), null);
+        db.execSQL("DELETE FROM event"
+                + " WHERE idPerson='" + id
+                + "';");
     }
 
     // �������� ��� ��������������� �� ������������ �������� �������
@@ -141,7 +140,9 @@ public class AppDb extends  Singleton {
             deleteEventsByPersonTemplate(id);
         }
 
-        db.delete("personTemplate", "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
+        db.execSQL("DELETE FROM personTemplate"
+                + " WHERE idTemplate='" + eventTemplate.getId()
+                + "';");
     }
 
     private ArrayList<Integer> getPersonTemplateIdsByEventTemplate(EventTemplate eventTemplate) {
@@ -182,31 +183,30 @@ public class AppDb extends  Singleton {
     // PersonTemplate API
 
     public void addPersonTemplate(PersonTemplate personTemplate) {
-        ContentValues insertValues = new ContentValues();
-        insertValues.put("idPerson", personTemplate.getPerson().getId());
-        insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
-        insertValues.put("customDate", personTemplate.getCustomDate().getTime());
-        insertValues.put("cooldown", personTemplate.getCooldown().getTime());
-
-        long id = db.insert("personTemplate", null, insertValues);
-        personTemplate.setId((int) id);
+        db.execSQL("INSERT INTO personTemplate(idPerson, idTemplate, customDate, cooldown) VALUES('"
+            + personTemplate.getPerson().getId()        + "','"
+            + personTemplate.getEventTemplate().getId() + "','"
+            + personTemplate.getCustomDate().getTime()  + "','"
+            + personTemplate.getCooldown().getTime()    + "');");
     }
 
     public void updatePersonTemplate(PersonTemplate personTemplate) {
-        ContentValues newValues = new ContentValues();
-        newValues.put("idPerson", personTemplate.getPerson().getId());
-        newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
-        newValues.put("customDate", personTemplate.getCustomDate().getTime());
-        newValues.put("cooldown", personTemplate.getCooldown().getTime());
-
-        db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
+        db.execSQL("UPDATE personTemplate set"
+            + " idPerson='"                 + personTemplate.getPerson().getId()
+            + "' idTemplate='"              + personTemplate.getEventTemplate().getId()
+            + "' customDate='"              + personTemplate.getCustomDate().getTime()
+            + "' cooldown='"                + personTemplate.getCooldown().getTime()
+            + "' WHERE idPersonTemplate='"  + personTemplate.getId()
+            + "';");
     }
 
     // �������� ��� ��������������� �� ������������� ������� �������
     public void deletePersonTemplate(PersonTemplate personTemplate) {
         deleteEventsByPersonTemplate(personTemplate.getId());
 
-        db.delete("personTemplate", "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
+        db.execSQL("DELETE FROM personTemplate"
+                + " WHERE idPersonTemplate='" + personTemplate.getId()
+                + "';");
     }
 
     public PersonTemplate getPersonTemplate(int id) {
@@ -242,30 +242,29 @@ public class AppDb extends  Singleton {
     // Event API
 
     public void addEvent(Event event) {
-        ContentValues insertValues = new ContentValues();
-        insertValues.put("idPerson", event.getPerson().getId());
-        insertValues.put("idPersonTemplate", event.getPersonTemplate().getId());
-        insertValues.put("info", event.getInfo());
-        insertValues.put("date", event.getDate().getTime());
-        insertValues.put("status", Status.toInteger(event.getStatus()));
-
-        long id = db.insert("event", null, insertValues);
-        event.setId((int) id);
+        db.execSQL("INSERT INTO event(idPerson, idPersonTemplate, info, date, status) VALUES('"
+            + event.getPerson().getId()             + "','"
+            + event.getPersonTemplate().getId()     + "','"
+            + event.getInfo()                       + "','"
+            + event.getDate().getTime()             + "','"
+            + Status.toInteger(event.getStatus())   + "');");
     }
 
     public void updateEvent(Event event) {
-        ContentValues newValues = new ContentValues();
-        newValues.put("idPerson", event.getPerson().getId());
-        newValues.put("idPersonTemplate", event.getPersonTemplate().getId());
-        newValues.put("info", event.getInfo());
-        newValues.put("date", event.getDate().getTime());
-        newValues.put("status", Status.toInteger(event.getStatus()));
-
-        db.update("event", newValues, "idEvent=".concat(Integer.toString(event.getId())), null);
+        db.execSQL("UPDATE event set"
+            + " idPerson='"             + event.getPerson().getId()
+            + "' idPersonTemplate='"    + event.getPersonTemplate().getId()
+            + "' info='"                + event.getInfo()
+            + "' date='"                + event.getDate().getTime()
+            + "' status='"              + Status.toInteger(event.getStatus())
+            + "' WHERE idEvent='"       + event.getId()
+            + "';");
     }
 
     public void deleteEvent(Event event) {
-        db.delete("event", "idEvent=".concat(Integer.toString(event.getId())), null);
+        db.execSQL("DELETE FROM event"
+                + " WHERE idEvent='" + event.getId()
+                + "';");
     }
 
     public Event getEvent(int id) {

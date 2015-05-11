@@ -2,17 +2,31 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="fill_parent"
     android:layout_height="48dp"
+    android:layout_width="fill_parent"
     android:gravity="center_vertical">
 
-    <CheckBox
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:id="@+id/significant_event_checkbox"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:button="@drawable/checkbox"
-        android:layout_marginLeft="16dp" />
+    <FrameLayout
+        android:id="@+id/enable_significant_event_button"
+        android:layout_width="56dp"
+        android:clickable="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:layout_height="match_parent">
+
+        <CheckBox
+            android:id="@+id/significant_event_checkbox"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:textSize="@dimen/standard_text_size"
+            android:button="@drawable/checkbox"
+            android:layout_marginLeft="16dp"
+            android:layout_gravity="center_vertical" />
+
+        </FrameLayout>
 
     <TextView
         android:id="@+id/significant_event_title"
@@ -23,7 +37,7 @@
         android:textSize="@dimen/standard_text_size"
         android:textColor="@color/text_color_secondary"
         android:layout_weight="1"
-        android:layout_marginLeft="28dp"
+        android:layout_marginLeft="12dp"
         android:layout_marginRight="8dp" />
 
     <de.hdodenhof.circleimageview.CircleImageView

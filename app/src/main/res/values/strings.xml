@@ -11,7 +11,6 @@
     <string name="events_days_left_suffix">дн.</string>
     <string name="event_list_title_urgently">Срочно</string>
     <string name="event_list_title_soon">Скоро</string>
-
     <string name="event_action_accept">Принять</string>
     <string name="event_action_put_off">Отложить</string>
     <string name="event_action_dismiss">Отклонить</string>
@@ -20,9 +19,9 @@
     <string name="cancel_button_title">Отменить</string>
     <string name="add_contact_layout_title">Добавить контакт</string>
     <string name="friend_name_hint">Имя контакта</string>
+    <string name="friend_description_hint">Описание контакта</string>
     <string name="significant_events_title">Значимые события</string>
     <string name="add_significant_event_button_text">Добавить особое событие</string>
-
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
     <string name="title_activity_vkontakte">VkontakteActivity</string>
@@ -31,5 +30,13 @@
     <string name="enable_push">Включить push-уведомления</string>
     <string name="notifications_category">Уведомления</string>
     <string name="title_activity_preferences">Preferences</string>
+    <string name="significant_event_name_hint">Название замечания</string>
+    <string name="ok_button">OK</string>
+    <string name="cancel_button">ОТМЕНА</string>
+    <string name="significant_event_date_hint">Дата</string>
+    <string name="empty_event_name_hint">Название события не может быть пустым</string>
+    <string name="settings_switch_push">Push-уведомления</string>
+    <string name="settings_get_friends_from_vk">Добавить друзей из Вконтакте</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>

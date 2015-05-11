@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.vk.sdk.*;
 import com.vk.sdk.api.*;
 import com.vk.sdk.api.methods.VKApiFriends;
@@ -121,7 +121,7 @@ public class VkontakteActivity extends Activity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), "description", isMale, 0);
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){

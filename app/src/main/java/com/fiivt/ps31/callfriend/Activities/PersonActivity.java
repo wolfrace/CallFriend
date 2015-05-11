@@ -12,8 +12,9 @@ import android.widget.*;
 import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
-import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import android.view.Gravity;
+
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
 

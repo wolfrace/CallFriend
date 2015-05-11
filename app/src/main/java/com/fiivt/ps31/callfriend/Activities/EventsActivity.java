@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.fiivt.ps31.callfriend.AppDatabase.*;
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.fiivt.ps31.callfriend.R;
 
 import java.util.Date;
@@ -28,9 +29,9 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListSoon;
 
     public void test(AppDb db) {
-        Person p = new Person("Kolya Lobkov", true, 1);
-        Person p2 = new Person("Lena Lobkova", false, 2);
-        Person p3 = new Person("Danil Lobkov", true, 3);
+        Person p = new Person("Kolya Lobkov", "desctiption", true, 1);
+        Person p2 = new Person("Lena Lobkova", "desctiption", false, 2);
+        Person p3 = new Person("Danil Lobkov", "desctiption", true, 3);
 
         db.addPerson(p);
         db.addPerson(p2);
