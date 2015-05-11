@@ -61,6 +61,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         for (int i = 0; i++ < 10;) {
             SignificantEvent event = new SignificantEvent();
             event.setId(i);
+            event.setModified(i % 2 == 0);
             event.setDate(new Date(System.currentTimeMillis() + (i * 1000000)));
             event.setTitle((i % 2 == 0) ? "Best title eve " + i + " !!!" : "Short " + i);
             event.setEnabled(i % 3 == 0);
@@ -120,7 +121,11 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 SignificantEvent event = eventsAdapter.getItem(position);
-                onEventEditClick(event);
+                if (event.isModified()) {
+                    onEventEditClick(event);
+                } else {
+                    onSignificantEventCheckBoxClick(event);
+                }
             }
         });
         eventsAdapter = new SignificantEventAdapter(getApplicationContext());
@@ -145,7 +150,15 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         showSignificantEventEditDialog(event);
     }
 
-    private void onEventEnableClick(SignificantEvent event) {
+    private void onSignificantEventCheckBoxClick(SignificantEvent event) {
+        boolean isInitialized = event.getDate() != null;
+        if (isInitialized) {
+            event.setEnabled(!event.isEnabled());
+            eventsAdapter.notifyDataSetChanged();
+        } else {
+            event.setEnabled(true);
+            showSignificantEventEditDialog(event);
+        }
     }
 
     private void showSignificantEventEditDialog(SignificantEvent event) {
@@ -223,7 +236,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
     }
 
     public void onCancel() {
-        //todo close page
+        finish();
     }
 
     private void setMinimalWidthAsScreenWidth(View view) {
@@ -275,11 +288,13 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         //todo add event icon
         private Date date;
         private boolean enabled;
+        private boolean modified;
         private long reminderTime;
 
         public SignificantEvent(String title, Date date, long reminderTime) {
             this.title = title;
             this.date = date;
+            this.modified = true;
             this.reminderTime = reminderTime;
         }
     }
@@ -333,7 +348,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
                 @Override
                 public void onClick(View view) {
                     SignificantEvent event = getItem(eventPosition);
-                    onEventEnableClick(event);
+                    onSignificantEventCheckBoxClick(event);
                 }
             });
         }
