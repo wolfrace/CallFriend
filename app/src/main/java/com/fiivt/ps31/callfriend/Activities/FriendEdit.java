@@ -41,6 +41,7 @@ import lombok.NoArgsConstructor;
 
 public class FriendEdit extends ActionBarActivity implements OnDataSetChangedListener {
 
+    private static final int INVALID_EVENT_ID = -1;
     private EditText nameView;
     private EditText descriptionView;
     private CircleImageView avatarView;
@@ -132,6 +133,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
 
     private void onCreateNewSignificantEvent() {
         // todo create new significant date
+        showSignificantEventEditDialog(null);
     }
 
     private void onDeleteSignificantEvent(SignificantEvent event) {
@@ -151,10 +153,14 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         SignificantEventEditDialog dialog = new SignificantEventEditDialog();
 
         Bundle args = new Bundle();
-        args.putInt("id", event.getId());
-        args.putString("eventName", event.getTitle());
-        args.putSerializable("eventDate", event.getDate());
-        args.putLong("reminderTime", event.getReminderTime());
+        if (event != null){
+            args.putInt("id", event.getId());
+            args.putString("eventName", event.getTitle());
+            args.putSerializable("eventDate", event.getDate());
+            args.putLong("reminderTime", event.getReminderTime());
+        } else {
+            args.putInt("id", INVALID_EVENT_ID);
+        }
 
         dialog.setArguments(args);
         dialog.setListener(this);
@@ -233,9 +239,16 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         return null;
     }
 
-
     @Override
     public void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime) {
+        if (eventId == INVALID_EVENT_ID) {
+            onCreateNewEvent(eventName, eventDate, reminderTime);
+        } else {
+            onChangeEventDate(eventId, eventName, eventDate, reminderTime);
+        }
+    }
+
+    private void onChangeEventDate(int eventId, String eventName, Date eventDate, long reminderTime) {
         SignificantEvent event = eventsAdapter.getItemById(eventId);
         if (event == null) return;
 
@@ -247,6 +260,13 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         // todo save changed significant event to db
     }
 
+    private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
+        SignificantEvent event = new SignificantEvent(eventName, eventDate, reminderTime);
+        // todo save new event into db
+        eventsAdapter.add(event);
+        eventsAdapter.notifyDataSetChanged();
+    }
+
     @Data
     @NoArgsConstructor
     public static class SignificantEvent {
@@ -256,6 +276,12 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         private Date date;
         private boolean enabled;
         private long reminderTime;
+
+        public SignificantEvent(String title, Date date, long reminderTime) {
+            this.title = title;
+            this.date = date;
+            this.reminderTime = reminderTime;
+        }
     }
 
 
@@ -293,6 +319,13 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
             viewHolder.setEventValues(event);
             processEnableEventButtonClick(viewHolder, position);
             return view;
+        }
+
+        @Override
+        public void add(SignificantEvent event) {
+            if (event != null) {
+                values.add(event);
+            }
         }
 
         private void processEnableEventButtonClick(SignificantEventHolder viewHolder, final int eventPosition) {

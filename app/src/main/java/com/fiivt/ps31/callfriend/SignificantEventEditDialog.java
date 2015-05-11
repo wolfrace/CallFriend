@@ -109,9 +109,12 @@ public class SignificantEventEditDialog extends DialogFragment {
         long reminderTime = getReminderTime();
 
         if (name.isEmpty()) {
-            Toast
-                    .makeText(getActivity(), R.string.empty_event_name_hint, Toast.LENGTH_LONG)
-                    .show();
+            onError(R.string.empty_event_name_hint);
+            return;
+        }
+
+        if (date == null) {
+            onError(R.string.empty_event_date_hint);
             return;
         }
 
@@ -119,6 +122,12 @@ public class SignificantEventEditDialog extends DialogFragment {
             listener.onDataSetChanged(eventId, name, date, reminderTime);
         }
         getDialog().dismiss();
+    }
+
+    private void onError(int errorStringResId) {
+        Toast
+                .makeText(getActivity(), errorStringResId, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override

@@ -38,5 +38,6 @@
     <string name="settings_switch_push">Push-уведомления</string>
     <string name="settings_get_friends_from_vk">Добавить друзей из Вконтакте</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="empty_event_date_hint">Дата события не задана</string>
 
 </resources>
