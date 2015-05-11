@@ -35,7 +35,9 @@ import lombok.NoArgsConstructor;
 public class FriendEdit extends ActionBarActivity implements OnDataSetChangedListener {
 
     private EditText nameView;
+    private EditText descriptionView;
     private CircleImageView avatarView;
+    private Integer hiddenPersonId;
     private SignificantEventAdapter eventsAdapter;
 
 
@@ -55,7 +57,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
             events.add(event);
         }
 
-        Person person = new Person("Vasya hop", false, 99999);
+        Person person = new Person("Vasya hop", "So svadbi Leni", false, 99999);
         // test data end
         setPersonDataOnView(person, events);
     }
@@ -67,6 +69,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         initButtons();
         initEventsList();
         nameView = (EditText) findViewById(R.id.friend_name_edit_text);
+        descriptionView = (EditText) findViewById(R.id.friend_description_edit_text);
         avatarView = (CircleImageView) findViewById(R.id.friend_avatar);
     }
 
@@ -91,6 +94,8 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
     private void setPersonDataOnView(Person person, List<SignificantEvent> events) {
         // set personal info
         nameView.setText(person.getName());
+        nameView.setText(person.getDescription());
+        hiddenPersonId = person.getId();
         //avatarView.setImageResource(); todo set AVATAR
 
         // set significant events
@@ -217,6 +222,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         //todo todo me
         return null;
     }
+
 
     @Override
     public void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime) {

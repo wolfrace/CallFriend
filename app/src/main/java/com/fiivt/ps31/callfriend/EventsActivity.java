@@ -28,9 +28,9 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListSoon;
 
     public void test(AppDb db) {
-        Person tmpPerson = new Person("Kolya Lobkov", true, 1);
-        Person tmpPerson2 = new Person("Lena Lobkova", false, 2);
-        Person tmpPerson3 = new Person("Danil Lobkov", true, 3);
+        Person tmpPerson = new Person("Kolya Lobkov", "tovarish", true, 1);
+        Person tmpPerson2 = new Person("Lena Lobkova", "mati", false, 2);
+        Person tmpPerson3 = new Person("Danil Lobkov", "brat",true, 3);
 
         db.addPerson(tmpPerson);
         db.addPerson(tmpPerson2);
