@@ -20,9 +20,6 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Данил on 24.04.2015.
- */
 public class PersonActivity extends Activity {
 
 
