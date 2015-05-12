@@ -19,6 +19,12 @@ import lombok.Data;
 
 import java.util.List;
 
+
+/**
+ * Created by Данил on 24.04.2015.
+ */
+
+
 public class PersonActivity extends Activity {
 
 
@@ -34,29 +40,24 @@ public class PersonActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               //addPersonButton.setBackgroundColor();
-               Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                //addPersonButton.setBackgroundColor();
+                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
         });
+
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
         final List<Person> person = database.getPersons(100, 0);
         ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
         personsListView.setAdapter(personAdapter);
     }
 
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_persons_list, menu);
 
-//        eventsListView.setOnItemClickListener(  new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-//            }
-//        });
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
-
 
     @Data
     static class PersonViewHolder {

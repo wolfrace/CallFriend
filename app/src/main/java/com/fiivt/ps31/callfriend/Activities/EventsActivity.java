@@ -27,6 +27,7 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListUrgently;
     private EventsListView eventsListSoon;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +36,7 @@ public class EventsActivity extends ActionBarActivity {
         initEventsLists();
 
         database = new AppDb(this);
-        // test end
+
         addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
     }
 
@@ -156,9 +157,9 @@ public class EventsActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_show_contacts) {
-            return true;
-        }
+//        if (id == R.id.action_show_contacts) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
