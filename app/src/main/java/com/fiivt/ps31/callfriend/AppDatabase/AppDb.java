@@ -4,8 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
@@ -16,19 +15,23 @@ import java.util.List;
 /**
  * Created by Egor on 23.04.2015.
  */
-public class AppDb extends  Singleton {
+public class AppDb {
     private SQLiteDatabase db;
     private String dbPath = "AppDb_new.db";
 
     public AppDb(Context c) {
         //c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
+        // Ïåðñîíà èìååò èìÿ, ïîë, ôîòîãðàôèþ
         db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
 
+        // Øàáëîí ñîáûòèÿ èìååò èíôîðìàöèþ î ñîáûòèè, äàòó ïî óìîë÷àíèþ, èäåíòèôèêàòîð èêîíêè è ôëàã, îïîâåùàþùèé î âîçìîæíîñòè ìåíÿòü äàòó è êóëäàóí ñîáûòèÿ (äëÿ Íîâîãî Ãîäà, íàïðèìåð, íåëüçÿ)
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
+        // Ïåðñîíàëüíûé øàáëîí õðàíèò íàñòðîåííûé äëÿ êîíêðåòíîãî ÷åëîâåêà øàáëîí ñîáûòèÿ. Ñîäåðæèò èäåíòèôèêàòîð ïåðñîíû, øàáëîíà ñîáûòèÿ, äàòó íà÷àëà è êóëäàóí
         db.execSQL("CREATE TABLE IF NOT EXISTS personTemplate(idPersonTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idTemplate INTEGER, customDate DATE, cooldown DATE);");
 
+        // Ñîáûòèå õðàíèò èäåíòèôèêàòîðû ïåðñîíû, ïåðñîíàëüíîãî øàáëîíà, äàòó ñîáûòèÿ è ñòàòóñ ñîáûòèÿ
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idEvent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idPersonTemplate INTEGER, info VARCHAR, date DATE, status INTEGER);");
     }
 
@@ -44,7 +47,7 @@ public class AppDb extends  Singleton {
         insertValues.put("photo", person.getIdPhoto());
 
         long id = db.insert("person", null, insertValues);
-        person.setId((int)id);
+        person.setId((int) id);
     }
 
     public void updatePerson(Person person) {
@@ -56,7 +59,7 @@ public class AppDb extends  Singleton {
         db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
-    // ������ ��� ������������������� ������� � ��������������� �������
+    // Óäàëèò âñå ïåðñîíàëèçèðîâàííûå øàáëîíû è çàïëàíèðîâàííûå ñîáûòèÿ
     public void deletePerson(Person person) {
         deleteEventsByPerson(person);
         deletePersonTemplatesByPerson(person);
@@ -80,11 +83,7 @@ public class AppDb extends  Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0)
-                    , cursor.getString(1)
-                    , "description"
-                    , cursor.getString(2).equalsIgnoreCase("TRUE")
-                    , cursor.getInt(3));
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
             persons.add(p);
         }
 
@@ -96,7 +95,6 @@ public class AppDb extends  Singleton {
         cursor.moveToNext();
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
-                , "description"
                 , cursor.getString(2).equalsIgnoreCase("TRUE")
                 , cursor.getInt(3));
     }
@@ -123,7 +121,7 @@ public class AppDb extends  Singleton {
         db.update("eventTemplate", newValues, "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
     }
 
-    // �������� ��� ������������������� ������� � ��������������� ������� �� ���
+    // Óäàëÿòñÿ âñå ïåðñîíàëèçèðîâàííûå øàáëîíû è çàïëàíèðîâàíûûå ñîáûòèÿ ïî íèì
     public void deleteEventTemplate(EventTemplate eventTemplate) {
         deletePersonTemplatesByEventTemplate(eventTemplate);
 
@@ -134,7 +132,7 @@ public class AppDb extends  Singleton {
         db.delete("event", "idPerson=".concat(Integer.toString(id)), null);
     }
 
-    // �������� ��� ��������������� �� ������������ �������� �������
+    // Óäàëÿòñÿ âñå çàïëàíèðîâàííûå ïî ïåðñîíàëüíûì øàáëîíàì ñîáûòèÿ
     private void deletePersonTemplatesByEventTemplate(EventTemplate eventTemplate) {
         ArrayList<Integer> personTemplateIds = getPersonTemplateIdsByEventTemplate(eventTemplate);
         for (Integer id : personTemplateIds) {
@@ -202,7 +200,7 @@ public class AppDb extends  Singleton {
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
 
-    // �������� ��� ��������������� �� ������������� ������� �������
+    // Óäàëÿòñÿ âñå çàïëàíèðîâàííûå ïî ïåðñîíàëüíîìó øàáëîíó ñîáûòèÿ
     public void deletePersonTemplate(PersonTemplate personTemplate) {
         deleteEventsByPersonTemplate(personTemplate.getId());
 
@@ -295,5 +293,16 @@ public class AppDb extends  Singleton {
         }
 
         return events;
+    }
+
+    public Event getLastEventByPersonTemplate(Integer id) {
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date DESC;", null);
+        cursor.moveToNext();
+        Person person = getPerson(cursor.getInt(1));
+        PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+        return new Event(cursor.getInt(0), person,
+                personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
     }
 }

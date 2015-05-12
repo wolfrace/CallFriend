@@ -7,7 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.vk.sdk.*;
 import com.vk.sdk.api.*;
 import com.vk.sdk.api.methods.VKApiFriends;
@@ -15,10 +16,6 @@ import com.vk.sdk.dialogs.VKCaptchaDialog;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
@@ -28,7 +25,6 @@ public class VkontakteActivity extends Activity {
 
     private final static String VK_APP_ID = "4907734";
 
-    //private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String[] VK_SCOPE = new String[]{VKScope.FRIENDS, VKScope.NOHTTPS};
 
@@ -71,6 +67,12 @@ public class VkontakteActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Settings settings = Settings.getInstance(this);
+        if (settings.isImportVkNeed() == false) {
+            return;
+        }
+
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, VK_APP_ID, VKAccessToken.tokenFromSharedPreferences(this, VK_ACCESS_TOKEN));
         VKSdk.authorize(VK_SCOPE);
@@ -121,7 +123,7 @@ public class VkontakteActivity extends Activity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), "description", isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), isMale, 0);
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){
