@@ -51,14 +51,14 @@ public class VkontakteActivity extends Activity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             newToken.saveTokenToSharedPreferences(VkontakteActivity.this, VK_ACCESS_TOKEN);
-            //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             //startActivity(i);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-//            startActivity(i);
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+            startActivity(i);
         }
     };
 
@@ -87,8 +87,8 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
-                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                //startActivity(i);
                 //Do complete stuff
             }
 

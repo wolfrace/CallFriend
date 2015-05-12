@@ -3,13 +3,14 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 import com.fiivt.ps31.callfriend.Utils.Status;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Egor on 23.04.2015.
  */
 @Data
-public class PersonTemplate {
+public class PersonTemplate implements Serializable {
     private Integer id;
     private Person person;
     private EventTemplate eventTemplate;

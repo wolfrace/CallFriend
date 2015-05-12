@@ -5,10 +5,11 @@ package com.fiivt.ps31.callfriend.AppDatabase;
  */
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class EventTemplate {
+public class EventTemplate implements Serializable {
     private Integer id;
     private String info;
     private Date defaultDate;

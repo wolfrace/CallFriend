@@ -3,6 +3,7 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 import com.fiivt.ps31.callfriend.Utils.Status;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -11,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @Data
-public class Event {
+public class Event implements Serializable {
     private Integer id;
     private Person person;
     private PersonTemplate personTemplate;
