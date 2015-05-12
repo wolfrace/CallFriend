@@ -1,25 +1,28 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
-import com.fiivt.ps31.callfriend.AppDatabase.*;
-import com.fiivt.ps31.callfriend.R;
-
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class EventsActivity extends ActionBarActivity {
+public class EventsActivity extends BaseActivity {
 
     public AppDb database;
 
@@ -147,7 +150,6 @@ public class EventsActivity extends ActionBarActivity {
 //        });
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

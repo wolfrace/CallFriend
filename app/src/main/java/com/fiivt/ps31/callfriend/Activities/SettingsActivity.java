@@ -1,32 +1,30 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
 
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
 
-public class SettingsActivity extends ActionBarActivity {
+public class SettingsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
 
-
         Switch switchPush = (Switch)findViewById(R.id.sett_switchPush);
-        OnCheckedChangeListener switchCheckedChangeListener = new OnCheckedChangeListener() {
+        CompoundButton.OnCheckedChangeListener switchCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 changePushSettings(b);
             }
         };
         switchPush.setOnCheckedChangeListener(switchCheckedChangeListener);
-
         View loadFromVkView = findViewById(R.id.sett_loadFriends);
         View.OnClickListener vkLoadClickListener = new View.OnClickListener() {
             @Override
@@ -40,7 +38,7 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        //getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
     }
 
@@ -55,7 +53,6 @@ public class SettingsActivity extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

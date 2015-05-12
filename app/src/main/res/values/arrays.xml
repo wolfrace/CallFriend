@@ -11,4 +11,24 @@
         <item>За неделю</item>
         <item>За месяц</item>
     </string-array>
+<!-- Пункты бокового меню -->
+    <string-array name="nav_drawer_items">
+        <item>События</item>
+        <item>Друзья</item>
+        <item>Настройки</item>
+        <item>О приложении</item>
+        <item>Дни рождения</item>
+        <item>Особые</item>
+    </string-array>
+<!-- иконки для итемов бокового меню, порядок соответствующий верхнему списку -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_launcher</item>
+    </array>
 </resources>

@@ -75,6 +75,7 @@ public class VkontakteActivity extends Activity {
         if (settings.isImportVkNeed() == false) {
             Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             startActivity(i);
+
             return;
         }
 

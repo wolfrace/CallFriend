@@ -1,11 +1,11 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-public class FriendEdit extends ActionBarActivity implements OnDataSetChangedListener {
+public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     private static final int INVALID_EVENT_ID = -1;
     private EditText nameView;
@@ -56,6 +56,15 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
 
         super.onCreate(savedInstanceState);
         initView();
+
+        int iconsResIds[] = {
+                R.drawable.ic_event_birthday, R.drawable.ic_event_girl,
+                R.drawable.ic_event_baby, R.drawable.ic_event_deffend,
+                R.drawable.ic_event_angel, R.drawable.ic_event_wedding,
+                R.drawable.ic_event_lovers, R.drawable.ic_event_xmass,
+                R.drawable.ic_event_china, R.drawable.ic_event_special
+        };
+
         //todo get Person info/significant events (now only test data)
         List<SignificantEvent> events = new ArrayList<SignificantEvent>();
         for (int i = 0; i++ < 10;) {
@@ -65,9 +74,12 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
             event.setDate(new Date(System.currentTimeMillis() + (i * 1000000)));
             event.setTitle((i % 2 == 0) ? "Best title eve " + i + " !!!" : "Short " + i);
             event.setEnabled(i % 3 == 0);
+            event.setIconResId(iconsResIds[i % iconsResIds.length]);
             event.setReminderTime(TimeUnit.DAYS.toMillis(7));
             events.add(event);
         }
+
+
 
         Person person = new Person("Vasya hop", "So svadbi Leni", false, 99999);
         // test data end
@@ -168,6 +180,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         Bundle args = new Bundle();
         if (event != null){
             args.putInt("id", event.getId());
+            args.putInt("iconResId", event.getIconResId());
             args.putString("eventName", event.getTitle());
             args.putSerializable("eventDate", event.getDate());
             args.putLong("reminderTime", event.getReminderTime());
@@ -283,6 +296,9 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
     @Data
     @NoArgsConstructor
     public static class SignificantEvent {
+
+        private static final int CUSTOM_EVENT_ICON = R.drawable.ic_event_special;
+
         private int id;
         private String title;
         //todo add event icon
@@ -290,12 +306,17 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         private boolean enabled;
         private boolean modified;
         private long reminderTime;
+        private int iconResId;
 
         public SignificantEvent(String title, Date date, long reminderTime) {
             this.title = title;
             this.date = date;
             this.modified = true;
             this.reminderTime = reminderTime;
+        }
+
+        public int getIconResId() {
+            return (iconResId <= 0) ? CUSTOM_EVENT_ICON : iconResId;
         }
     }
 
@@ -311,7 +332,7 @@ public class FriendEdit extends ActionBarActivity implements OnDataSetChangedLis
         public void setEventValues(SignificantEvent event) {
             title.setText(event.getTitle());
             checkBox.setChecked(event.isEnabled());
-            //icon.setImageResource(); todo set image
+            icon.setImageResource(event.getIconResId());
         }
     }
 

@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.fiivt.ps31.callfriend.Utils.Settings;
+
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
@@ -22,8 +22,14 @@ public class AppDb {
     public AppDb(Context c) {
         //c.deleteDatabase(dbPath); // dropbase
         initDb(c);
-    }
 
+        db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description VARCHAR, isMale BOOLEAN, photo BLOB);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
+
+    }
 
     public void clearDb(Context c) {
         c.deleteDatabase(dbPath);
@@ -84,7 +90,13 @@ public class AppDb {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("TRUE"), cursor.getInt(4));
+
+            Person p = new Person(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3).equalsIgnoreCase("TRUE"),
+                    cursor.getInt(4));
             persons.add(p);
         }
 
