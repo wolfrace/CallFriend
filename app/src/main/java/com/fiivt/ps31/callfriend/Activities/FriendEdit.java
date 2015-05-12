@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -18,7 +17,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
@@ -30,7 +32,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.fiivt.ps31.callfriend.R;
-import com.fiivt.ps31.callfriend.Service.EventService;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -42,6 +43,11 @@ import lombok.NoArgsConstructor;
 public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     private static final int INVALID_EVENT_ID = -1;
+    private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
+
+    private AppDb db;
+
+    private Person person;
     private EditText nameView;
     private EditText descriptionView;
     private CircleImageView avatarView;
@@ -52,38 +58,42 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //test
-        startService(new Intent(this, EventService.class));
-
+        //startService(new Intent(this, EventService.class));
         super.onCreate(savedInstanceState);
+
+        db = AppDb.getInstance(this);
         initView();
 
-        int iconsResIds[] = {
-                R.drawable.ic_event_birthday, R.drawable.ic_event_girl,
-                R.drawable.ic_event_baby, R.drawable.ic_event_deffend,
-                R.drawable.ic_event_angel, R.drawable.ic_event_wedding,
-                R.drawable.ic_event_lovers, R.drawable.ic_event_xmass,
-                R.drawable.ic_event_china, R.drawable.ic_event_special
-        };
+        //todo init person and events
+        //setPersonDataOnView(person, events);
+    }
 
-        //todo get Person info/significant events (now only test data)
-        List<SignificantEvent> events = new ArrayList<SignificantEvent>();
-        for (int i = 0; i++ < 10;) {
-            SignificantEvent event = new SignificantEvent();
-            event.setId(i);
-            event.setModified(i % 2 == 0);
-            event.setDate(new Date(System.currentTimeMillis() + (i * 1000000)));
-            event.setTitle((i % 2 == 0) ? "Best title eve " + i + " !!!" : "Short " + i);
-            event.setEnabled(i % 3 == 0);
-            event.setIconResId(iconsResIds[i % iconsResIds.length]);
-            event.setReminderTime(TimeUnit.DAYS.toMillis(7));
-            events.add(event);
+    private List<PersonTemplate> convertToSignificantEvents(List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> templates) {
+        List<PersonTemplate> events = new ArrayList<PersonTemplate>(templates.size());
+        for (com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate template: templates) {
+            new PersonTemplate();
         }
+        return events;
+    }
 
+    private List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> generateListOfPersonTemplates(Person person) {
+        List<EventTemplate> defaultTemplates = db.getEventTemplates();
+        List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> personTemplates = new ArrayList<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate>(defaultTemplates.size());
+        for (EventTemplate defTemplate: defaultTemplates) {
+            com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate personTemplate = generatePersonTemplate(person, defTemplate);
+            personTemplates.add(personTemplate);
+        }
+        return personTemplates;
+    }
 
-
-        Person person = new Person("Vasya hop", "So svadbi Leni", false, 99999);
-        // test data end
-        setPersonDataOnView(person, events);
+    private com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate generatePersonTemplate(Person person, EventTemplate defaultTemplate) {
+        return new com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate(
+                person,
+                defaultTemplate,
+                defaultTemplate.getDefaultDate(),
+                new Date(TimeUnit.DAYS.toMillis(365)),
+                DEFAULT_REMINDER_TIME,
+                false);
     }
 
     private void initView() {
@@ -115,7 +125,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         });
     }
 
-    private void setPersonDataOnView(Person person, List<SignificantEvent> events) {
+    private void setPersonDataOnView(Person person, List<PersonTemplate> events) {
         // set personal info
         nameView.setText(person.getName());
         nameView.setText(person.getDescription());
@@ -132,12 +142,8 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                SignificantEvent event = eventsAdapter.getItem(position);
-                if (event.isModified()) {
-                    onEventEditClick(event);
-                } else {
-                    onSignificantEventCheckBoxClick(event);
-                }
+                PersonTemplate event = eventsAdapter.getItem(position);
+                onEventEditClick(event);
             }
         });
         eventsAdapter = new SignificantEventAdapter(getApplicationContext());
@@ -153,17 +159,17 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         showSignificantEventEditDialog(null);
     }
 
-    private void onDeleteSignificantEvent(SignificantEvent event) {
+    private void onDeleteSignificantEvent(PersonTemplate event) {
         //todo delete from db ??
         eventsAdapter.deleteEvent(event);
     }
 
-    private void onSignificantEventEdit(SignificantEvent event) {
+    private void onSignificantEventEdit(PersonTemplate event) {
         showSignificantEventEditDialog(event);
     }
 
-    private void onSignificantEventCheckBoxClick(SignificantEvent event) {
-        boolean isInitialized = event.getDate() != null;
+    private void onSignificantEventCheckBoxClick(PersonTemplate event) {
+        boolean isInitialized = event.getCustomDate() != null;
         if (isInitialized) {
             event.setEnabled(!event.isEnabled());
             eventsAdapter.notifyDataSetChanged();
@@ -173,7 +179,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         }
     }
 
-    private void showSignificantEventEditDialog(SignificantEvent event) {
+    private void showSignificantEventEditDialog(PersonTemplate event) {
         FragmentManager manager = getFragmentManager();
         SignificantEventEditDialog dialog = new SignificantEventEditDialog();
 
@@ -182,7 +188,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             args.putInt("id", event.getId());
             args.putInt("iconResId", event.getIconResId());
             args.putString("eventName", event.getTitle());
-            args.putSerializable("eventDate", event.getDate());
+            args.putSerializable("eventDate", event.getCustomDate());
             args.putLong("reminderTime", event.getReminderTime());
         } else {
             args.putInt("id", INVALID_EVENT_ID);
@@ -193,7 +199,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         dialog.show(manager, "sgnEventEdtDlg");
     }
 
-    private void onEventEditClick(final SignificantEvent event) {
+    private void onEventEditClick(final PersonTemplate event) {
         FragmentManager manager = getFragmentManager();
         SignificantEventActionDialog dialog = new SignificantEventActionDialog();
 
@@ -275,11 +281,11 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onChangeEventDate(int eventId, String eventName, Date eventDate, long reminderTime) {
-        SignificantEvent event = eventsAdapter.getItemById(eventId);
+        PersonTemplate event = eventsAdapter.getItemById(eventId);
         if (event == null) return;
 
         event.setTitle(eventName);
-        event.setDate(eventDate);
+        event.setCustomDate(eventDate);
         event.setReminderTime(reminderTime);
 
         eventsAdapter.notifyDataSetChanged();
@@ -287,39 +293,11 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
-        SignificantEvent event = new SignificantEvent(eventName, eventDate, reminderTime);
-        // todo save new event into db
+        PersonTemplate event = new PersonTemplate(person, eventName, eventDate, reminderTime);
+        db.addPersonTemplate(event);
         eventsAdapter.add(event);
         eventsAdapter.notifyDataSetChanged();
     }
-
-    @Data
-    @NoArgsConstructor
-    public static class SignificantEvent {
-
-        private static final int CUSTOM_EVENT_ICON = R.drawable.ic_event_special;
-
-        private int id;
-        private String title;
-        //todo add event icon
-        private Date date;
-        private boolean enabled;
-        private boolean modified;
-        private long reminderTime;
-        private int iconResId;
-
-        public SignificantEvent(String title, Date date, long reminderTime) {
-            this.title = title;
-            this.date = date;
-            this.modified = true;
-            this.reminderTime = reminderTime;
-        }
-
-        public int getIconResId() {
-            return (iconResId <= 0) ? CUSTOM_EVENT_ICON : iconResId;
-        }
-    }
-
 
     @Data
     @NoArgsConstructor
@@ -329,36 +307,36 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         CheckBox checkBox;
         CircleImageView icon;
 
-        public void setEventValues(SignificantEvent event) {
+        public void setEventValues(PersonTemplate event) {
             title.setText(event.getTitle());
             checkBox.setChecked(event.isEnabled());
             icon.setImageResource(event.getIconResId());
         }
     }
 
-    public class SignificantEventAdapter extends ArrayAdapter<SignificantEvent> {
+    public class SignificantEventAdapter extends ArrayAdapter<PersonTemplate> {
         @Getter
-        private final List<SignificantEvent> values;
+        private final List<PersonTemplate> values;
         private final Context context;
 
         public SignificantEventAdapter(Context context) {
             super(context, R.layout.row_significant_event);
             this.context = context;
-            this.values = new ArrayList<SignificantEvent>();
+            this.values = new ArrayList<PersonTemplate>();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = getViewWithHolder(convertView, parent);
             SignificantEventHolder viewHolder = (SignificantEventHolder) view.getTag();
-            SignificantEvent event = values.get(position);
+            PersonTemplate event = values.get(position);
             viewHolder.setEventValues(event);
             processEnableEventButtonClick(viewHolder, position);
             return view;
         }
 
         @Override
-        public void add(SignificantEvent event) {
+        public void add(PersonTemplate event) {
             if (event != null) {
                 values.add(event);
             }
@@ -368,7 +346,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             viewHolder.getEnableEventButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SignificantEvent event = getItem(eventPosition);
+                    PersonTemplate event = getItem(eventPosition);
                     onSignificantEventCheckBoxClick(event);
                 }
             });
@@ -400,7 +378,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         }
 
         @Override
-        public SignificantEvent getItem(int position) {
+        public PersonTemplate getItem(int position) {
             return values.get(position);
         }
 
@@ -409,12 +387,12 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             return values.size();
         }
 
-        public void deleteEvent(SignificantEvent event) {
+        public void deleteEvent(PersonTemplate event) {
             boolean isChanged = false;
-            Iterator<SignificantEvent> it = values.iterator();
+            Iterator<PersonTemplate> it = values.iterator();
             while (it.hasNext()) {
-                SignificantEvent next = it.next();
-                if (next.getId() == event.getId()) {
+                PersonTemplate next = it.next();
+                if (next.getId().equals(event.getId())) {
                     it.remove();
                     isChanged = true;
                 }
@@ -425,8 +403,8 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             }
         }
 
-        public SignificantEvent getItemById(int eventId) {
-            for (SignificantEvent event: values) {
+        public PersonTemplate getItemById(int eventId) {
+            for (PersonTemplate event: values) {
                 if (event.getId() == eventId) {
                     return event;
                 }
