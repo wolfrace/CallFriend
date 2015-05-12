@@ -11,14 +11,12 @@ import android.view.ViewGroup;
 import android.widget.*;
 import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import android.view.Gravity;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 public class PersonActivity extends Activity {

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
@@ -23,7 +22,8 @@ public class AppDb extends  Singleton {
     public AppDb(Context c) {
         //c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description VARCHAR, isMale BOOLEAN, photo BLOB);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
@@ -42,6 +42,7 @@ public class AppDb extends  Singleton {
         insertValues.put("name", person.getName());
         insertValues.put("isMale", person.isMale());
         insertValues.put("photo", person.getIdPhoto());
+        insertValues.put("description", person.getDescription());
 
         long id = db.insert("person", null, insertValues);
         person.setId((int)id);
@@ -52,6 +53,7 @@ public class AppDb extends  Singleton {
         newValues.put("name", person.getName());
         newValues.put("isMale", person.getIdPhoto());
         newValues.put("photo", person.getName());
+        newValues.put("description", person.getDescription());
 
         db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
     }
@@ -80,11 +82,12 @@ public class AppDb extends  Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0)
-                    , cursor.getString(1)
-                    , "description"
-                    , cursor.getString(2).equalsIgnoreCase("TRUE")
-                    , cursor.getInt(3));
+            Person p = new Person(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3).equalsIgnoreCase("TRUE"),
+                    cursor.getInt(4));
             persons.add(p);
         }
 
@@ -96,9 +99,9 @@ public class AppDb extends  Singleton {
         cursor.moveToNext();
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
-                , "description"
-                , cursor.getString(2).equalsIgnoreCase("TRUE")
-                , cursor.getInt(3));
+                , cursor.getString(2)
+                , cursor.getString(3).equalsIgnoreCase("TRUE")
+                , cursor.getInt(4));
     }
 
     // Templates API
