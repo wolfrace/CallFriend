@@ -17,10 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
 // BB58C88B1C43570A79DC1043794830D377702F12
@@ -29,7 +25,6 @@ public class VkontakteActivity extends Activity {
 
     private final static String VK_APP_ID = "4907734";
 
-    //private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String[] VK_SCOPE = new String[]{VKScope.FRIENDS, VKScope.NOHTTPS};
 
