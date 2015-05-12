@@ -1,25 +1,27 @@
 package com.fiivt.ps31.callfriend;
 
 import android.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fiivt.ps31.callfriend.AppDatabase2.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase2.Event;
+import com.fiivt.ps31.callfriend.AppDatabase2.EventTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase2.PersonTemplate;
+import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
-import com.fiivt.ps31.callfriend.AppDatabase2.*;
-import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
-
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class EventsActivity extends ActionBarActivity {
+public class EventsActivity extends BaseActivity {
 
     public AppDb database;
 

@@ -81,7 +81,11 @@ public class AppDb extends  Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
+            Person p = new Person(cursor.getInt(0)
+                    , cursor.getString(1)
+                    , "someDescription"//todo get from db
+                    , cursor.getString(2).equalsIgnoreCase("TRUE")
+                    , cursor.getInt(3));
             persons.add(p);
         }
 
@@ -93,6 +97,7 @@ public class AppDb extends  Singleton {
         cursor.moveToNext();
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
+                , "someDescription"// todo get from db
                 , cursor.getString(2).equalsIgnoreCase("TRUE")
                 , cursor.getInt(3));
     }

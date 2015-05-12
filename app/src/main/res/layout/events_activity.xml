@@ -1,46 +1,56 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    <!-- The main content view. ID = content_frame -->
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/events_not_existing_notify"
-        android:text="@string/events_not_existing_notify"
-        android:textColor="@color/text_color_light"
-        android:textSize="@dimen/standard_text_size"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        android:gravity="center" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+            <TextView
+                android:id="@+id/events_not_existing_notify"
+                android:text="@string/events_not_existing_notify"
+                android:textColor="@color/text_color_light"
+                android:textSize="@dimen/standard_text_size"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:visibility="gone"
+                android:gravity="center" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-                    <com.fiivt.ps31.callfriend.EventsListView
-                        app:dayLeftColor="@color/text_days_left_color_urgently"
-                        app:titleText="@string/event_list_title_urgently"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/events_list_urgently"/>
+                        android:orientation="vertical">
 
-                    <com.fiivt.ps31.callfriend.EventsListView
-                        app:dayLeftColor="@color/text_days_left_color_soon"
-                        app:titleText="@string/event_list_title_soon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/events_list_soon" />
+                            <com.fiivt.ps31.callfriend.EventsListView
+                                app:dayLeftColor="@color/text_days_left_color_urgently"
+                                app:titleText="@string/event_list_title_urgently"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/events_list_urgently"/>
 
-                </LinearLayout>
+                            <com.fiivt.ps31.callfriend.EventsListView
+                                app:dayLeftColor="@color/text_days_left_color_soon"
+                                app:titleText="@string/event_list_title_soon"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/events_list_soon" />
 
-    </ScrollView>
+                        </LinearLayout>
 
-</LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+    </LinearLayout>
+
