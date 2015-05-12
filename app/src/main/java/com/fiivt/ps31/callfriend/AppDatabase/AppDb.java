@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
@@ -21,16 +23,12 @@ public class AppDb extends  Singleton {
     public AppDb(Context c) {
         //c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
-        // Персона имеет имя, пол, фотографию
         db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
 
-        // Шаблон события имеет информацию о событии, дату по умолчанию, идентификатор иконки и флаг, оповещающий о возможности менять дату и кулдаун события (для Нового Года, например, нельзя)
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
-        // Персональный шаблон хранит настроенный для конкретного человека шаблон события. Содержит идентификатор персоны, шаблона события, дату начала и кулдаун
         db.execSQL("CREATE TABLE IF NOT EXISTS personTemplate(idPersonTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idTemplate INTEGER, customDate DATE, cooldown DATE);");
 
-        // Событие хранит идентификаторы персоны, персонального шаблона, дату события и статус события
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idEvent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idPersonTemplate INTEGER, info VARCHAR, date DATE, status INTEGER);");
     }
 
@@ -58,7 +56,7 @@ public class AppDb extends  Singleton {
         db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
-    // Удалит все персонализированные шаблоны и запланированные события
+    // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void deletePerson(Person person) {
         deleteEventsByPerson(person);
         deletePersonTemplatesByPerson(person);
@@ -82,7 +80,11 @@ public class AppDb extends  Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
+            Person p = new Person(cursor.getInt(0)
+                    , cursor.getString(1)
+                    , "description"
+                    , cursor.getString(2).equalsIgnoreCase("TRUE")
+                    , cursor.getInt(3));
             persons.add(p);
         }
 
@@ -94,6 +96,7 @@ public class AppDb extends  Singleton {
         cursor.moveToNext();
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
+                , "description"
                 , cursor.getString(2).equalsIgnoreCase("TRUE")
                 , cursor.getInt(3));
     }
@@ -120,7 +123,7 @@ public class AppDb extends  Singleton {
         db.update("eventTemplate", newValues, "idTemplate=".concat(Integer.toString(eventTemplate.getId())), null);
     }
 
-    // Удалятся все персонализированные шаблоны и запланированыые события по ним
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ
     public void deleteEventTemplate(EventTemplate eventTemplate) {
         deletePersonTemplatesByEventTemplate(eventTemplate);
 
@@ -131,7 +134,7 @@ public class AppDb extends  Singleton {
         db.delete("event", "idPerson=".concat(Integer.toString(id)), null);
     }
 
-    // Удалятся все запланированные по персональным шаблонам события
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     private void deletePersonTemplatesByEventTemplate(EventTemplate eventTemplate) {
         ArrayList<Integer> personTemplateIds = getPersonTemplateIdsByEventTemplate(eventTemplate);
         for (Integer id : personTemplateIds) {
@@ -199,7 +202,7 @@ public class AppDb extends  Singleton {
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
 
-    // Удалятся все запланированные по персональному шаблону события
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     public void deletePersonTemplate(PersonTemplate personTemplate) {
         deleteEventsByPersonTemplate(personTemplate.getId());
 
