@@ -1,70 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.fiivt.ps31.callfriend" >
-
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    package="com.fiivt.ps31.callfriend" >
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/CustomActionBarTheme" >
-
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/CustomActionBarTheme" >
         <activity
-                android:name=".Activities.Preferences"
-                android:label="Preferences">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-
-        <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
-        <activity
-                android:name=".Activities.EventsActivity"
-                android:label="@string/events_activity_title" >
-            <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-                android:name=".Activities.FriendEdit"
-                android:label="@string/title_activity_friend_edit" >
+            android:name="com.fiivt.ps31.callfriend.Activities.EventsActivity"
+            android:label="@string/events_activity_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver
-                android:name=".Service.RepeatingAlarmService"
-                android:process=":remote" />
-        <receiver
-                android:name=".Service.OnBootReceiver"
-                android:enabled="true"
-                android:exported="false" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service
-                android:name=".Service.EventService"
-                android:enabled="true" />
-
         <activity
-                android:name=".Activities.PersonActivity"
-                android:label="@string/persons_activity_title" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            android:name=".Activities.FriendEdit"
+            android:label="@string/title_activity_friend_edit" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <activity
             android:name=".Activities.VkontakteActivity"
             android:label="@string/title_activity_vkontakte" >
@@ -74,8 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
+    <!-- The main content view -->
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        <!-- Add content here -->
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
-
-            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
-            <LinearLayout
-                android:focusable="true" android:focusableInTouchMode="true"
-                android:layout_width="0px" android:layout_height="0px"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -35,7 +25,7 @@
                 <Switch
                     android:id="@+id/sett_switchPush"
                     android:layout_width="fill_parent"
-                    android:layout_height="0dp"
+                    android:layout_height="fill_parent"
                     android:textSize="@dimen/standard_text_size"
                     android:textColor="@color/text_color_darkness"
                     android:text="@string/settings_switch_push"
@@ -74,6 +64,5 @@
             </LinearLayout>
 
         </LinearLayout>
-
     </LinearLayout>
-</LinearLayout>
+

@@ -1,26 +1,28 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase2.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
-import com.fiivt.ps31.callfriend.AppDatabase.*;
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
-import com.fiivt.ps31.callfriend.R;
-
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class EventsActivity extends ActionBarActivity {
+public class EventsActivity extends BaseActivity {
 
     public AppDb database;
 
@@ -29,13 +31,13 @@ public class EventsActivity extends ActionBarActivity {
     private EventsListView eventsListSoon;
 
     public void test(AppDb db) {
-        Person p = new Person("Kolya Lobkov", "desctiption", true, 1);
-        Person p2 = new Person("Lena Lobkova", "desctiption", false, 2);
-        Person p3 = new Person("Danil Lobkov", "desctiption", true, 3);
+        Person tmpPerson = new Person("Kolya Lobkov", "tovarish", true, 1);
+        Person tmpPerson2 = new Person("Lena Lobkova", "mati", false, 2);
+        Person tmpPerson3 = new Person("Danil Lobkov", "brat",true, 3);
 
-        db.addPerson(p);
-        db.addPerson(p2);
-        db.addPerson(p3);
+        db.addPerson(tmpPerson);
+        db.addPerson(tmpPerson2);
+        db.addPerson(tmpPerson3);
 
         List<Person> persons = db.getPersons(100, 0);
         {
@@ -43,6 +45,14 @@ public class EventsActivity extends ActionBarActivity {
             EventTemplate et2 = new EventTemplate("Позвать синячить", true, new Date(), 0);
             db.addEventTemplate(et);
             db.addEventTemplate(et2);
+
+            et = db.getEventTemplate(1);
+            et2 = db.getEventTemplate(2);
+
+
+            Person p = db.getPerson(1);
+            Person p2 = db.getPerson(2);
+            Person p3 = db.getPerson(3);
 
             PersonTemplate pt = new PersonTemplate(p, et, new Date(), new Date(TimeUnit.DAYS.toMillis(1)));
             PersonTemplate pt2 = new PersonTemplate(p2, et, new Date(), new Date(TimeUnit.DAYS.toMillis(2)));
@@ -53,6 +63,11 @@ public class EventsActivity extends ActionBarActivity {
             db.addPersonTemplate(pt2);
             db.addPersonTemplate(pt3);
             db.addPersonTemplate(pt4);
+
+            pt = db.getPersonTemplate(1);
+            pt2 = db.getPersonTemplate(2);
+            pt3 = db.getPersonTemplate(3);
+            pt4 = db.getPersonTemplate(4);
 
             Event e = pt.generateEvent();
             db.addEvent(e);
@@ -193,7 +208,6 @@ public class EventsActivity extends ActionBarActivity {
 //        });
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
