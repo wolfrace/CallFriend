@@ -73,12 +73,21 @@
 
 
         <activity
-                android:name=".Activities.VkontakteActivity"
-                android:label="@string/title_activity_vkontakte" >
+            android:name=".Activities.VkontakteActivity"
+            android:label="@string/title_activity_vkontakte" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 

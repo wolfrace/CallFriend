@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.fiivt.ps31.callfriend.AppDatabase.*;
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
 import com.fiivt.ps31.callfriend.R;
 
 import java.util.Date;
@@ -37,6 +36,7 @@ public class EventsActivity extends ActionBarActivity {
         initEventsLists();
 
         database = new AppDb(this);
+
         addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
     }
 
