@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -6,6 +6,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
 
 public class SettingsActivity extends BaseActivity {
 

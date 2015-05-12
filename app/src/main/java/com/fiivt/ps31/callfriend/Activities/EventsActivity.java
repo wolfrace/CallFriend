@@ -1,4 +1,4 @@
-package com.fiivt.ps31.callfriend;
+package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -6,12 +6,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase2.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase2.Event;
-import com.fiivt.ps31.callfriend.AppDatabase2.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase2.Person;
-import com.fiivt.ps31.callfriend.AppDatabase2.PersonTemplate;
-import com.fiivt.ps31.callfriend.EventsListView.OnEventClickListener;
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -155,7 +156,7 @@ public class EventsActivity extends BaseActivity {
     }
 
     private void initEventsLists() {
-        OnEventClickListener eventClickListener = new OnEventClickListener() {
+        EventsListView.OnEventClickListener eventClickListener = new EventsListView.OnEventClickListener() {
             @Override
             public void onClick(Event event) {
                 showEventActionsDialog(event);

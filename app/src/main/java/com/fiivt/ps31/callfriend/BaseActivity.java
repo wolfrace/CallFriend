@@ -17,6 +17,9 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.fiivt.ps31.callfriend.Activities.EventsActivity;
+import com.fiivt.ps31.callfriend.Activities.SettingsActivity;
+
 import java.util.ArrayList;
 
 public class BaseActivity extends ActionBarActivity {

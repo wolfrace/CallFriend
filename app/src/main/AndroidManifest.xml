@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
         <activity
-            android:name=".EventsActivity"
+            android:name="com.fiivt.ps31.callfriend.Activities.EventsActivity"
             android:label="@string/events_activity_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,14 +17,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FriendEdit"
+            android:name=".Activities.FriendEdit"
             android:label="@string/title_activity_friend_edit" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" >
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
