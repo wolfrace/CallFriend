@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fiivt.ps31.callfriend.Activities.EventsActivity;
+import com.fiivt.ps31.callfriend.Activities.PersonActivity;
 import com.fiivt.ps31.callfriend.Activities.SettingsActivity;
 
 import java.util.ArrayList;
@@ -181,6 +182,7 @@ public class BaseActivity extends ActionBarActivity {
                 goToActivity(EventsActivity.class);
                 break;
             case 1://friends
+                goToActivity(PersonActivity.class);
                 break;
             case 2://settings
                 goToActivity(SettingsActivity.class);

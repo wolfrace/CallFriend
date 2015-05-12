@@ -14,6 +14,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import android.view.Gravity;
 
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
 
@@ -25,7 +26,7 @@ import java.util.List;
  */
 
 
-public class PersonActivity extends Activity {
+public class PersonActivity extends BaseActivity {
 
 
     public AppDb database;
