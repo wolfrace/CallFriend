@@ -17,6 +17,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
 // BB58C88B1C43570A79DC1043794830D377702F12
@@ -49,14 +51,14 @@ public class VkontakteActivity extends Activity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             newToken.saveTokenToSharedPreferences(VkontakteActivity.this, VK_ACCESS_TOKEN);
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            startActivity(i);
+            //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+            //startActivity(i);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            startActivity(i);
+//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+//            startActivity(i);
         }
     };
 
@@ -71,6 +73,8 @@ public class VkontakteActivity extends Activity {
         Settings settings = Settings.getInstance(this);
         settings.setIsImportVkNeed(true);
         if (settings.isImportVkNeed() == false) {
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+            startActivity(i);
             return;
         }
 
@@ -83,16 +87,22 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
                 //Do complete stuff
             }
 
             @Override
             public void onError(VKError error) {
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
                 //Do error stuff
             }
 
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
                 //I don't really believe in progress
             }
         });
