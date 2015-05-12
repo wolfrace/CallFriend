@@ -18,7 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;

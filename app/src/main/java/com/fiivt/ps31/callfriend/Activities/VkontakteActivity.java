@@ -69,6 +69,7 @@ public class VkontakteActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Settings settings = Settings.getInstance(this);
+        settings.setIsImportVkNeed(true);
         if (settings.isImportVkNeed() == false) {
             return;
         }
@@ -123,7 +124,7 @@ public class VkontakteActivity extends Activity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), "imported from vk",isMale, 0);
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){

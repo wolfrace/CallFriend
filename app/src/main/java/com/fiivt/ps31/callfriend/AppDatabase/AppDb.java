@@ -22,16 +22,12 @@ public class AppDb {
     public AppDb(Context c) {
         //c.deleteDatabase(dbPath); // dropbase
         db = c.openOrCreateDatabase(dbPath, c.MODE_PRIVATE, null);
-        // Ïåðñîíà èìååò èìÿ, ïîë, ôîòîãðàôèþ
-        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description VARCHAR, isMale BOOLEAN, photo BLOB);");
 
-        // Øàáëîí ñîáûòèÿ èìååò èíôîðìàöèþ î ñîáûòèè, äàòó ïî óìîë÷àíèþ, èäåíòèôèêàòîð èêîíêè è ôëàã, îïîâåùàþùèé î âîçìîæíîñòè ìåíÿòü äàòó è êóëäàóí ñîáûòèÿ (äëÿ Íîâîãî Ãîäà, íàïðèìåð, íåëüçÿ)
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
-        // Ïåðñîíàëüíûé øàáëîí õðàíèò íàñòðîåííûé äëÿ êîíêðåòíîãî ÷åëîâåêà øàáëîí ñîáûòèÿ. Ñîäåðæèò èäåíòèôèêàòîð ïåðñîíû, øàáëîíà ñîáûòèÿ, äàòó íà÷àëà è êóëäàóí
         db.execSQL("CREATE TABLE IF NOT EXISTS personTemplate(idPersonTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idTemplate INTEGER, customDate DATE, cooldown DATE);");
 
-        // Ñîáûòèå õðàíèò èäåíòèôèêàòîðû ïåðñîíû, ïåðñîíàëüíîãî øàáëîíà, äàòó ñîáûòèÿ è ñòàòóñ ñîáûòèÿ
         db.execSQL("CREATE TABLE IF NOT EXISTS event(idEvent INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, idPerson INTEGER, idPersonTemplate INTEGER, info VARCHAR, date DATE, status INTEGER);");
     }
 
@@ -45,6 +41,7 @@ public class AppDb {
         insertValues.put("name", person.getName());
         insertValues.put("isMale", person.isMale());
         insertValues.put("photo", person.getIdPhoto());
+        insertValues.put("description", person.getDescription());
 
         long id = db.insert("person", null, insertValues);
         person.setId((int) id);
@@ -55,6 +52,7 @@ public class AppDb {
         newValues.put("name", person.getName());
         newValues.put("isMale", person.getIdPhoto());
         newValues.put("photo", person.getName());
+        newValues.put("description", person.getDescription());
 
         db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
     }
@@ -83,7 +81,7 @@ public class AppDb {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2).equalsIgnoreCase("TRUE"), cursor.getInt(3));
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("TRUE"), cursor.getInt(4));
             persons.add(p);
         }
 
@@ -95,8 +93,9 @@ public class AppDb {
         cursor.moveToNext();
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
-                , cursor.getString(2).equalsIgnoreCase("TRUE")
-                , cursor.getInt(3));
+                , cursor.getString(2)
+                , cursor.getString(3).equalsIgnoreCase("TRUE")
+                , cursor.getInt(4));
     }
 
     // Templates API
