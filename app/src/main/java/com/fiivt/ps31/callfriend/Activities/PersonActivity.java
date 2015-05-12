@@ -40,7 +40,6 @@ public class PersonActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //addPersonButton.setBackgroundColor();
                 Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
