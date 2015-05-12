@@ -1,11 +1,11 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -39,7 +39,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-public class FriendEdit extends ActionBarActivity implements OnDataSetChangedListener {
+public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     private static final int INVALID_EVENT_ID = -1;
     private EditText nameView;
