@@ -13,6 +13,7 @@ import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import android.view.Gravity;
 
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
@@ -40,6 +41,7 @@ public class PersonActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //addPersonButton.setBackgroundColor();
                 Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
@@ -49,6 +51,16 @@ public class PersonActivity extends Activity {
         final List<Person> person = database.getPersons(100, 0);
         ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
         personsListView.setAdapter(personAdapter);
+
+        personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                Person person = ((PersonArrayAdapter) adapterView.getAdapter()).getItem(pos);
+                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                intent.putExtra("person", person);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -114,6 +126,11 @@ public class PersonActivity extends Activity {
         @Override
         public int getCount() {
             return values.size();
+        }
+
+        @Override
+        public Person getItem(int pos) {
+            return values.get(pos);
         }
     }
 

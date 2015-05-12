@@ -35,7 +35,7 @@
                 android:name=".Activities.FriendEdit"
                 android:label="@string/title_activity_friend_edit" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.EDIT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -76,7 +76,7 @@
             android:name=".Activities.VkontakteActivity"
             android:label="@string/title_activity_vkontakte" >
             <intent-filter>
-                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
