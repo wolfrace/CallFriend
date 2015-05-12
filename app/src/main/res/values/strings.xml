@@ -5,6 +5,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_friend_edit">Редактирование друга</string>
     <string name="action_friend_list">Contacts</string>
+    <string name="action_search">Search</string>
     <string name="action_event_list">Events</string>
     <string name="events_activity_title">События</string>
     <string name="persons_activity_title">Друзья</string>
@@ -22,6 +23,7 @@
     <string name="friend_name_hint">Имя контакта</string>
     <string name="significant_events_title">Значимые события</string>
     <string name="add_significant_event_button_text">Добавить особое событие</string>
+    <string name="search_hint">Поиск...</string>
 
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
@@ -31,5 +33,11 @@
     <string name="enable_push">Включить push-уведомления</string>
     <string name="notifications_category">Уведомления</string>
     <string name="title_activity_preferences">Preferences</string>
+
+    <string-array name="screen_array">
+        <item>Друзья</item>
+        <item>События</item>
+        <item>Дни Рождения</item>
+    </string-array>
 
 </resources>

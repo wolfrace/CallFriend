@@ -17,3 +17,4 @@ app/build/*
 app/.idea/
 app/local.properties
 app/gradle/
+app/src/main/res/layout/left_menu_list_item.xml
