@@ -60,9 +60,9 @@ public class EventActionDialog extends DialogFragment implements AdapterView.OnI
 
     private EventAction[] createActions() {
         return new EventAction[] {
-            new EventAction(R.color.text_days_left_color_urgently, getString(R.string.event_action_accept)),
-            new EventAction(R.color.text_days_left_color_urgently, getString(R.string.event_action_put_off)),
-            new EventAction(R.color.text_days_left_color_urgently, getString(R.string.event_action_dismiss))};
+            new EventAction(R.drawable.ic_done_grey600_24dp, getString(R.string.event_action_accept)),
+            new EventAction(R.drawable.ic_schedule_grey600_24dp, getString(R.string.event_action_put_off)),
+            new EventAction(R.drawable.ic_close_grey600_24dp, getString(R.string.event_action_dismiss))};
     }
 
     @Override
@@ -106,9 +106,12 @@ public class EventActionDialog extends DialogFragment implements AdapterView.OnI
         public View getView(int position, View convertView, ViewGroup parent) {
             View view = createNewView(parent);
             EventAction action = getItem(position);
-            //todo replace set background method on set image res
-            //((ImageView) view.findViewById(R.id.event_action_icon)).setImageResource();
-            ((TextView) view.findViewById(R.id.event_action_title)).setText(action.getTitle());
+
+            ImageView iconView = ((ImageView) view.findViewById(R.id.event_action_icon));
+            TextView titleView = ((TextView) view.findViewById(R.id.event_action_title));
+
+            iconView.setImageResource(action.getIcon());
+            titleView.setText(action.getTitle());
             return view;
         }
 
