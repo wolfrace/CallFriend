@@ -87,7 +87,7 @@ public class AppDb extends  Singleton {
                     cursor.getString(1),
                     cursor.getString(2),
                     cursor.getString(3).equalsIgnoreCase("TRUE"),
-                    cursor.getInt(4));
+                    9);//cursor.getInt(4));
             persons.add(p);
         }
 
@@ -101,7 +101,7 @@ public class AppDb extends  Singleton {
                 , cursor.getString(1)
                 , cursor.getString(2)
                 , cursor.getString(3).equalsIgnoreCase("TRUE")
-                , cursor.getInt(4));
+                , 9);//cursor.getInt(4));
     }
 
     // Templates API

@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -124,7 +126,14 @@ public class BaseActivity extends ActionBarActivity {
 
     private void initDrawer() {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
         mDrawerLeft = (LinearLayout) findViewById(R.id.left_drawer);
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        mDrawerLeft.setMinimumWidth(width-getStatusBarHeight());
+
         mDrawerList = (ListView)findViewById(R.id.drawer_list);
         mDrawerLayout.setDrawerListener(createDrawerToggle());
         NavDrawerListAdapter adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
@@ -175,7 +184,7 @@ public class BaseActivity extends ActionBarActivity {
      * Displaying fragment view for selected nav drawer list item
      * */
     private void displayView(int position) {
-
+//depends on string array
         switch (position) {
             case 0://events
                 goToActivity(EventsActivity.class);
@@ -201,7 +210,7 @@ public class BaseActivity extends ActionBarActivity {
         mDrawerLayout.closeDrawer(mDrawerLeft);
     }
 
-    private void goToActivity(Class activityClass ){
+    public void goToActivity(Class activityClass ){
         Intent intent = new Intent(this, activityClass);
         startActivity(intent);
         finish();// finishes the current activity
