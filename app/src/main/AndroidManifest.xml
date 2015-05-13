@@ -11,6 +11,14 @@
         android:label="@string/app_name"
         android:theme="@style/CustomActionBarTheme" >
         <activity
+                android:name=".Activities.Preferences"
+                android:label="Preferences">
+        </activity>
+
+
+        <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
+
+        <activity
             android:name="com.fiivt.ps31.callfriend.Activities.EventsActivity"
             android:label="@string/events_activity_title" >
             <intent-filter>
@@ -18,21 +26,59 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
         <activity
             android:name=".Activities.FriendEdit"
             android:label="@string/title_activity_friend_edit" >
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
+
+        <receiver
+                android:name=".Service.RepeatingAlarmService"
+                android:process=":remote" />
+        <receiver
+                android:name=".Service.OnBootReceiver"
+                android:enabled="true"
+                android:exported="false" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </receiver>
+
+
+        <service
+                android:name=".Service.EventService"
+                android:enabled="true" />
+
+
+        <activity
+                android:name=".Activities.PersonActivity"
+                android:label="@string/persons_activity_title" >
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                       android:resource="@xml/searchable"/>
+        </activity>
+
+
+        <activity
+            android:name=".Activities.VkontakteActivity"
+            android:label="@string/title_activity_vkontakte" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activities.VkontakteActivity"
-            android:label="@string/title_activity_vkontakte" >
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".Activities.SettingsActivity"
             android:label="@string/title_activity_settings" >
@@ -40,11 +86,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activities.PersonActivity">
-        <intent-filter>
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
-    </application>
 
+
+
+    </application>
 </manifest>

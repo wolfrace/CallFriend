@@ -153,9 +153,9 @@ public class EventsActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_show_contacts) {
+       /* if (id == R.id.action_show_contacts) {
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

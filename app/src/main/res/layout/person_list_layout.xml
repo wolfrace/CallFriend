@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+        android:id="@+id/content_frame"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/content_frame"
         tools:context=".PersonActivity"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
