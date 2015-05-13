@@ -11,6 +11,7 @@
             android:name="com.fiivt.ps31.callfriend.Activities.EventsActivity"
             android:label="@string/events_activity_title" >
             <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
