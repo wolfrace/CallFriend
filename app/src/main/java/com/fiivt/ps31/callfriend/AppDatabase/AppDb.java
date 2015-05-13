@@ -154,7 +154,8 @@ public class AppDb {
         ContentValues insertValues = new ContentValues();
         insertValues.put("info", eventTemplate.getInfo());
         insertValues.put("canModified", eventTemplate.isCanModified());
-        insertValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
+        if (eventTemplate.getDefaultDate() != null)
+            insertValues.put("defaultDate", eventTemplate.getDefaultDate().getTime());
         insertValues.put("idIcon", eventTemplate.getIdIcon());
 
         long id = db.insert("eventTemplate", null, insertValues);

@@ -6,20 +6,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.Utils.Settings;
-import com.vk.sdk.*;
-import com.vk.sdk.api.*;
-import com.vk.sdk.api.methods.VKApiFriends;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
 
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
@@ -54,14 +62,14 @@ public class VkontakteActivity extends Activity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             newToken.saveTokenToSharedPreferences(VkontakteActivity.this, VK_ACCESS_TOKEN);
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            startActivity(i);
+//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+//            startActivity(i);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            startActivity(i);
+//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+//            startActivity(i);
         }
     };
 
@@ -76,6 +84,9 @@ public class VkontakteActivity extends Activity {
         Settings settings = Settings.getInstance(this);
         settings.setIsImportVkNeed(true);
         if (settings.isImportVkNeed() == false) {
+            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+            startActivity(i);
+
             return;
         }
 
@@ -89,16 +100,26 @@ public class VkontakteActivity extends Activity {
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
                 //Do complete stuff
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
+
             }
 
             @Override
             public void onError(VKError error) {
+                Log.e("AAAAAAAAAAAAAAAAA", error.toString());
                 //Do error stuff
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
+
             }
 
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 //I don't really believe in progress
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
+
             }
         });
     }
@@ -132,6 +153,8 @@ public class VkontakteActivity extends Activity {
                     Person p = new Person(firstName.concat(" ").concat(lastName), "imported from vk",isMale, 0);
                     appDb.addPerson(p);
                 }
+                List<Person> lp = appDb.getPersons(100, 0);
+                int a = 7;
             }catch(JSONException e){
                 e.printStackTrace();
             }
