@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,10 +32,12 @@ public class NavDrawerListAdapter extends ArrayAdapter {
     private static class DrawerItemViewHolder {
         private TextView title;
         private ImageView icon;
+        private FrameLayout divider;
 
         public void setDrawerItemValues(NavDrawerItem item) {
             title.setText(item.getTitle());
             icon.setImageResource(item.getIcon());
+            divider.setBackgroundResource(item.getColor());
         }
     }
 
@@ -66,18 +69,9 @@ public class NavDrawerListAdapter extends ArrayAdapter {
         DrawerItemViewHolder holder = new DrawerItemViewHolder();
         holder.setTitle((TextView) view.findViewById(R.id.drawer_item_title));
         holder.setIcon((ImageView) view.findViewById(R.id.drawer_item_icon));
+        holder.setDivider((FrameLayout) view.findViewById(R.id.drawer_item_divider));
         view.setTag(holder);
-
-       // setDaysLeftColor(view, daysLeftColor);
         return holder;
-    }
-
-    private void setDaysLeftColor(View view, int daysLeftColor) {
-        TextView daysLeftSuffix = (TextView) view.findViewById(R.id.events_days_left_suffix);
-        TextView daysLeftView = (TextView) view.findViewById(R.id.events_days_left);
-
-        daysLeftSuffix.setTextColor(daysLeftColor);
-        daysLeftView.setTextColor(daysLeftColor);
     }
 
     @Override

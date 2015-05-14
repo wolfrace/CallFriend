@@ -15,13 +15,14 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:background="@color/circle_button_color"
                     android:layout_width="72dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_info_outline_grey600_24dp"/>
 
                 <TextView
                     android:id="@+id/settings_push_label"
@@ -63,16 +64,17 @@
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
                 android:id="@+id/sett_loadFriends"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:clickable="true"
                 android:focusable="false"
                 android:background="@drawable/layout_clickable_click"
                 android:focusableInTouchMode="false">
 
                 <ImageView
-                    android:background="@color/circle_button_color"
+                    android:src="@drawable/ic_vk_blue"
                     android:layout_width="72dp"
-                    android:layout_height="50dp" />
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"/>
 
                 <TextView
                     android:layout_width="0dp"

@@ -13,22 +13,29 @@
     </string-array>
 <!-- Пункты бокового меню -->
     <string-array name="nav_drawer_items">
-        <item>События</item>
         <item>Друзья</item>
-        <item>Настройки</item>
-        <item>О приложении</item>
+        <item>События</item>
         <item>Дни рождения</item>
         <item>Особые</item>
+        <item>Настройки</item>
+        <item>О приложении</item>
     </string-array>
 <!-- иконки для итемов бокового меню, порядок соответствующий верхнему списку -->
     <array name="nav_drawer_icons">
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
+        <item>@drawable/ic_friends_grey600_24dp</item>
+        <item>@drawable/ic_friend_events</item>
+        <item>@drawable/ic_event_birthday</item>
+        <item>@drawable/ic_event_special</item>
+        <item>@drawable/ic_settings_grey600_24dp</item>
+        <item>@drawable/ic_info_outline_grey600_24dp</item>
+    </array>
+
+    <array name="nav_drawer_div_color">
+        <item>@color/window_background</item>
+        <item>@color/menu_divider_color</item>
+        <item>@color/window_background</item>
+        <item>@color/menu_divider_color</item>
+        <item>@color/window_background</item>
+        <item>@color/window_background</item>
     </array>
 </resources>

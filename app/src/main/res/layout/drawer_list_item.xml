@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:background="@drawable/selector_navigation_drawer" >
+    android:background="@drawable/selector_navigation_drawer">
 
     <ImageView
         android:id="@+id/drawer_item_icon"
         android:layout_width="25dp"
-        android:layout_height="wrap_content"
+        android:layout_height="25dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
@@ -25,5 +25,11 @@
         android:textSize="@dimen/standard_text_size"
         android:text="no text"
         android:textColor="@color/text_color" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/window_background"
+        android:id="@+id/drawer_item_divider"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

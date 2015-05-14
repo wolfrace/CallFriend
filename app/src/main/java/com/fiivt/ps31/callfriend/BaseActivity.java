@@ -1,5 +1,6 @@
 package com.fiivt.ps31.callfriend;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -32,34 +33,32 @@ public class BaseActivity extends ActionBarActivity {
     private LinearLayout mDrawerLeft;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<NavDrawerItem> navDrawerItems;
+    private Integer selectedPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        selectedPos = getIntent().getIntExtra("selectedPos", 1);
         setContentView(R.layout.base_activity);
         moveDrawerToTop();
         initActionBar() ;
 
         String[] navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         TypedArray navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-        initDrawerItems(navMenuTitles, navMenuIcons);
+        TypedArray navMenuColors = getResources().obtainTypedArray(R.array.nav_drawer_div_color);
+        initDrawerItems(navMenuTitles, navMenuIcons,navMenuColors );
         initDrawer();
     }
 
-    public void initDrawerItems(String[] navMenuTitles, TypedArray navMenuIcons) {
+    public void initDrawerItems(String[] navMenuTitles, TypedArray navMenuIcons, TypedArray navMenuColors) {
 
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
-        if (navMenuIcons == null) {
-            for (int i = 0; i < navMenuTitles.length; i++) {
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
-            }
-        } else {
-            for (int i = 0; i < navMenuTitles.length; i++) {
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i],
-                        navMenuIcons.getResourceId(i, -1)));
-            }
-        }
+         for (int i = 0; i < navMenuTitles.length; i++) {
+            navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]
+                    ,navMenuIcons.getResourceId(i, -1)
+                    ,navMenuColors.getResourceId(i, -1)));
+         }
     }
 
     @Override
@@ -98,7 +97,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_persons_list, menu);
         return true;
     }
 
@@ -140,6 +139,12 @@ public class BaseActivity extends ActionBarActivity {
         NavDrawerListAdapter adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+        mDrawerList.setItemChecked(selectedPos, true);
+        mDrawerList.setSelection(selectedPos);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE
+                | ActionBar.DISPLAY_SHOW_HOME);
     }
 
     private class SlideMenuClickListener implements
@@ -187,33 +192,32 @@ public class BaseActivity extends ActionBarActivity {
     private void displayView(int position) {
 //depends on string array
         switch (position) {
-            case 0://events
-                goToActivity(EventsActivity.class);
+            case 0://friends
+                goToActivity(PersonActivity.class,position);
                 break;
-            case 1://friends
-                goToActivity(PersonActivity.class);
+            case 1://events
+                goToActivity(EventsActivity.class,position);
                 break;
-            case 2://settings
-                goToActivity(SettingsActivity.class);
+            case 2://birthday
                 break;
-            case 3://about
+            case 3://special
                 break;
-            case 4://birthday
+            case 4://settings
+                goToActivity(SettingsActivity.class, position);
                 break;
-            case 5://special
+            case 5://about
                 break;
             default:
                 break;
         }
 
         // update selected item and title, then close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mDrawerList.setSelection(position);
         mDrawerLayout.closeDrawer(mDrawerLeft);
     }
 
-    public void goToActivity(Class activityClass ){
+    public void goToActivity(Class activityClass , int pos){
         Intent intent = new Intent(this, activityClass);
+        intent.putExtra("selectedPos", pos);
         startActivity(intent);
         finish();// finishes the current activity
     }

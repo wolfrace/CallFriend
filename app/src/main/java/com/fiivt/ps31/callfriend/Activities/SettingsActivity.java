@@ -74,7 +74,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     public void loadFromVK(){
-        goToActivity(VkontakteActivity.class);
+        goToActivity(VkontakteActivity.class,0);
         settings.setIsImportVkNeed(false);
         disableVkButton();
     }
