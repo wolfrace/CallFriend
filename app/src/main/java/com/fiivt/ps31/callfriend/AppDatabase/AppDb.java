@@ -311,4 +311,12 @@ public class AppDb {
         return new Event(cursor.getInt(0), person,
                 personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
     }
+
+    public Date getLastAchievedEventDateByPerson(Integer id) {
+
+        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "', status=" + Status.ACHIEVED.toString() + "' ORDER BY date DESC;", null);
+        if (cursor.moveToNext())
+            return new Date(cursor.getLong(1));
+        return new Date(0);
+    }
 }
