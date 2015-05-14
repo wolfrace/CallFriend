@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -24,6 +25,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
+import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener ;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
+import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
@@ -44,10 +47,15 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     private static final int INVALID_EVENT_ID = -1;
     private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
+    private static final Date INVALID_DATE = new Date(0);
 
     private AppDb db;
 
     private Person person;
+    private boolean isNewUser;
+    private List<Integer> removedTemplateIds;
+    private List<PersonTemplate> personTemplates;
+
     private EditText nameView;
     private EditText descriptionView;
     private CircleImageView avatarView;
@@ -57,37 +65,51 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //test
-        //startService(new Intent(this, EventService.class));
         super.onCreate(savedInstanceState);
-
         db = AppDb.getInstance(this);
+
+        initData();
         initView();
-
-        //todo init person and events
-        //setPersonDataOnView(person, events);
+        setPersonDataOnView(person, personTemplates);
     }
 
-    private List<PersonTemplate> convertToSignificantEvents(List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> templates) {
-        List<PersonTemplate> events = new ArrayList<PersonTemplate>(templates.size());
-        for (com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate template: templates) {
-            new PersonTemplate();
+    private void initData() {
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+            person = (Person) bundle.getSerializable("person");
         }
-        return events;
+
+        isNewUser = false;
+        if (person == null) {
+            person = new Person();
+            isNewUser = true;
+        }
+
+        removedTemplateIds = new ArrayList<Integer>(0);
+        personTemplates = getPersonalTemplates(person);
     }
 
-    private List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> generateListOfPersonTemplates(Person person) {
+    private List<PersonTemplate> getPersonalTemplates(Person person){
+        boolean isNewUser = person.getId() <= 0;
+        return isNewUser
+                ? generateNewPersonTemplates(person)
+                : db.getPersonTemplates(person);
+    }
+
+
+    private List<PersonTemplate> generateNewPersonTemplates(Person person) {
         List<EventTemplate> defaultTemplates = db.getEventTemplates();
-        List<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate> personTemplates = new ArrayList<com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate>(defaultTemplates.size());
+        List<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>(defaultTemplates.size());
         for (EventTemplate defTemplate: defaultTemplates) {
-            com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate personTemplate = generatePersonTemplate(person, defTemplate);
+            PersonTemplate personTemplate = generatePersonTemplate(person, defTemplate);
             personTemplates.add(personTemplate);
         }
         return personTemplates;
     }
 
-    private com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate generatePersonTemplate(Person person, EventTemplate defaultTemplate) {
-        return new com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate(
+    private PersonTemplate generatePersonTemplate(Person person, EventTemplate defaultTemplate) {
+        return new PersonTemplate(
+                IdGenerator.generate(),
                 person,
                 defaultTemplate,
                 defaultTemplate.getDefaultDate(),
@@ -133,7 +155,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         //avatarView.setImageResource(); todo set AVATAR
 
         // set significant events
-        eventsAdapter.getValues().addAll(events);
+        eventsAdapter.setValues(events);
         eventsAdapter.notifyDataSetChanged();
     }
 
@@ -155,31 +177,39 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onCreateNewSignificantEvent() {
-        // todo create new significant date
-        showSignificantEventEditDialog(null);
+        showSignificantEventEditDialog(null, null);
     }
 
     private void onDeleteSignificantEvent(PersonTemplate event) {
-        //todo delete from db ??
+        if (event.getId() >= 0){
+            removedTemplateIds.add(event.getId());
+        }
         eventsAdapter.deleteEvent(event);
     }
 
     private void onSignificantEventEdit(PersonTemplate event) {
-        showSignificantEventEditDialog(event);
+        showSignificantEventEditDialog(event, null);
     }
 
-    private void onSignificantEventCheckBoxClick(PersonTemplate event) {
-        boolean isInitialized = event.getCustomDate() != null;
+    private void onSignificantEventCheckBoxClick(final PersonTemplate event) {
+        Date date = event.getCustomDate();
+        boolean isInitialized = date != null && !INVALID_DATE.equals(date);
         if (isInitialized) {
             event.setEnabled(!event.isEnabled());
             eventsAdapter.notifyDataSetChanged();
         } else {
-            event.setEnabled(true);
-            showSignificantEventEditDialog(event);
+            OnSuccessListener onSuccess = new OnSuccessListener() {
+                @Override
+                public void onSuccess(int eventId) {
+                    event.setEnabled(true);
+                    eventsAdapter.notifyDataSetChanged();
+                }
+            };
+            showSignificantEventEditDialog(event, onSuccess);
         }
     }
 
-    private void showSignificantEventEditDialog(PersonTemplate event) {
+    private void showSignificantEventEditDialog(PersonTemplate event, OnSuccessListener onSuccess) {
         FragmentManager manager = getFragmentManager();
         SignificantEventEditDialog dialog = new SignificantEventEditDialog();
 
@@ -196,6 +226,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
         dialog.setArguments(args);
         dialog.setListener(this);
+        dialog.setOnSuccessListener(onSuccess);
         dialog.show(manager, "sgnEventEdtDlg");
     }
 
@@ -219,27 +250,28 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     @SuppressWarnings("all")
     private void setCustomActionBar() {
-        ActionBar mActionBar = getActionBar();
-        mActionBar.setDisplayShowHomeEnabled(false);
-        mActionBar.setDisplayShowTitleEnabled(false);
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
         LayoutInflater mInflater = LayoutInflater.from(this);
 
-        View mCustomView = mInflater.inflate(R.layout.friend_edit_action_bar, null);
-        setMinimalWidthAsScreenWidth(mCustomView);
-        mActionBar.setCustomView(mCustomView);
-        mActionBar.setDisplayShowCustomEnabled(true);
+        View cutomView = mInflater.inflate(R.layout.friend_edit_action_bar, null);
+        setMinimalWidthAsScreenWidth(cutomView);
+        actionBar.setCustomView(cutomView);
+        actionBar.setDisplayShowCustomEnabled(true);
 
-
-        ImageButton saveButton = (ImageButton) mCustomView.findViewById(R.id.save_button);
+        setActionBarTitle(cutomView);
+        ImageButton saveButton = (ImageButton) cutomView.findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
                 onSave();
+                finish();
             }
         });
 
-        ImageButton cancelButton = (ImageButton) mCustomView.findViewById(R.id.cancel_button);
+        ImageButton cancelButton = (ImageButton) cutomView.findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -249,9 +281,35 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         });
     }
 
+    private void setActionBarTitle(View actionBar) {
+        int titleResId = isNewUser
+                ? R.string.add_contact_layout_title
+                : R.string.change_contact_layout_title;
+
+        String title = getString(titleResId);
+        TextView titleView = (TextView) actionBar.findViewById(R.id.friend_action_bar_title);
+        titleView.setText(title);
+    }
+
     public void onSave() {
         Person person = getPersonDataFromView();
-        //todo save person
+        if (person.getId() <= 0) {
+            db.addPerson(person);
+        } else {
+            db.updatePerson(person);
+        }
+
+        for (Integer id: removedTemplateIds){
+            db.deletePersonTemplate(id);
+        }
+
+        for (PersonTemplate pt: personTemplates) {
+            if (pt.getId() <= 0) {
+                db.addPersonTemplate(pt);
+            } else {
+                db.updatePersonTemplate(pt);
+            }
+        }
     }
 
     public void onCancel() {
@@ -267,8 +325,11 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     public Person getPersonDataFromView() {
-        //todo todo me
-        return null;
+        String name = nameView.getText().toString();
+        String description = descriptionView.getText().toString();
+        person.setName(name);
+        person.setDescription(description);
+        return person;
     }
 
     @Override
@@ -289,7 +350,6 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         event.setReminderTime(reminderTime);
 
         eventsAdapter.notifyDataSetChanged();
-        // todo save changed significant event to db
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
@@ -316,7 +376,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     public class SignificantEventAdapter extends ArrayAdapter<PersonTemplate> {
         @Getter
-        private final List<PersonTemplate> values;
+        private List<PersonTemplate> values;
         private final Context context;
 
         public SignificantEventAdapter(Context context) {
@@ -410,6 +470,10 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 }
             }
             return null;
+        }
+
+        public void setValues(List<PersonTemplate> values) {
+            this.values = values;
         }
     }
 

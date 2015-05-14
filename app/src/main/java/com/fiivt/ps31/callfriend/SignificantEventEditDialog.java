@@ -24,6 +24,7 @@ import lombok.Setter;
 public class SignificantEventEditDialog extends DialogFragment {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+    private static final Date INVALID_DATE = new Date(0);
     private final long[] spinnerItemIdToReminderTime = {
             TimeUnit.DAYS.toMillis(1),
             TimeUnit.DAYS.toMillis(2),
@@ -32,6 +33,8 @@ public class SignificantEventEditDialog extends DialogFragment {
 
     @Setter
     private OnDataSetChangedListener listener;
+    @Setter
+    private OnSuccessListener onSuccessListener;
     private EditText eventNameText;
     private CircleImageView eventIcon;
     private EditText eventDateText;
@@ -56,6 +59,10 @@ public class SignificantEventEditDialog extends DialogFragment {
 
     public interface OnDataSetChangedListener {
         void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime);
+    }
+
+    public interface OnSuccessListener {
+        void onSuccess(int eventId);
     }
 
     @Override
@@ -125,6 +132,11 @@ public class SignificantEventEditDialog extends DialogFragment {
         if (listener != null) {
             listener.onDataSetChanged(eventId, name, date, reminderTime);
         }
+
+        if (onSuccessListener != null) {
+            onSuccessListener.onSuccess(eventId);
+        }
+
         getDialog().dismiss();
     }
 
@@ -164,7 +176,7 @@ public class SignificantEventEditDialog extends DialogFragment {
     }
 
     private void setEventDate(Date date) {
-        if (date != null) {
+        if (date != null && !INVALID_DATE.equals(date)) {
             String dateAsText = DATE_FORMAT.format(date);
             eventDateText.setText(dateAsText);
             eventDateText.setTag(date);

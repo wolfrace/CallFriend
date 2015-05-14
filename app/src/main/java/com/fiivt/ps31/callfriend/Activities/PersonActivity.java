@@ -33,6 +33,7 @@ public class PersonActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
+        database.clearDb(this);
         setContentView(R.layout.person_list_layout);
 
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);

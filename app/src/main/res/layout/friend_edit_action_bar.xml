@@ -21,7 +21,7 @@
         android:textSize="@dimen/standard_text_size"
         android:text="@string/add_contact_layout_title"
         android:textAlignment="center"
-        android:id="@+id/labelFriendEdit"
+        android:id="@+id/friend_action_bar_title"
         android:textColor="@color/text_color_primary"
         android:layout_weight="1"
         android:gravity="center_vertical"

@@ -30,16 +30,18 @@ public class PersonTemplate implements Serializable {
     private Date cooldown;
     private long reminderTime;
     private boolean enabled;
-    private int title;
 
     public PersonTemplate(Integer id, Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled) {
         this.id = id;
         this.person = person;
-        this.eventTemplate =eventTemplate;
+        this.eventTemplate = eventTemplate;
         this.customDate = customDate;
         this.cooldown = cooldown;
         this.reminderTime = reminderTime;
         this.enabled = enabled;
+        if (eventTemplate != null) {
+            this.info = eventTemplate.getInfo();
+        }
     }
 
     public PersonTemplate(Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled) {

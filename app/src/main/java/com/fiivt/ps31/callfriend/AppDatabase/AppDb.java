@@ -255,11 +255,9 @@ public class AppDb {
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
 
-    // Г“Г¤Г Г«ГїГІГ±Гї ГўГ±ГҐ Г§Г ГЇГ«Г Г­ГЁГ°Г®ГўГ Г­Г­Г»ГҐ ГЇГ® ГЇГҐГ°Г±Г®Г­Г Г«ГјГ­Г®Г¬Гі ГёГ ГЎГ«Г®Г­Гі Г±Г®ГЎГ»ГІГЁГї
-    public void deletePersonTemplate(PersonTemplate personTemplate) {
-        deleteEventsByPersonTemplate(personTemplate.getId());
-
-        db.delete("personTemplate", "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
+    public void deletePersonTemplate(int id) {
+        deleteEventsByPersonTemplate(id);
+        db.delete("personTemplate", "idPersonTemplate=" + id, null);
     }
 
     public PersonTemplate getPersonTemplate(int id) {
@@ -273,13 +271,24 @@ public class AppDb {
                 eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
     }
 
+    public ArrayList<PersonTemplate> getPersonTemplates(int personId, int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE personId = '"
+                + personId + "' LIMIT " + limit + " OFFSET " + offset, null);
+        return getPersonTemplates(cursor);
+    }
+
     public ArrayList<PersonTemplate> getPersonTemplates(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
-        ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
-
         Cursor cursor = db.rawQuery("SELECT * FROM personTemplate LIMIT " + limit + " OFFSET " + offset, null);
+        return getPersonTemplates(cursor);
+    }
 
+
+    private ArrayList<PersonTemplate> getPersonTemplates(Cursor cursor){
+        ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));
             EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
@@ -367,5 +376,9 @@ public class AppDb {
 
     public List<EventTemplate> getEventTemplates() {
         return getEventTemplates(Integer.MAX_VALUE, 0);
+    }
+
+    public List<PersonTemplate> getPersonTemplates(Person person) {
+        return getPersonTemplates(person.getId(), Integer.MAX_VALUE, 0);
     }
 }
