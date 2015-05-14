@@ -3,6 +3,8 @@ package com.fiivt.ps31.callfriend.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import com.fiivt.ps31.callfriend.R;
 import lombok.Data;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -27,7 +30,6 @@ import java.util.List;
 
 
 public class PersonActivity extends BaseActivity {
-
 
     public AppDb database;
 
@@ -71,12 +73,34 @@ public class PersonActivity extends BaseActivity {
     }
 
     @Data
-    static class PersonViewHolder {
+     class PersonViewHolder {
         private TextView name;
         private ImageView image;
+        private TextView personNote;
+        private TextView personStatus;
+        private RelativeLayout personStatusRL;
 
         public void setPersonValues(Person person) {
+
+            long timeLeft = System.currentTimeMillis() - database.getLastAchievedEventDateByPerson(person.getId()).getTime();
+            long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
+
+            if(daysLeft >= 60){
+                personStatus.setText(R.string.status_red_txt);
+                personStatusRL.setBackgroundResource(R.drawable.red_label);
+            }
+            else if (daysLeft < 60 && daysLeft >= 30){
+                personStatus.setText(R.string.status_yellow_txt);
+                personStatusRL.setBackgroundResource(R.drawable.yellow_label);
+            }
+            else{
+                personStatus.setText(R.string.status_green_txt);
+                personStatusRL.setBackgroundResource(R.drawable.green_label);
+            }
+
             name.setText(person.getName());
+            personNote.setText(person.getDescription());
+
             //image.setImageResource(R.mipmap.ic_user);
         }
     }
@@ -119,6 +143,9 @@ public class PersonActivity extends BaseActivity {
             PersonViewHolder holder = new PersonViewHolder();
             holder.setName((TextView) view.findViewById(R.id.person_list_contact_name));
             //holder.setImage((ImageView) view.findViewById(R.id.contactAvatar));
+            holder.setPersonNote((TextView) view.findViewById(R.id.person_note));
+            holder.setPersonStatus((TextView) view.findViewById(R.id.person_ststus));
+            holder.setPersonStatusRL((RelativeLayout) view.findViewById(R.id.person_status_rl));
             view.setTag(holder);
             return holder;
         }

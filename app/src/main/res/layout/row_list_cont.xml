@@ -26,6 +26,7 @@
             android:layout_marginLeft="4dp"
             android:layout_gravity="center_vertical">
 
+
         <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +38,45 @@
                 android:singleLine="true"
                 android:ellipsize="end" />
 
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent" android:weightSum="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/events_subtitle_size"
+                        android:text="petyh Kokoko"
+                        android:textColor="@color/text_color_secondary"
+                        android:id="@+id/person_note"
+                        android:layout_marginBottom="4dp"
+                        android:singleLine="true"
+                        android:ellipsize="end"/>
+
+                    <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/person_status_rl" android:gravity="center_vertical"
+                            android:layout_marginTop="2dp">
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="15dp"
+                                    android:textSize="10dp"
+                                    android:text="petyh Kokoko"
+                                    android:textColor="@color/person_status_text"
+                                    android:id="@+id/person_ststus"
+                                    android:singleLine="true"
+                                    android:ellipsize="end" android:textStyle="bold"
+                                    android:gravity="center_vertical"/>
+
+                    </RelativeLayout>
+
+            </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout> 

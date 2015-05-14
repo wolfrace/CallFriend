@@ -8,20 +8,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".PersonActivity"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         >
 
         <ListView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/person_list_view"
-                android:divider="@null" />
+                android:divider="@null"/>
 
         <at.markushi.ui.CircleButton
                 android:id="@+id/person_add_image"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="16dp"

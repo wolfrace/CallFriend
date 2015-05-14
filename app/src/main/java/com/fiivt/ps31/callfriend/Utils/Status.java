@@ -3,26 +3,25 @@ package com.fiivt.ps31.callfriend.Utils;
 /**
  * Created by Egor on 23.04.2015.
  */
-public enum Status {
-    EXPECTED,
-    ACHIEVED;
 
-    public static Status fromInteger(int x) {
-        switch(x) {
-            case 0:
-                return EXPECTED;
-            case 1:
-                return ACHIEVED;
-        }
-        return null;
+import lombok.Getter;
+
+@Getter
+public enum Status {
+    EXPECTED(0),
+    ACHIEVED(1);
+
+    private int id;
+
+    Status(int id){
+        this.id = id;
     }
 
-    public static Integer toInteger(Status x) {
-        switch(x) {
-            case EXPECTED:
-                return 0;
-            case ACHIEVED:
-                return 1;
+    public static Status fromInteger(int x) {
+        for(Status status: values()){
+            if (status.id == x){
+                return status;
+            }
         }
         return null;
     }

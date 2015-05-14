@@ -74,6 +74,14 @@ public class AppDb {
         db.delete("person", "idPerson=".concat(Integer.toString(person.getId())), null);
     }
 
+
+    public Date getLastAchievedEventDateByPerson(Integer id) {
+        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
+        if (cursor.moveToNext())
+            return new Date(cursor.getLong(1));
+        return new Date(0);
+    }
+
     private void deletePersonTemplatesByPerson(Person person) {
         db.delete("personTemplate", "idPerson=".concat(Integer.toString(person.getId())), null);
     }
@@ -259,7 +267,7 @@ public class AppDb {
         insertValues.put("idPersonTemplate", event.getPersonTemplate().getId());
         insertValues.put("info", event.getInfo());
         insertValues.put("date", event.getDate().getTime());
-        insertValues.put("status", Status.toInteger(event.getStatus()));
+        insertValues.put("status", event.getStatus().getId());
 
         long id = db.insert("event", null, insertValues);
         event.setId((int) id);
@@ -271,7 +279,7 @@ public class AppDb {
         newValues.put("idPersonTemplate", event.getPersonTemplate().getId());
         newValues.put("info", event.getInfo());
         newValues.put("date", event.getDate().getTime());
-        newValues.put("status", Status.toInteger(event.getStatus()));
+        newValues.put("status", event.getStatus().getId());
 
         db.update("event", newValues, "idEvent=".concat(Integer.toString(event.getId())), null);
     }
