@@ -233,7 +233,8 @@ public class AppDb {
     public void addPersonTemplate(PersonTemplate personTemplate) {
         ContentValues insertValues = new ContentValues();
         insertValues.put("idPerson", personTemplate.getPerson().getId());
-        insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        if (personTemplate.getEventTemplate() != null)
+            insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
         insertValues.put("customDate", personTemplate.getCustomDate().getTime());
         insertValues.put("cooldown", personTemplate.getCooldown().getTime());
         insertValues.put("reminderTime", personTemplate.getReminderTime());
@@ -246,7 +247,8 @@ public class AppDb {
     public void updatePersonTemplate(PersonTemplate personTemplate) {
         ContentValues newValues = new ContentValues();
         newValues.put("idPerson", personTemplate.getPerson().getId());
-        newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        if (personTemplate.getEventTemplate() != null)
+            newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
         newValues.put("customDate", personTemplate.getCustomDate().getTime());
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
         newValues.put("reminderTime", personTemplate.getReminderTime());
@@ -265,7 +267,9 @@ public class AppDb {
         if (!cursor.moveToNext())
             return null;
         Person person = getPerson(cursor.getInt(1));
-        EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+        EventTemplate eventTemplate = null;
+        if (cursor.isNull(2))
+            eventTemplate = getEventTemplate(cursor.getInt(2));
 
         return new PersonTemplate(cursor.getInt(0), person,
                 eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
@@ -291,7 +295,9 @@ public class AppDb {
         ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));
-            EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+            EventTemplate eventTemplate = null;
+            if (cursor.isNull(2))
+                eventTemplate = getEventTemplate(cursor.getInt(2));
 
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
                     eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getInt(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
