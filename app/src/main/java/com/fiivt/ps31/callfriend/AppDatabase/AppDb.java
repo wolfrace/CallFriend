@@ -184,7 +184,8 @@ public class AppDb {
     public void addPersonTemplate(PersonTemplate personTemplate) {
         ContentValues insertValues = new ContentValues();
         insertValues.put("idPerson", personTemplate.getPerson().getId());
-        insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        if (personTemplate.getEventTemplate() != null)
+            insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
         insertValues.put("customDate", personTemplate.getCustomDate().getTime());
         insertValues.put("cooldown", personTemplate.getCooldown().getTime());
         insertValues.put("remindTime", personTemplate.getRemindTime());
@@ -197,7 +198,8 @@ public class AppDb {
     public void updatePersonTemplate(PersonTemplate personTemplate) {
         ContentValues newValues = new ContentValues();
         newValues.put("idPerson", personTemplate.getPerson().getId());
-        newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        if (personTemplate.getEventTemplate() != null)
+            newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
         newValues.put("customDate", personTemplate.getCustomDate().getTime());
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
         newValues.put("remindTime", personTemplate.getRemindTime());
@@ -218,10 +220,31 @@ public class AppDb {
         if (!cursor.moveToNext())
             return null;
         Person person = getPerson(cursor.getInt(1));
-        EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+        EventTemplate eventTemplate = null;
+        if (cursor.isNull(2))
+            eventTemplate = getEventTemplate(cursor.getInt(2));
 
         return new PersonTemplate(cursor.getInt(0), person,
                 eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getInt(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
+    }
+
+    public ArrayList<PersonTemplate> getPersonTemplatesByPerson(int id) {
+        ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE idPerson='" + id + "'", null);
+
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            EventTemplate eventTemplate = null;
+            if (cursor.isNull(2))
+                eventTemplate = getEventTemplate(cursor.getInt(2));
+
+            PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
+                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getInt(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
+            personTemplates.add(pt);
+        }
+
+        return personTemplates;
     }
 
     public ArrayList<PersonTemplate> getPersonTemplates(int limit, int offset) {
@@ -233,7 +256,9 @@ public class AppDb {
 
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));
-            EventTemplate eventTemplate = getEventTemplate(cursor.getInt(2));
+            EventTemplate eventTemplate = null;
+            if (cursor.isNull(2))
+                eventTemplate = getEventTemplate(cursor.getInt(2));
 
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
                     eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getInt(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
