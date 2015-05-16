@@ -150,7 +150,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private void setPersonDataOnView(Person person, List<PersonTemplate> events) {
         // set personal info
         nameView.setText(person.getName());
-        nameView.setText(person.getDescription());
+        descriptionView.setText(person.getDescription());
         hiddenPersonId = person.getId();
         //avatarView.setImageResource(); todo set AVATAR
 

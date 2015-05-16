@@ -37,7 +37,7 @@ public class AppDb extends Singleton {
     private void initDb(Context c) {
         boolean isExists = isDatabaseExists(c);
         db = c.openOrCreateDatabase(dbPath, Context.MODE_PRIVATE, null);// dropbase
-        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB, description STRING);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description STRING, isMale BOOLEAN, photo BLOB);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
@@ -283,8 +283,8 @@ public class AppDb extends Singleton {
     public ArrayList<PersonTemplate> getPersonTemplatesByPerson(int id, int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
-        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE personId = '"
-                + id + "' LIMIT " + limit + " OFFSET " + offset, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE idPerson="
+                + id + " LIMIT " + limit + " OFFSET " + offset, null);
         return getPersonTemplates(cursor);
     }
 
@@ -320,7 +320,7 @@ public class AppDb extends Singleton {
         insertValues.put("idPersonTemplate", event.getPersonTemplate().getId());
         insertValues.put("info", event.getInfo());
         insertValues.put("date", event.getDate().getTime());
-        insertValues.put("status", Status.toInteger(event.getStatus()));
+        insertValues.put("status", event.getStatus().getId());
 
         long id = db.insert("event", null, insertValues);
         event.setId((int) id);
@@ -332,7 +332,7 @@ public class AppDb extends Singleton {
         newValues.put("idPersonTemplate", event.getPersonTemplate().getId());
         newValues.put("info", event.getInfo());
         newValues.put("date", event.getDate().getTime());
-        newValues.put("status", Status.toInteger(event.getStatus()));
+        newValues.put("status", event.getStatus().getId());
 
         db.update("event", newValues, "idEvent=".concat(Integer.toString(event.getId())), null);
     }
@@ -386,8 +386,10 @@ public class AppDb extends Singleton {
     }
 
     public Date getLastAchievedEventDateByPerson(Integer id) {
-        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "', status=" + Status.ACHIEVED.toString() + "' ORDER BY date DESC;", null);
+        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
+        if (cursor.moveToNext())
             return new Date(cursor.getLong(1));
+        return new Date(0);
     }
     public List<PersonTemplate> getPersonTemplates(Person person) {
         return getPersonTemplatesByPerson(person.getId(), Integer.MAX_VALUE, 0);

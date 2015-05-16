@@ -2,17 +2,21 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * Created by Egor on 24.03.2015.
  */
 @Data
-public class Person {
+public class Person implements Serializable{
 
     private Integer id;
     private String name;
     private String description;
     private  boolean isMale;
     private int idPhoto;
+
+    public Person(){}
 
     public Person(String name, String description, boolean isMale, int idPhoto)
     {

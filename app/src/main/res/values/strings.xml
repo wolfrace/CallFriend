@@ -46,4 +46,6 @@
     <string name="status_green_txt">Близкий</string>
     <string name="status_yellow_txt">Давно не общались</string>
     <string name="status_red_txt">Забытый друг</string>
+    <string name="action_search">Поиск</string>
+    <string name="change_contact_layout_title">Изменить контакт</string>
 </resources>

@@ -139,7 +139,16 @@ public class VkontakteActivity extends Activity {
                     String firstName = f.getString("first_name");
                     String lastName = f.getString("last_name");
                     Boolean isMale = (f.getInt("sex") == 2);
-                    //String city = f.getString("city");
+
+                    String description;
+                    try {
+                        JSONObject city = f.getJSONObject("city");
+                        description = city.getString("title");
+                    }
+                    catch (Exception e) {
+                        description = "Из ВКонтакте";
+                    }
+
                     //String dateStr = f.getString("bdate");
                     //SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy");
 //                    try {
@@ -150,7 +159,7 @@ public class VkontakteActivity extends Activity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), "description", isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, 0);
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){
