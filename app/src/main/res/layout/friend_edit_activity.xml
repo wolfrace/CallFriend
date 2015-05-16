@@ -53,9 +53,10 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:background="@color/circle_button_color"
-                                android:layout_width="72dp"
-                                android:layout_height="50dp" />
+                                android:src="@drawable/ic_person_grey600_24dp"
+                                android:layout_width="57dp"
+                                android:layout_height="50dp"
+                                android:padding="13dp" />
 
                             <EditText
                                 android:layout_width="fill_parent"
@@ -75,9 +76,10 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:background="@color/circle_button_color"
-                                android:layout_width="72dp"
-                                android:layout_height="50dp" />
+                                android:src="@drawable/ic_friend_description"
+                                android:layout_width="57dp"
+                                android:layout_height="50dp"
+                                android:padding="13dp" />
 
                             <EditText
                                 android:layout_width="fill_parent"
@@ -97,9 +99,10 @@
                             android:layout_height="wrap_content">
 
                             <ImageView
-                                android:background="@color/circle_button_color"
-                                android:layout_width="72dp"
-                                android:layout_height="50dp" />
+                                android:src="@drawable/ic_event_grey600_24dp"
+                                android:layout_width="57dp"
+                                android:layout_height="50dp"
+                                android:padding="13dp" />
 
                             <LinearLayout
                                 android:orientation="vertical"
@@ -136,7 +139,7 @@
                 <at.markushi.ui.CircleButton
                     android:layout_width="64dp"
                     android:layout_height="64dp"
-                    android:src="@drawable/ic_action_event"
+                    android:src="@drawable/ic_photo_32"
                     app:cb_color="@color/circle_button_color"
                     app:cb_pressedRingWidth="8dp"
                     android:layout_alignParentRight="true"
@@ -161,9 +164,10 @@
                 android:layout_height="wrap_content">
 
                 <ImageView
-                    android:background="@color/circle_button_color"
-                    android:layout_width="72dp"
-                    android:layout_height="50dp" />
+                    android:src="@drawable/ic_add_grey600_24dp"
+                    android:layout_width="57dp"
+                    android:layout_height="50dp"
+                    android:padding="13dp" />
 
                 <TextView
                     android:layout_width="fill_parent"

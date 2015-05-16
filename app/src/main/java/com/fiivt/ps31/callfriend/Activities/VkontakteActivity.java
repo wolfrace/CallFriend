@@ -9,15 +9,26 @@ import android.util.Log;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.Utils.Settings;
-import com.vk.sdk.*;
-import com.vk.sdk.api.*;
-import com.vk.sdk.api.methods.VKApiFriends;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKApiConst;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKParameters;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.dialogs.VKCaptchaDialog;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
@@ -27,6 +38,7 @@ public class VkontakteActivity extends Activity {
 
     private final static String VK_APP_ID = "4907734";
 
+    //private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String[] VK_SCOPE = new String[]{VKScope.FRIENDS, VKScope.NOHTTPS};
 
@@ -51,14 +63,14 @@ public class VkontakteActivity extends Activity {
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             newToken.saveTokenToSharedPreferences(VkontakteActivity.this, VK_ACCESS_TOKEN);
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            //startActivity(i);
+//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+//            startActivity(i);
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-            startActivity(i);
+//            Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+//            startActivity(i);
         }
     };
 
@@ -75,6 +87,7 @@ public class VkontakteActivity extends Activity {
         if (settings.isImportVkNeed() == false) {
             Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             startActivity(i);
+
             return;
         }
 
@@ -87,20 +100,23 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
-                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                //startActivity(i);
                 //Do complete stuff
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
+
             }
 
             @Override
             public void onError(VKError error) {
+                //Do error stuff
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
-                //Do error stuff
+
             }
 
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                //I don't really believe in progress
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
                 //I don't really believe in progress
@@ -134,7 +150,7 @@ public class VkontakteActivity extends Activity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), "imported from vk",isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), "description", isMale, 0);
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){

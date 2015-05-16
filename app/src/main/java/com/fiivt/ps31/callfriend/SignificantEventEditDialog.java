@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,11 +18,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Setter;
 
 public class SignificantEventEditDialog extends DialogFragment {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+    private static final Date INVALID_DATE = new Date(0);
     private final long[] spinnerItemIdToReminderTime = {
             TimeUnit.DAYS.toMillis(1),
             TimeUnit.DAYS.toMillis(2),
@@ -30,7 +33,10 @@ public class SignificantEventEditDialog extends DialogFragment {
 
     @Setter
     private OnDataSetChangedListener listener;
+    @Setter
+    private OnSuccessListener onSuccessListener;
     private EditText eventNameText;
+    private CircleImageView eventIcon;
     private EditText eventDateText;
     private Spinner reminderTimeSpinner;
     private int eventId;
@@ -55,11 +61,16 @@ public class SignificantEventEditDialog extends DialogFragment {
         void onDataSetChanged(int eventId, String eventName, Date eventDate, long reminderTime);
     }
 
+    public interface OnSuccessListener {
+        void onSuccess(int eventId);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.significant_event_edit_dialog, null, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
+        eventIcon = (CircleImageView) view.findViewById(R.id.significant_event_icon);
         eventNameText = (EditText) view.findViewById(R.id.significant_event_name);
         eventDateText = (EditText) view.findViewById(R.id.significant_event_date);
         reminderTimeSpinner = (Spinner) view.findViewById(R.id.reminder_time_spinner);
@@ -109,16 +120,30 @@ public class SignificantEventEditDialog extends DialogFragment {
         long reminderTime = getReminderTime();
 
         if (name.isEmpty()) {
-            Toast
-                    .makeText(getActivity(), R.string.empty_event_name_hint, Toast.LENGTH_LONG)
-                    .show();
+            onError(R.string.empty_event_name_hint);
+            return;
+        }
+
+        if (date == null) {
+            onError(R.string.empty_event_date_hint);
             return;
         }
 
         if (listener != null) {
             listener.onDataSetChanged(eventId, name, date, reminderTime);
         }
+
+        if (onSuccessListener != null) {
+            onSuccessListener.onSuccess(eventId);
+        }
+
         getDialog().dismiss();
+    }
+
+    private void onError(int errorStringResId) {
+        Toast
+                .makeText(getActivity(), errorStringResId, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -129,19 +154,29 @@ public class SignificantEventEditDialog extends DialogFragment {
 
     private void setEventData(Bundle args) {
         eventId = args.getInt("id");
+        int iconResId = args.getInt("iconResId");
         long time = args.getLong("reminderTime");
         String name = args.getString("eventName");
         Date date = (Date) args.getSerializable("eventDate");
 
+
         setEventDate(date);
         eventNameText.setText(name);
+        setEventIcon(iconResId);
 
         int spinnerElementId = getReminderTimeSpinnerIdByTime(time);
         reminderTimeSpinner.setSelection(spinnerElementId);
     }
 
+    private void setEventIcon(int iconResId) {
+        if (iconResId <= 0) {
+            iconResId = R.drawable.ic_event_special;
+        }
+        eventIcon.setImageResource(iconResId);
+    }
+
     private void setEventDate(Date date) {
-        if (date != null) {
+        if (date != null && !INVALID_DATE.equals(date)) {
             String dateAsText = DATE_FORMAT.format(date);
             eventDateText.setText(dateAsText);
             eventDateText.setTag(date);

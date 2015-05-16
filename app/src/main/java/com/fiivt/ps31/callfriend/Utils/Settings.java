@@ -69,4 +69,8 @@ public class Settings
         }
         return instance;
     }
+
 }
+
+
+

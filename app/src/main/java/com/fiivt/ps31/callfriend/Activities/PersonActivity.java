@@ -1,25 +1,32 @@
 package com.fiivt.ps31.callfriend.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
-import at.markushi.ui.CircleButton;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import android.view.Gravity;
-
-import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
-import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
-public class PersonActivity extends Activity {
+import at.markushi.ui.CircleButton;
+import lombok.Data;
+
+public class PersonActivity extends BaseActivity {
 
 
     public AppDb database;
@@ -28,6 +35,7 @@ public class PersonActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
+        database.clearDb(this);
         setContentView(R.layout.person_list_layout);
 
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
