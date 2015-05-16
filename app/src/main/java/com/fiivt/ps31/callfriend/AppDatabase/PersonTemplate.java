@@ -3,7 +3,10 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.Status;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -25,7 +28,8 @@ public class PersonTemplate implements Serializable {
     private EventTemplate eventTemplate;
     private Date customDate;
     private Date cooldown;
-    private int remindTime;
+    private long reminderTime;
+    private boolean enabled;
 
     public PersonTemplate(Integer id, Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled) {
         this.id = id;
@@ -37,6 +41,7 @@ public class PersonTemplate implements Serializable {
         if (eventTemplate != null) {
             this.info = eventTemplate.getInfo();
         }
+        this.enabled = enabled;
     }
 
     public PersonTemplate(Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled) {
@@ -48,7 +53,7 @@ public class PersonTemplate implements Serializable {
         this.info = name;
         this.person = person;
         this.customDate = customDate;
-        this.remindTime = remindTime;
+        this.reminderTime = reminderTime;
     }
 
     private String generateInfo(String personInfo, String templateInfo) {
@@ -56,8 +61,8 @@ public class PersonTemplate implements Serializable {
     }
 
     // TODO
-    private Date generateDate() {
-        return new Date(customDate.getTime() + cooldown.getTime());
+    private Date generateDate(Date lastDate) {
+        return new Date(lastDate.getTime() + cooldown.getTime());
     }
 
     public Event generateEvent(Date lastDate) {

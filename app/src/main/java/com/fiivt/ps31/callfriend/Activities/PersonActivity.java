@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
-import com.fiivt.ps31.callfriend.AppDatabase2.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
 
@@ -35,7 +35,7 @@ public class PersonActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
-        database.clearDb(this);
+        //database.clearDb(this);
         setContentView(R.layout.person_list_layout);
 
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);

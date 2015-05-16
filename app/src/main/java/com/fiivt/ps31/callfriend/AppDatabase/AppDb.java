@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.fiivt.ps31.callfriend.Activities.FriendEdit;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Utils.Singleton;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.List;
 /**
  * Created by Egor on 23.04.2015.
  */
-public class AppDb extends  Singleton {
+public class AppDb extends Singleton {
     private SQLiteDatabase db;
     private String dbPath = "AppDb_new.db";
 
@@ -36,7 +37,7 @@ public class AppDb extends  Singleton {
     private void initDb(Context c) {
         boolean isExists = isDatabaseExists(c);
         db = c.openOrCreateDatabase(dbPath, Context.MODE_PRIVATE, null);// dropbase
-        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, isMale BOOLEAN, photo BLOB, description STRING);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
@@ -208,6 +209,10 @@ public class AppDb extends  Singleton {
         return result;
     }
 
+    public List<EventTemplate> getEventTemplates() {
+        return  getEventTemplates(Integer.MAX_VALUE, 0);
+    }
+
     public List<EventTemplate> getEventTemplates(int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
@@ -251,7 +256,7 @@ public class AppDb extends  Singleton {
         newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
         newValues.put("customDate", personTemplate.getCustomDate().getTime());
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
-        newValues.put("remindTime", personTemplate.getRemindTime());
+        newValues.put("remindTime", personTemplate.getReminderTime());
 
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
@@ -272,13 +277,15 @@ public class AppDb extends  Singleton {
             eventTemplate = getEventTemplate(cursor.getInt(2));
 
         return new PersonTemplate(cursor.getInt(0), person,
-                eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getInt(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
-    public ArrayList<PersonTemplate> getPersonTemplatesByPerson(int id) {
+                eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
+    }
+
+    public ArrayList<PersonTemplate> getPersonTemplatesByPerson(int id, int limit, int offset) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
         Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE personId = '"
-                + personId + "' LIMIT " + limit + " OFFSET " + offset, null);
-        return personTemplates;
+                + id + "' LIMIT " + limit + " OFFSET " + offset, null);
+        return getPersonTemplates(cursor);
     }
 
     public ArrayList<PersonTemplate> getPersonTemplates(int limit, int offset) {
@@ -298,7 +305,7 @@ public class AppDb extends  Singleton {
                 eventTemplate = getEventTemplate(cursor.getInt(2));
 
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
-                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)));
+                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
             personTemplates.add(pt);
         }
 
@@ -374,12 +381,15 @@ public class AppDb extends  Singleton {
                 personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
     }
 
-    public Date getLastAchievedEventDateByPerson(Integer id) {
+    public static AppDb getInstance(FriendEdit conetext) {
         return new AppDb(conetext);
+    }
+
+    public Date getLastAchievedEventDateByPerson(Integer id) {
         Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "', status=" + Status.ACHIEVED.toString() + "' ORDER BY date DESC;", null);
-    public List<EventTemplate> getEventTemplates() {
             return new Date(cursor.getLong(1));
     }
     public List<PersonTemplate> getPersonTemplates(Person person) {
-        return getPersonTemplates(person.getId(), Integer.MAX_VALUE, 0);
+        return getPersonTemplatesByPerson(person.getId(), Integer.MAX_VALUE, 0);
+    }
 }
