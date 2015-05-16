@@ -17,4 +17,5 @@
     <color name="menu_clicked">#ffeeeeee</color>
     <color name="transparent">#00000000</color>
     <color name="blue_button_text">#04a7f6</color>
+    <color name="person_status_text">#727272</color>
 </resources>

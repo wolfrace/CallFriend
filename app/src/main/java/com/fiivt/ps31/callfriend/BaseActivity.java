@@ -1,16 +1,13 @@
 package com.fiivt.ps31.callfriend;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.fiivt.ps31.callfriend.Activities.EventsActivity;
-import com.fiivt.ps31.callfriend.Activities.PersonActivity;
 import com.fiivt.ps31.callfriend.Activities.SettingsActivity;
 
 import java.util.ArrayList;
@@ -33,32 +29,34 @@ public class BaseActivity extends ActionBarActivity {
     private LinearLayout mDrawerLeft;
     private ActionBarDrawerToggle mDrawerToggle;
     private ArrayList<NavDrawerItem> navDrawerItems;
-    private Integer selectedPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        selectedPos = getIntent().getIntExtra("selectedPos", 1);
         setContentView(R.layout.base_activity);
         moveDrawerToTop();
         initActionBar() ;
 
         String[] navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items);
         TypedArray navMenuIcons = getResources().obtainTypedArray(R.array.nav_drawer_icons);
-        TypedArray navMenuColors = getResources().obtainTypedArray(R.array.nav_drawer_div_color);
-        initDrawerItems(navMenuTitles, navMenuIcons,navMenuColors );
+        initDrawerItems(navMenuTitles, navMenuIcons);
         initDrawer();
     }
 
-    public void initDrawerItems(String[] navMenuTitles, TypedArray navMenuIcons, TypedArray navMenuColors) {
+    public void initDrawerItems(String[] navMenuTitles, TypedArray navMenuIcons) {
 
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
-         for (int i = 0; i < navMenuTitles.length; i++) {
-            navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]
-                    ,navMenuIcons.getResourceId(i, -1)
-                    ,navMenuColors.getResourceId(i, -1)));
-         }
+        if (navMenuIcons == null) {
+            for (int i = 0; i < navMenuTitles.length; i++) {
+                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
+            }
+        } else {
+            for (int i = 0; i < navMenuTitles.length; i++) {
+                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i],
+                        navMenuIcons.getResourceId(i, -1)));
+            }
+        }
     }
 
     @Override
@@ -97,7 +95,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_persons_list, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -126,25 +124,12 @@ public class BaseActivity extends ActionBarActivity {
 
     private void initDrawer() {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-
         mDrawerLeft = (LinearLayout) findViewById(R.id.left_drawer);
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        mDrawerLeft.setMinimumWidth(width-getStatusBarHeight());
-
         mDrawerList = (ListView)findViewById(R.id.drawer_list);
         mDrawerLayout.setDrawerListener(createDrawerToggle());
         NavDrawerListAdapter adapter = new NavDrawerListAdapter(getApplicationContext(), navDrawerItems);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-
-        mDrawerList.setItemChecked(selectedPos, true);
-        mDrawerList.setSelection(selectedPos);
-
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE
-                | ActionBar.DISPLAY_SHOW_HOME);
     }
 
     private class SlideMenuClickListener implements
@@ -190,34 +175,35 @@ public class BaseActivity extends ActionBarActivity {
      * Displaying fragment view for selected nav drawer list item
      * */
     private void displayView(int position) {
-//depends on string array
+
         switch (position) {
-            case 0://friends
-                goToActivity(PersonActivity.class,position);
+            case 0://events
+                goToActivity(EventsActivity.class);
                 break;
-            case 1://events
-                goToActivity(EventsActivity.class,position);
+            case 1://friends
+                goToActivity(PersonActivity.class);
                 break;
-            case 2://birthday
+            case 2://settings
+                goToActivity(SettingsActivity.class);
                 break;
-            case 3://special
+            case 3://about
                 break;
-            case 4://settings
-                goToActivity(SettingsActivity.class, position);
+            case 4://birthday
                 break;
-            case 5://about
+            case 5://special
                 break;
             default:
                 break;
         }
 
         // update selected item and title, then close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerList.setSelection(position);
         mDrawerLayout.closeDrawer(mDrawerLeft);
     }
 
-    public void goToActivity(Class activityClass , int pos){
+    private void goToActivity(Class activityClass ){
         Intent intent = new Intent(this, activityClass);
-        intent.putExtra("selectedPos", pos);
         startActivity(intent);
         finish();// finishes the current activity
     }
