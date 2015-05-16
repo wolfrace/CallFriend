@@ -90,7 +90,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private List<PersonTemplate> getPersonalTemplates(Person person){
-        boolean isNewUser = person.getId() <= 0;
+        boolean isNewUser = person.getId() <= 0 | db.getPersonTemplates(person).size() == 0;
         return isNewUser
                 ? generateNewPersonTemplates(person)
                 : db.getPersonTemplates(person);
