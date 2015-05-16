@@ -2,6 +2,7 @@
 xmlns:android="http://schemas.android.com/apk/res/android"
 android:id="@+id/drawer_layout"
 android:layout_width="match_parent"
+    android:background="@color/window_background"
 android:layout_height="match_parent">
 <!-- The main content view -->
 <LinearLayout
@@ -18,8 +19,7 @@ android:layout_height="match_parent">
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:choiceMode="singleChoice"
-    android:background="#f0f"
-    android:divider="#666">
+    android:background="@color/window_background">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="180dip"
@@ -27,6 +27,8 @@ android:layout_height="match_parent">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/window_background"
+        android:divider="@color/window_background"
         android:id="@+id/drawer_list"/>
 </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

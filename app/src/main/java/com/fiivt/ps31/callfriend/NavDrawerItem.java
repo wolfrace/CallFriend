@@ -9,13 +9,15 @@ import lombok.Data;
 public class NavDrawerItem {
     private String title;
     private int icon;
+    private int color;
 
     public NavDrawerItem() {
     }
 
-    public NavDrawerItem(String title, int icon) {
+    public NavDrawerItem(String title, int icon, int color) {
         this.title = title;
         this.icon = icon;
+        this.color = color;
     }
 
     public NavDrawerItem(String title) {
