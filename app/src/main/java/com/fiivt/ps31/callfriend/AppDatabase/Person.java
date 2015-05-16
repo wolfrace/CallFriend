@@ -16,7 +16,13 @@ public class Person implements Serializable{
     private  boolean isMale;
     private int idPhoto;
 
-    public Person(){}
+    public Person(){
+        this.id = 0;
+        this.name = "";
+        this.description = "";
+        this.idPhoto = 0;
+        this.isMale = false;
+    }
 
     public Person(String name, String description, boolean isMale, int idPhoto)
     {
