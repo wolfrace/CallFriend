@@ -7,7 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
+import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
+import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
@@ -28,7 +31,11 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.AbstractCollection;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 // ��������� ����������� ��� Android:
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
@@ -41,6 +48,7 @@ public class VkontakteActivity extends Activity {
     //private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String VK_ACCESS_TOKEN = "eLEwiwRgTdVsc160bLgW";
     private static String[] VK_SCOPE = new String[]{VKScope.FRIENDS, VKScope.NOHTTPS};
+    private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
 
     private VKSdkListener sdkListener = new VKSdkListener() {
         @Override
@@ -161,6 +169,10 @@ public class VkontakteActivity extends Activity {
 //                    }
                     Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, 0);
                     appDb.addPerson(p);
+//                    List<PersonTemplate> personTemplates = generateNewPersonTemplates(p, appDb);
+//                    for (PersonTemplate pt: personTemplates) {
+//                        appDb.addPersonTemplate(pt);
+//                    }
                 }
             }catch(JSONException e){
                 e.printStackTrace();
@@ -169,6 +181,27 @@ public class VkontakteActivity extends Activity {
         else {
             Log.e("ServiceHandler", "Couldn't get any data from the url");
         }
+    }
+
+    private List<PersonTemplate> generateNewPersonTemplates(Person person, AppDb appDb) {
+        List<EventTemplate> defaultTemplates = appDb.getEventTemplates();
+        List<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>(defaultTemplates.size());
+        for (EventTemplate defTemplate: defaultTemplates) {
+            PersonTemplate personTemplate = generatePersonTemplate(person, defTemplate);
+            personTemplates.add(personTemplate);
+        }
+        return personTemplates;
+    }
+
+    private PersonTemplate generatePersonTemplate(Person person, EventTemplate defaultTemplate) {
+        return new PersonTemplate(
+                IdGenerator.generate(),
+                person,
+                defaultTemplate,
+                defaultTemplate.getDefaultDate(),
+                new Date(TimeUnit.DAYS.toMillis(365)),
+                DEFAULT_REMINDER_TIME,
+                false);
     }
 
     @Override

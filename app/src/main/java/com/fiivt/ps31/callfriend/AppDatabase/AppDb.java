@@ -245,6 +245,7 @@ public class AppDb extends Singleton {
         insertValues.put("customDate", personTemplate.getCustomDate().getTime());
         insertValues.put("cooldown", personTemplate.getCooldown().getTime());
         insertValues.put("remindTime", personTemplate.getReminderTime());
+        insertValues.put("enabled", personTemplate.isEnabled());
 
         long id = db.insert("personTemplate", null, insertValues);
         personTemplate.setId((int) id);
@@ -257,6 +258,7 @@ public class AppDb extends Singleton {
         newValues.put("customDate", personTemplate.getCustomDate().getTime());
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
         newValues.put("remindTime", personTemplate.getReminderTime());
+        newValues.put("enabled", personTemplate.isEnabled());
 
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }
@@ -273,7 +275,7 @@ public class AppDb extends Singleton {
             return null;
         Person person = getPerson(cursor.getInt(1));
         EventTemplate eventTemplate = null;
-        if (cursor.isNull(2))
+        if (!cursor.isNull(2))
             eventTemplate = getEventTemplate(cursor.getInt(2));
 
         return new PersonTemplate(cursor.getInt(0), person,
@@ -301,7 +303,7 @@ public class AppDb extends Singleton {
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));
             EventTemplate eventTemplate = null;
-            if (cursor.isNull(2))
+            if (!cursor.isNull(2))
                 eventTemplate = getEventTemplate(cursor.getInt(2));
 
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
