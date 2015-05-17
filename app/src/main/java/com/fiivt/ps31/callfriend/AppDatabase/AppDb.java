@@ -136,7 +136,7 @@ public class AppDb extends Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("TRUE"), cursor.getInt(4));
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("1"), cursor.getInt(4));
             persons.add(p);
         }
 
@@ -149,7 +149,7 @@ public class AppDb extends Singleton {
         return new Person(cursor.getInt(0)
                 , cursor.getString(1)
                 , cursor.getString(2)
-                , cursor.getString(3).equalsIgnoreCase("TRUE")
+                , cursor.getString(3).equalsIgnoreCase("1")
                 , cursor.getInt(4));
     }
 
@@ -222,7 +222,7 @@ public class AppDb extends Singleton {
 
         while(cursor.moveToNext()) {
             EventTemplate et = new EventTemplate(cursor.getInt(0), cursor.getString(1),
-                    cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
+                    cursor.getString(2).equalsIgnoreCase("1"), new Date(cursor.getLong(3)), cursor.getInt(4));
             eventTemplates.add(et);
         }
 
@@ -233,7 +233,7 @@ public class AppDb extends Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate WHERE idTemplate='" + id + "'", null);
         cursor.moveToNext();
         return new EventTemplate(cursor.getInt(0), cursor.getString(1),
-                cursor.getString(2).equalsIgnoreCase("TRUE"), new Date(cursor.getLong(3)), cursor.getInt(4));
+                cursor.getString(2).equalsIgnoreCase("1"), new Date(cursor.getLong(3)), cursor.getInt(4));
     }
 
     // PersonTemplate API
@@ -279,7 +279,7 @@ public class AppDb extends Singleton {
             eventTemplate = getEventTemplate(cursor.getInt(2));
 
         return new PersonTemplate(cursor.getInt(0), person,
-                eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
+                eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("1"));
     }
 
     public ArrayList<PersonTemplate> getPersonTemplatesByPerson(int id, int limit, int offset) {
@@ -305,9 +305,8 @@ public class AppDb extends Singleton {
             EventTemplate eventTemplate = null;
             if (!cursor.isNull(2))
                 eventTemplate = getEventTemplate(cursor.getInt(2));
-
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
-                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("TRUE"));
+                    eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("1"));
             personTemplates.add(pt);
         }
 

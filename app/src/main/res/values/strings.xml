@@ -48,4 +48,5 @@
     <string name="status_red_txt">Забытый друг</string>
     <string name="action_search">Поиск</string>
     <string name="change_contact_layout_title">Изменить контакт</string>
+    <string name="empty_person_name_hint">Имя друга не может быть пустым</string>
 </resources>

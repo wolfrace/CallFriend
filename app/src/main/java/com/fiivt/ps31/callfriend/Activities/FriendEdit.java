@@ -17,25 +17,25 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
-import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener ;
+import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener;
+import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
+import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import com.fiivt.ps31.callfriend.R;
-import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
-import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
@@ -45,7 +45,7 @@ import lombok.NoArgsConstructor;
 
 public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
-    private static final int INVALID_EVENT_ID = -1;
+    private static final int INVALID_EVENT_ID = Integer.MAX_VALUE;
     private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
     private static final Date INVALID_DATE = new Date(0);
 
@@ -59,7 +59,6 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private EditText nameView;
     private EditText descriptionView;
     private CircleImageView avatarView;
-    private Integer hiddenPersonId;
     private SignificantEventAdapter eventsAdapter;
 
 
@@ -90,7 +89,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private List<PersonTemplate> getPersonalTemplates(Person person){
-        boolean isNewUser = person.getId() <= 0 | db.getPersonTemplates(person).size() == 0;
+        boolean isNewUser = person.getId() <= 0 || db.getPersonTemplates(person).size() == 0;
         return isNewUser
                 ? generateNewPersonTemplates(person)
                 : db.getPersonTemplates(person);
@@ -151,7 +150,6 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         // set personal info
         nameView.setText(person.getName());
         descriptionView.setText(person.getDescription());
-        hiddenPersonId = person.getId();
         //avatarView.setImageResource(); todo set AVATAR
 
         // set significant events
@@ -267,7 +265,6 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             @Override
             public void onClick(View view) {
                 onSave();
-                finish();
             }
         });
 
@@ -293,6 +290,10 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     public void onSave() {
         Person person = getPersonDataFromView();
+
+        if (person == null)
+            return;
+
         if (person.getId() <= 0) {
             db.addPerson(person);
         } else {
@@ -310,9 +311,18 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 db.updatePersonTemplate(pt);
             }
         }
+
+        close();
     }
 
     public void onCancel() {
+        finish();
+    }
+
+    public void close(){
+        Intent intent = new Intent(this, PersonActivity.class);
+        intent.putExtra("selectedPos", 0);
+        startActivity(intent);
         finish();
     }
 
@@ -325,11 +335,24 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     public Person getPersonDataFromView() {
+
         String name = nameView.getText().toString();
         String description = descriptionView.getText().toString();
+
+        if (name.isEmpty()) {
+            onError(R.string.empty_person_name_hint);
+            return null;
+        }
+
         person.setName(name);
         person.setDescription(description);
         return person;
+    }
+
+    private void onError(int errorStringResId) {
+        Toast
+                .makeText(this, errorStringResId, Toast.LENGTH_LONG)
+                .show();
     }
 
     @Override
@@ -361,7 +384,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     @Data
     @NoArgsConstructor
     private static class SignificantEventHolder {
-        View enableEventButton;
+        View checkBoxButton;
         TextView title;
         CheckBox checkBox;
         CircleImageView icon;
@@ -390,7 +413,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             SignificantEventHolder viewHolder = (SignificantEventHolder) view.getTag();
             PersonTemplate event = values.get(position);
             viewHolder.setEventValues(event);
-            processEnableEventButtonClick(viewHolder, position);
+            processCheckBoxButtonClick(viewHolder, position);
             return view;
         }
 
@@ -401,8 +424,8 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             }
         }
 
-        private void processEnableEventButtonClick(SignificantEventHolder viewHolder, final int eventPosition) {
-            viewHolder.getEnableEventButton().setOnClickListener(new View.OnClickListener() {
+        private void processCheckBoxButtonClick(SignificantEventHolder viewHolder, final int eventPosition) {
+            viewHolder.getCheckBoxButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     PersonTemplate event = getItem(eventPosition);
@@ -431,7 +454,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             holder.setIcon((CircleImageView) view.findViewById(R.id.significant_event_icon));
             holder.setTitle((TextView) view.findViewById(R.id.significant_event_title));
             holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
-            holder.setEnableEventButton(view.findViewById(R.id.enable_significant_event_button));
+            holder.setCheckBoxButton(view.findViewById(R.id.enable_significant_event_button));
             view.setTag(holder);
             return holder;
         }
