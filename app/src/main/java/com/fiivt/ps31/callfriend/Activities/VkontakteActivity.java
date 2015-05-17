@@ -169,10 +169,6 @@ public class VkontakteActivity extends Activity {
 //                    }
                     Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, 0);
                     appDb.addPerson(p);
-//                    List<PersonTemplate> personTemplates = generateNewPersonTemplates(p, appDb);
-//                    for (PersonTemplate pt: personTemplates) {
-//                        appDb.addPersonTemplate(pt);
-//                    }
                 }
             }catch(JSONException e){
                 e.printStackTrace();
@@ -181,27 +177,6 @@ public class VkontakteActivity extends Activity {
         else {
             Log.e("ServiceHandler", "Couldn't get any data from the url");
         }
-    }
-
-    private List<PersonTemplate> generateNewPersonTemplates(Person person, AppDb appDb) {
-        List<EventTemplate> defaultTemplates = appDb.getEventTemplates();
-        List<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>(defaultTemplates.size());
-        for (EventTemplate defTemplate: defaultTemplates) {
-            PersonTemplate personTemplate = generatePersonTemplate(person, defTemplate);
-            personTemplates.add(personTemplate);
-        }
-        return personTemplates;
-    }
-
-    private PersonTemplate generatePersonTemplate(Person person, EventTemplate defaultTemplate) {
-        return new PersonTemplate(
-                IdGenerator.generate(),
-                person,
-                defaultTemplate,
-                defaultTemplate.getDefaultDate(),
-                new Date(TimeUnit.DAYS.toMillis(365)),
-                DEFAULT_REMINDER_TIME,
-                false);
     }
 
     @Override
