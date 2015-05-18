@@ -24,6 +24,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Service.EventService;
 import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
@@ -45,7 +46,7 @@ import lombok.NoArgsConstructor;
 
 public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
-    private static final int INVALID_EVENT_ID = Integer.MAX_VALUE;
+    private static final int INVALID_EVENT_ID = - Integer.MAX_VALUE;
     private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
     private static final Date INVALID_DATE = new Date(0);
 
@@ -112,10 +113,14 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 person,
                 defaultTemplate,
                 defaultTemplate.getDefaultDate(),
-                new Date(TimeUnit.DAYS.toMillis(365)),
+                getYearCooldown(),
                 DEFAULT_REMINDER_TIME,
                 false,
                 "");
+    }
+
+    private Date getYearCooldown(){
+        return new Date(TimeUnit.DAYS.toMillis(365));//todo 366
     }
 
     private void initView() {
@@ -312,7 +317,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 db.updatePersonTemplate(pt);
             }
         }
-
+        startService(new Intent(this, EventService.class));//todo remove
         close();
     }
 
@@ -377,7 +382,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
-        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, reminderTime);
+        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, getYearCooldown(), reminderTime );
         eventsAdapter.add(event);
         eventsAdapter.notifyDataSetChanged();
     }
