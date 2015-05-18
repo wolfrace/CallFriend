@@ -49,10 +49,11 @@ public class PersonTemplate implements Serializable {
         this(0, person, eventTemplate, customDate, cooldown, reminderTime, enabled);
     }
 
-    public PersonTemplate(int id, Person person, String name, Date customDate, long reminderTime) {
+    public PersonTemplate(Integer id, Person person, String name, Date customDate, Date cooldown, long reminderTime) {
         this.id = id;
         this.info = name;
         this.person = person;
+        this.cooldown = cooldown;
         this.customDate = customDate;
         this.reminderTime = reminderTime;
     }

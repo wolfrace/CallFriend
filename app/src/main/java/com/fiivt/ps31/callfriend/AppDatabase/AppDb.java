@@ -230,7 +230,9 @@ public class AppDb extends Singleton {
     }
 
     public EventTemplate getEventTemplate(int id) {
-        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate WHERE idTemplate='" + id + "'", null);
+        if (id < 0)
+            return null;
+         Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate WHERE idTemplate='" + id + "'", null);
         cursor.moveToNext();
         return new EventTemplate(cursor.getInt(0), cursor.getString(1),
                 cursor.getString(2).equalsIgnoreCase("1"), new Date(cursor.getLong(3)), cursor.getInt(4));
@@ -241,12 +243,11 @@ public class AppDb extends Singleton {
     public void addPersonTemplate(PersonTemplate personTemplate) {
         ContentValues insertValues = new ContentValues();
         insertValues.put("idPerson", personTemplate.getPerson().getId());
-        insertValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        insertValues.put("idTemplate", personTemplate.getEventTemplate() == null ? -1 : personTemplate.getEventTemplate().getId());
         insertValues.put("customDate", personTemplate.getCustomDate().getTime());
         insertValues.put("cooldown", personTemplate.getCooldown().getTime());
         insertValues.put("remindTime", personTemplate.getReminderTime());
         insertValues.put("enabled", personTemplate.isEnabled());
-
         long id = db.insert("personTemplate", null, insertValues);
         personTemplate.setId((int) id);
     }
@@ -254,7 +255,7 @@ public class AppDb extends Singleton {
     public void updatePersonTemplate(PersonTemplate personTemplate) {
         ContentValues newValues = new ContentValues();
         newValues.put("idPerson", personTemplate.getPerson().getId());
-        newValues.put("idTemplate", personTemplate.getEventTemplate().getId());
+        newValues.put("idTemplate", personTemplate.getEventTemplate() == null ? -1 : personTemplate.getEventTemplate().getId());
         newValues.put("customDate", personTemplate.getCustomDate().getTime());
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
         newValues.put("remindTime", personTemplate.getReminderTime());
@@ -305,6 +306,7 @@ public class AppDb extends Singleton {
             EventTemplate eventTemplate = null;
             if (!cursor.isNull(2))
                 eventTemplate = getEventTemplate(cursor.getInt(2));
+
             PersonTemplate pt = new PersonTemplate(cursor.getInt(0), person,
                     eventTemplate, new Date(cursor.getLong(3)), new Date(cursor.getLong(4)), cursor.getLong(5), cursor.getString(6).equalsIgnoreCase("1"));
             personTemplates.add(pt);
@@ -374,12 +376,15 @@ public class AppDb extends Singleton {
     public Event getLastEventByPersonTemplate(Integer id) {
 
         Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date DESC;", null);
-        cursor.moveToNext();
-        Person person = getPerson(cursor.getInt(1));
-        PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+        if (cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
 
-        return new Event(cursor.getInt(0), person,
-                personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            return new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+        }
+        else
+            return null;
     }
 
     public static AppDb getInstance(FriendEdit conetext) {
