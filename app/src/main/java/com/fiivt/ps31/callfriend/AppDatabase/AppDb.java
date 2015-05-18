@@ -246,6 +246,11 @@ public class AppDb extends Singleton {
         insertValues.put("cooldown", personTemplate.getCooldown().getTime());
         insertValues.put("remindTime", personTemplate.getReminderTime());
         insertValues.put("enabled", personTemplate.isEnabled());
+        if (personTemplate.getInfo() != null)
+            insertValues.put("info", personTemplate.getInfo());
+        else {
+            insertValues.put("info", "");
+        }
 
         long id = db.insert("personTemplate", null, insertValues);
         personTemplate.setId((int) id);
@@ -259,6 +264,11 @@ public class AppDb extends Singleton {
         newValues.put("cooldown", personTemplate.getCooldown().getTime());
         newValues.put("remindTime", personTemplate.getReminderTime());
         newValues.put("enabled", personTemplate.isEnabled());
+        if (personTemplate.getInfo() != null)
+            newValues.put("info", personTemplate.getInfo());
+        else {
+            newValues.put("info", "");
+        }
 
         db.update("personTemplate", newValues, "idPersonTemplate=".concat(Integer.toString(personTemplate.getId())), null);
     }

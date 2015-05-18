@@ -114,7 +114,8 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 defaultTemplate.getDefaultDate(),
                 new Date(TimeUnit.DAYS.toMillis(365)),
                 DEFAULT_REMINDER_TIME,
-                false);
+                false,
+                "");
     }
 
     private void initView() {
