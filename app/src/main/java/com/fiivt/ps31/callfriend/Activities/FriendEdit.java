@@ -90,10 +90,12 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private List<PersonTemplate> getPersonalTemplates(Person person){
-        boolean isNewUser = person.getId() <= 0 || db.getPersonTemplates(person).size() == 0;
-        return isNewUser
-                ? generateNewPersonTemplates(person)
-                : db.getPersonTemplates(person);
+        if (person.getId() > 0) {
+            List<PersonTemplate> pt = db.getPersonTemplates(person);
+            if (pt.size() > 0)
+                return  pt;
+        }
+        return generateNewPersonTemplates(person);
     }
 
 
@@ -116,7 +118,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 getYearCooldown(),
                 DEFAULT_REMINDER_TIME,
                 false,
-                "");
+                null);
     }
 
     private Date getYearCooldown(){
@@ -374,15 +376,16 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         PersonTemplate event = eventsAdapter.getItemById(eventId);
         if (event == null) return;
 
-        event.setTitle(eventName);
+        event.setInfo(eventName);
         event.setCustomDate(eventDate);
         event.setReminderTime(reminderTime);
+        event.setEnabled(true);
 
         eventsAdapter.notifyDataSetChanged();
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
-        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, getYearCooldown(), reminderTime );
+        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, getYearCooldown(), reminderTime, true );
         eventsAdapter.add(event);
         eventsAdapter.notifyDataSetChanged();
     }

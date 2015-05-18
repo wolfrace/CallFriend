@@ -61,14 +61,12 @@ public class EventService extends Service {
         Log.e(LOG_TAG, "generateEventsFromEventService");
 
         AppDb appDb = new AppDb(this);
-        List<PersonTemplate> personTemplates = appDb.getPersonTemplates(Integer.MAX_VALUE, 0);
+        List<PersonTemplate> personTemplates = appDb.getEnabledPersonTemplates(Integer.MAX_VALUE, 0);
         for (int i = 0; i < personTemplates.size(); ++i) {
-            if (!personTemplates.get(i).isEnabled())
-                continue;
             Event lastEvent = appDb.getLastEventByPersonTemplate(personTemplates.get(i).getId());
             if (lastEvent == null)
             {//todo ref
-                Date eventDate = personTemplates.get(i).getCustomDate();
+                Date eventDate = personTemplates.get(i).getCustomDate();//todo calendar to another class?
                 while (eventDate.before(new Date()))
                 {
                     eventDate.setTime(eventDate.getTime() + personTemplates.get(i).getCooldown().getTime());

@@ -77,7 +77,7 @@ public class AppDb extends Singleton {
 
     private EventTemplate createEventTemplate(String name, int month, int day, int icon) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(2015, month, day);
+        calendar.set(new Date().getYear(), month, day);
         return createEventTemplate(name, icon)
                 .setDefaultDate(calendar.getTime());
     }
@@ -309,6 +309,12 @@ public class AppDb extends Singleton {
         return getPersonTemplates(cursor);
     }
 
+    public ArrayList<PersonTemplate> getEnabledPersonTemplates(int limit, int offset) {
+        assert limit > 0 : "Limit must be great than 0";
+        assert  offset >= 0 : "Offset must be great than 0";
+        Cursor cursor = db.rawQuery("SELECT * FROM personTemplate WHERE enabled=1 LIMIT " + limit + " OFFSET " + offset, null);
+        return getPersonTemplates(cursor);
+    }
 
     private ArrayList<PersonTemplate> getPersonTemplates(Cursor cursor){
         ArrayList<PersonTemplate> personTemplates = new ArrayList<PersonTemplate>();
