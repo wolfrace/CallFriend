@@ -75,7 +75,13 @@ public class BaseActivity extends ActionBarActivity {
         decor.removeView(child);
         LinearLayout container = (LinearLayout) drawer.findViewById(R.id.content_frame);
         container.addView(child, 0);
-        drawer.findViewById(R.id.left_drawer).setPadding(0, getStatusBarHeight(), 0, 0);
+
+        View menuLayout = drawer.findViewById(R.id.left_drawer);
+        menuLayout.setPadding(0, getStatusBarHeight(), 0, 0);
+        menuLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {}// catch click on empty field
+        });
 
         // Make the drawer replace the first child
         decor.addView(drawer);

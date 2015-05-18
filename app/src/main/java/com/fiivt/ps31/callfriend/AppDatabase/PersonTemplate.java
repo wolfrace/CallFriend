@@ -2,12 +2,13 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.Status;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 /**
  * Created by Egor on 23.04.2015.
@@ -73,7 +74,7 @@ public class PersonTemplate implements Serializable {
     public Event generateEvent(Date lastDate) {
         return new Event(person,
                 this,
-                generateInfo(person.getName(), eventTemplate.getInfo()),
+                generateInfo(person.getName(), eventTemplate == null ? "null" : eventTemplate.getInfo()),
                 generateDate(lastDate),
                 Status.EXPECTED
         );
