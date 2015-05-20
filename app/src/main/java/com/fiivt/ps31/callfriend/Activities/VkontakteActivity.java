@@ -138,6 +138,10 @@ public class VkontakteActivity extends Activity {
                 AppDb appDb = new AppDb(this);
                 // TO DELETE
                 appDb.clearDb(this);
+                EventTempate dobTemplate = appDb.getEventTemplate("День рождения");
+                EventTempate motherDayTemplate = appDb.getEventTemplate("Всемирный женский день");
+                EventTempate fatherDayTemplate = appDb.getEventTemplate("День Защитника Отечества");
+                EventTempate newYearTemplate = appDb.getEventTemplate("Новый год");
 
                 JSONObject json = response.json;
                 JSONObject ara = json.getJSONObject("response");
@@ -157,18 +161,18 @@ public class VkontakteActivity extends Activity {
                         description = "Из ВКонтакте";
                     }
 
-                    //String dateStr = f.getString("bdate");
-                    //SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy");
-//                    try {
-//                        Date birthDate = sdf.parse(dateStr);
-//                        // TODO add photo
-//                        Person p = new Person(firstName.concat(" ").concat(lastName), isMale, 0);
-//                        appDb.addPerson(p);
-//                    }
-//                    catch (ParseException pe) {
-//                    }
                     Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, 0);
                     appDb.addPerson(p);
+
+                    String dateStr = f.getString("bdate");
+                    SimpleDateFormat sdf = new SimpleDateFormat("d.M.yyyy");
+                    try {
+                        Date birthDate = sdf.parse(dateStr);
+                        // TODO add photo
+                        addBirthdayPersonTemplate(appDb, dobTemplate, p, birthDate);
+                    }
+                    catch (ParseException pe) {
+                    }
                 }
             }catch(JSONException e){
                 e.printStackTrace();
@@ -177,6 +181,12 @@ public class VkontakteActivity extends Activity {
         else {
             Log.e("ServiceHandler", "Couldn't get any data from the url");
         }
+    }
+
+    void addBirthdayPersonTemplate(AppDb appDb, EventTemplate dobTemplate, Person p, Date birthDate){
+        PersonTemplate pt = new PersonTemplate(
+                0, p, dobTemplate, dobTemplate.getDefaultDate(), getYearCooldown(), TimeUnit.DAYS.toMillis(1), true, null);
+        appDb.addPersonTemplate(pt);
     }
 
     @Override

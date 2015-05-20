@@ -229,6 +229,16 @@ public class AppDb extends Singleton {
         return eventTemplates;
     }
 
+    public EventTemplate getEventTemplate(String title) {
+        if (title.length() == 0)
+            return null;
+        Cursor cursor = db.rawQuery("SELECT * FROM eventTemplate WHERE info='" + title + "'", null);
+        if (cursor.moveToNext())
+            return new EventTemplate(cursor.getInt(0), cursor.getString(1),
+                cursor.getString(2).equalsIgnoreCase("1"), new Date(cursor.getLong(3)), cursor.getInt(4));
+        return null;
+    }
+
     public EventTemplate getEventTemplate(int id) {
         if (id < 0)
             return null;
