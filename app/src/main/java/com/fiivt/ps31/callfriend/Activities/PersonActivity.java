@@ -3,6 +3,7 @@ package com.fiivt.ps31.callfriend.Activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -98,6 +99,14 @@ public class PersonActivity extends BaseActivity {
             name.setText(person.getName());
             personNote.setText(person.getDescription());
 
+            String mPhotoPath = person.getIdPhoto();
+            if (mPhotoPath != "") {
+                try {
+                    image.setImageBitmap(BitmapFactory.decodeFile(mPhotoPath));
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
             //image.setImageResource(R.mipmap.ic_user);
         }
     }
@@ -139,7 +148,7 @@ public class PersonActivity extends BaseActivity {
         private PersonViewHolder initializeHolder(View view) {
             PersonViewHolder holder = new PersonViewHolder();
             holder.setName((TextView) view.findViewById(R.id.person_list_contact_name));
-            //holder.setImage((ImageView) view.findViewById(R.id.contactAvatar));
+            holder.setImage((ImageView) view.findViewById(R.id.profile_image));
             holder.setPersonNote((TextView) view.findViewById(R.id.person_note));
             holder.setPersonStatus((TextView) view.findViewById(R.id.person_ststus));
             holder.setPersonStatusRL((RelativeLayout) view.findViewById(R.id.person_status_rl));

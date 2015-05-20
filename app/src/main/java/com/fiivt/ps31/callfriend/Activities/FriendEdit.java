@@ -1,23 +1,27 @@
 package com.fiivt.ps31.callfriend.Activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
@@ -32,6 +36,8 @@ import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -59,8 +65,11 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
     private EditText nameView;
     private EditText descriptionView;
-    private CircleImageView avatarView;
+    private ImageView avatarView;
+    private String avatarImagePath;
     private SignificantEventAdapter eventsAdapter;
+
+    private Bitmap bmp;
 
 
     @Override
@@ -133,7 +142,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         initEventsList();
         nameView = (EditText) findViewById(R.id.friend_name_edit_text);
         descriptionView = (EditText) findViewById(R.id.friend_description_edit_text);
-        avatarView = (CircleImageView) findViewById(R.id.friend_avatar);
+        avatarView = (ImageView) findViewById(R.id.friend_avatar);
     }
 
     private void initButtons() {
@@ -149,7 +158,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         changeAvatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onChangeAvatar();
+                onChangeAvatar(view);
             }
         });
     }
@@ -158,7 +167,19 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         // set personal info
         nameView.setText(person.getName());
         descriptionView.setText(person.getDescription());
-        //avatarView.setImageResource(); todo set AVATAR
+
+        avatarImagePath = person.getIdPhoto();
+        if (avatarImagePath != "") {
+            try {
+                avatarView.setImageBitmap(BitmapFactory.decodeFile(avatarImagePath));
+                avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            //todo: show default avatar picture
+        }
+
 
         // set significant events
         eventsAdapter.setValues(events);
@@ -178,8 +199,74 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         eventList.setAdapter(eventsAdapter);
     }
 
-    private void onChangeAvatar() {
-        //todo set avatar ???
+    private void onChangeAvatar(View view) {
+        startActivityForResult(
+                Intent.createChooser(
+                        new Intent(Intent.ACTION_GET_CONTENT)
+                                .setType("image/*"), "Choose an image"),
+                1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        handleGalleryResult(data);
+    }
+
+    private void handleGalleryResult(Intent data) {
+        Uri selectedImage = data.getData();
+        String mTmpGalleryPicturePath = getPath(selectedImage);
+        if(mTmpGalleryPicturePath!=null) {
+//            Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_SHORT).show();
+            avatarImagePath = mTmpGalleryPicturePath;
+            avatarView.setImageBitmap(BitmapFactory.decodeFile(mTmpGalleryPicturePath));
+
+            avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
+        else {
+            try {
+                InputStream is = getContentResolver().openInputStream(selectedImage);
+                avatarView.setImageBitmap(BitmapFactory.decodeStream(is));
+                //mTmpGalleryPicturePath = selectedImage.getPath();
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @SuppressLint("NewApi")
+    private String getPath(Uri uri) {
+
+        if( uri == null ) {
+            return null;
+        }
+
+        String[] projection = { MediaStore.Images.Media.DATA };
+
+        Cursor cursor;
+        // Will return "image:x*"
+        String wholeID = DocumentsContract.getDocumentId(uri);
+        // Split at colon, use second item in the array
+        String id = wholeID.split(":")[1];
+        // where id is equal to
+        String sel = MediaStore.Images.Media._ID + "=?";
+
+        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                projection, sel, new String[]{ id }, null);
+
+        String path = null;
+        try {
+            int column_index = cursor
+                    .getColumnIndex(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            path = cursor.getString(column_index).toString();
+            cursor.close();
+        }
+        catch(NullPointerException e) {
+            Toast.makeText(getApplicationContext(), "ept", Toast.LENGTH_SHORT).show();
+        }
+        return path;
     }
 
     private void onCreateNewSignificantEvent() {
@@ -354,6 +441,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
         person.setName(name);
         person.setDescription(description);
+        person.setIdPhoto(avatarImagePath);
         return person;
     }
 

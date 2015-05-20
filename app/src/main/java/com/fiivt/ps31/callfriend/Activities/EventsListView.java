@@ -2,16 +2,12 @@ package com.fiivt.ps31.callfriend.Activities;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 
@@ -167,6 +163,14 @@ public class EventsListView extends LinearLayout {
             title.setText(event.getInfo());
             daysLeft.setText(Integer.toString(event.getDaysLeft()));
             //personImage.setImageResource();
+            String mPhotoPath = event.getPerson().getIdPhoto();
+            if (mPhotoPath != "") {
+                try {
+                    personImage.setImageBitmap(BitmapFactory.decodeFile(mPhotoPath));
+                } catch (Exception e) {
+                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
             //eventImage.setImageResource();
         }
     }

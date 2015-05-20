@@ -37,7 +37,7 @@ public class AppDb extends Singleton {
     private void initDb(Context c) {
         boolean isExists = isDatabaseExists(c);
         db = c.openOrCreateDatabase(dbPath, Context.MODE_PRIVATE, null);// dropbase
-        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description STRING, isMale BOOLEAN, photo BLOB);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS person(idPerson INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, name VARCHAR, description STRING, isMale BOOLEAN, photo STRING);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS eventTemplate(idTemplate INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, info VARCHAR, canModified BOOLEAN, defaultDate DATE, idIcon INTEGER);");
 
@@ -105,8 +105,8 @@ public class AppDb extends Singleton {
     public void updatePerson(Person person) {
         ContentValues newValues = new ContentValues();
         newValues.put("name", person.getName());
-        newValues.put("isMale", person.getIdPhoto());
-        newValues.put("photo", person.getName());
+        newValues.put("isMale", person.isMale());
+        newValues.put("photo", person.getIdPhoto());
         newValues.put("description", person.getDescription());
 
         db.update("person", newValues, "idPerson=".concat(Integer.toString(person.getId())), null);
@@ -136,7 +136,7 @@ public class AppDb extends Singleton {
         Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
 
         while(cursor.moveToNext()) {
-            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("1"), cursor.getInt(4));
+            Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("1"), cursor.getString(4));
             persons.add(p);
         }
 
@@ -150,7 +150,7 @@ public class AppDb extends Singleton {
                 , cursor.getString(1)
                 , cursor.getString(2)
                 , cursor.getString(3).equalsIgnoreCase("1")
-                , cursor.getInt(4));
+                , cursor.getString(4));
     }
 
     // Templates API

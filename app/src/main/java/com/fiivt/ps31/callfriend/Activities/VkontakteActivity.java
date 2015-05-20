@@ -175,7 +175,7 @@ public class VkontakteActivity extends BaseActivity {
 //                    }
 //                    catch (ParseException pe) {
 //                    }
-                    Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, 0);
+                    Person p = new Person(firstName.concat(" ").concat(lastName), description, isMale, "");
                     appDb.addPerson(p);
                 }
             }catch(JSONException e){
