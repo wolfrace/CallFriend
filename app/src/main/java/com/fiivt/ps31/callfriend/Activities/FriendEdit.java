@@ -377,7 +377,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
-        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, reminderTime);
+        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, reminderTime, false, "");
         eventsAdapter.add(event);
         eventsAdapter.notifyDataSetChanged();
     }

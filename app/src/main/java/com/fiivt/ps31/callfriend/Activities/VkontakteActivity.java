@@ -117,16 +117,16 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onError(VKError error) {
                 //Do error stuff
-                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                //startActivity(i);
 
             }
 
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 //I don't really believe in progress
-                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                startActivity(i);
+                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                //startActivity(i);
                 //I don't really believe in progress
             }
         });
