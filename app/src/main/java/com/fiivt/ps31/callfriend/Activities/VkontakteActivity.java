@@ -6,10 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.BaseActivity;
+import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.vk.sdk.VKAccessToken;
@@ -41,7 +44,7 @@ import java.util.concurrent.TimeUnit;
 // A3DD8FF0F176C44FDA248C7156DA8366380CA2BC
 // BB58C88B1C43570A79DC1043794830D377702F12
 
-public class VkontakteActivity extends Activity {
+public class VkontakteActivity extends BaseActivity {
 
     private final static String VK_APP_ID = "4907734";
 
@@ -108,6 +111,9 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        getString(R.string.import_compete), Toast.LENGTH_SHORT);
+                toast.show();
                 //Do complete stuff
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
@@ -117,9 +123,11 @@ public class VkontakteActivity extends Activity {
             @Override
             public void onError(VKError error) {
                 //Do error stuff
-                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                //startActivity(i);
-
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        error.errorMessage, Toast.LENGTH_SHORT);
+                toast.show();
+                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                startActivity(i);
             }
 
             @Override

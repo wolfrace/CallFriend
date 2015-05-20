@@ -24,7 +24,7 @@
     <string name="add_significant_event_button_text">Добавить особое событие</string>
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
-    <string name="title_activity_vkontakte">VkontakteActivity</string>
+    <string name="title_activity_vkontakte">Импорт друзей</string>
     <string name="import_from_vk">Импортировать друзей из ВКонтакте</string>
     <string name="import_category">Импорт</string>
     <string name="enable_push">Включить push-уведомления</string>
@@ -49,4 +49,5 @@
     <string name="action_search">Поиск</string>
     <string name="change_contact_layout_title">Изменить контакт</string>
     <string name="empty_person_name_hint">Имя друга не может быть пустым</string>
+    <string name="import_compete">Друзья успешно импортированы</string>
 </resources>
