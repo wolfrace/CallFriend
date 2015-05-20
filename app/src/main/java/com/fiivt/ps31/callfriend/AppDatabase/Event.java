@@ -1,11 +1,12 @@
 package com.fiivt.ps31.callfriend.AppDatabase;
 
 import com.fiivt.ps31.callfriend.Utils.Status;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import lombok.Data;
 
 /**
  * Created by Egor on 23.04.2015.

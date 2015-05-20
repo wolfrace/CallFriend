@@ -4,13 +4,14 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
+
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
+import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Egor on 06.05.2015.
@@ -45,11 +46,10 @@ public class EventService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (lastDateGenerate != null && TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastDateGenerate.getTime()) > 1) {
+               // if (lastDateGenerate != null && TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastDateGenerate.getTime()) > 1) {
                     lastDateGenerate = new Date();
                     generateEvents();
-                }
-
+             //   }
                 //temp
                 stopSelf();
             }
@@ -61,9 +61,21 @@ public class EventService extends Service {
         Log.e(LOG_TAG, "generateEventsFromEventService");
 
         AppDb appDb = new AppDb(this);
-        List<PersonTemplate> personTemplates = appDb.getPersonTemplates(10000, 0);
+        List<PersonTemplate> personTemplates = appDb.getEnabledPersonTemplates(Integer.MAX_VALUE, 0);
         for (int i = 0; i < personTemplates.size(); ++i) {
             Event lastEvent = appDb.getLastEventByPersonTemplate(personTemplates.get(i).getId());
+            if (lastEvent == null)
+            {//todo ref
+                Date eventDate = personTemplates.get(i).getCustomDate();//todo calendar to another class?
+                while (eventDate.before(new Date()))
+                {
+                    eventDate.setTime(eventDate.getTime() + personTemplates.get(i).getCooldown().getTime());
+                }
+                lastEvent = new Event(0, personTemplates.get(i).getPerson(),
+                        personTemplates.get(i), personTemplates.get(i).getInfo()
+                        , eventDate, Status.EXPECTED);
+                appDb.addEvent(lastEvent);
+            }
             while (lastEvent.getDaysLeft() < generateForXdays) {
                 lastEvent = personTemplates.get(i).generateEvent(lastEvent.getDate());
                 appDb.addEvent(lastEvent);
