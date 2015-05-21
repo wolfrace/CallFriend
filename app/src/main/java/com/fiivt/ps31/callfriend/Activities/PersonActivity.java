@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 public class PersonActivity extends BaseActivity {
 
     public AppDb database;
+    private View friendListEmptyNotify;
+    private  ArrayAdapter personAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +39,22 @@ public class PersonActivity extends BaseActivity {
         database = new AppDb(this);
         setContentView(R.layout.person_list_layout);
 
+
+        friendListEmptyNotify = findViewById(R.id.friends_not_existing_notify);
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
+        Button addFriendsButton = (Button) findViewById(R.id.add_friends_button);
+
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //addPersonButton.setBackgroundColor();
+                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                startActivity(intent);
+            }
+        });
+
+        addFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
@@ -49,7 +62,7 @@ public class PersonActivity extends BaseActivity {
 
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
         final List<Person> person = database.getPersons(100, 0);
-        ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
+        personAdapter = new PersonArrayAdapter(this, person);
         personsListView.setAdapter(personAdapter);
 
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,6 +74,16 @@ public class PersonActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        notifyOnFriendListChanged();
+    }
+
+    private void notifyOnFriendListChanged() {
+        boolean isEmpty = true;// = personAdapter.isEmpty();
+        friendListEmptyNotify.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+    public boolean isEmpty() {
+        return personAdapter.isEmpty();
     }
 
     @Override

@@ -10,22 +10,58 @@
         tools:context=".PersonActivity"
         >
 
-        <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/person_list_view"
-                android:divider="@null"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-        <at.markushi.ui.CircleButton
-                android:id="@+id/person_add_image"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_person_add_white_36dp"
-                app:cb_color="@color/circle_button_color"
-                app:cb_pressedRingWidth="8dp" />
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"
+                        android:id="@+id/friends_not_existing_notify"
+                        >
+                        <TextView
+                                android:text="@string/friends_not_existing_notify"
+                                android:textColor="@color/text_color_light"
+                                android:textSize="@dimen/add_friends_button_text_size"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                android:layout_marginTop="180dp"
+                                android:layout_gravity="center_horizontal"/>
+                        <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:text="@string/friends_add_button_text"
+                                android:id="@+id/add_friends_button"
+                                android:background="@drawable/friends_add_button_background"
+                                android:layout_gravity="center_horizontal"
+                                android:paddingLeft="8dp"
+                                android:paddingRight="8dp"
+                                android:textColor="@color/text_color_primary" android:textStyle="bold"
+                                android:textSize="14dp"/>
+
+                </LinearLayout>
+
+                <ListView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/person_list_view"
+                        android:divider="@null"/>
+
+                <at.markushi.ui.CircleButton
+                        android:id="@+id/person_add_image"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:src="@drawable/ic_person_add_white_36dp"
+                        app:cb_color="@color/circle_button_color"
+                        app:cb_pressedRingWidth="8dp" />
+        </LinearLayout>
 </RelativeLayout>
 
