@@ -19,7 +19,7 @@
         <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
 
         <activity
-            android:name="com.fiivt.ps31.callfriend.Activities.EventsActivity"
+            android:name=".Activities.EventsActivity"
             android:label="@string/events_activity_title" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
