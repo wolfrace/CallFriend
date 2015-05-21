@@ -22,13 +22,13 @@ android:layout_height="match_parent">
     android:background="@color/window_background">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="180dip"
-        android:background="@color/background_blue_light"/>
+        android:layout_height="172dp"
+        android:background="@drawable/menu_back_304x172dp"/>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/window_background"
         android:divider="@color/window_background"
-        android:id="@+id/drawer_list"/>
+        android:id="@+id/drawer_list" android:layout_marginTop="8dp"/>
 </LinearLayout>
 </android.support.v4.widget.DrawerLayout>

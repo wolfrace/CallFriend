@@ -27,7 +27,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:id="@+id/friend_avatar"
-                        android:background="@color/background_blue_light">
+                        android:background="@drawable/edit_avatar_back">
                     </ImageView>
 
                     <LinearLayout
