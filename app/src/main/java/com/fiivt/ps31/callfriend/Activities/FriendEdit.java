@@ -61,12 +61,14 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private EditText descriptionView;
     private CircleImageView avatarView;
     private SignificantEventAdapter eventsAdapter;
+    private static Context context;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = AppDb.getInstance(this);
+        context = this;
 
         initData();
         initView();
@@ -395,11 +397,18 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private static class SignificantEventHolder {
         View checkBoxButton;
         TextView title;
+        TextView subtitle;
         CheckBox checkBox;
         CircleImageView icon;
 
         public void setEventValues(PersonTemplate event) {
             title.setText(event.getTitle());
+            if (!event.getCustomDate().equals(INVALID_DATE)) {
+                subtitle.setText(event.getCustomDateString());
+                subtitle.setVisibility(View.VISIBLE);
+            }
+            else
+                subtitle.setVisibility(View.GONE);
             checkBox.setChecked(event.isEnabled());
             icon.setImageResource(event.getIconResId());
         }
@@ -462,6 +471,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             SignificantEventHolder holder = new SignificantEventHolder();
             holder.setIcon((CircleImageView) view.findViewById(R.id.significant_event_icon));
             holder.setTitle((TextView) view.findViewById(R.id.significant_event_title));
+            holder.setSubtitle((TextView) view.findViewById(R.id.significant_event_subtitle));
             holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
             holder.setCheckBoxButton(view.findViewById(R.id.enable_significant_event_button));
             view.setTag(holder);

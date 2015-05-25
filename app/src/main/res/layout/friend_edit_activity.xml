@@ -40,7 +40,8 @@
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="38dp">
 
                         <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
                         <LinearLayout
