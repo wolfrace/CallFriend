@@ -10,6 +10,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,18 +39,22 @@ public class EventsActivity extends BaseActivity {
     }
 
     public void dismissEvent(Event event) {
-        //todo remove(update template) from db
+        //todo remove pushes
+        event.setStatus(Status.DELETED);
         removeEventFromView(event);
     }
 
     public void acceptEvent(Event event) {
-        //todo remove(update template) from db
+        //todo remove pushes
+        event.setStatus(Status.ACHIEVED);
+        database.updateEvent(event);
         removeEventFromView(event);
     }
 
     public void putOffEvent(Event event) {
         event.putOff(TimeUnit.HOURS, 25);
-        //todo save into db
+        //todo update pushes
+        database.updateEvent(event);
         removeEventFromView(event);
         addEventToView(event);
     }
