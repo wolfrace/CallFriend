@@ -4,7 +4,9 @@ import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,7 @@ public class PersonTemplate implements Serializable {
     private Date cooldown;
     private long reminderTime;
     private boolean enabled;
+    private int ZERO_YEAR = -1899;
 
     public PersonTemplate(Integer id, Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled, String info) {
         this.id = id;
@@ -91,6 +94,14 @@ public class PersonTemplate implements Serializable {
             iconId = CUSTOM_EVENT_ICON;
         }
         return iconId;
+    }
+
+    public String getCustomDateString(){
+        String pattern = "d MMMM yyyy 'г.'";
+        if (ZERO_YEAR == customDate.getYear())
+            pattern = "d MMMM";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, new Locale("ru", "RU"));
+        return sdf.format(customDate);
     }
 
     public void setTitle(String name) {

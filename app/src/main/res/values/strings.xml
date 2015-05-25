@@ -3,7 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_friend_edit">Редактирование друга</string>
+    <string name="title_activity_friend_edit">Изменить</string>
     <string name="action_friend_list">Contacts</string>
     <string name="action_event_list">Events</string>
     <string name="events_activity_title">События</string>
@@ -17,11 +17,11 @@
     <string name="events_not_existing_notify">У вас нет новых событий.</string>
     <string name="save_button_title">Сохранить</string>
     <string name="cancel_button_title">Отменить</string>
-    <string name="add_contact_layout_title">Добавить контакт</string>
-    <string name="friend_name_hint">Имя контакта</string>
-    <string name="friend_description_hint">Описание контакта</string>
+    <string name="add_contact_layout_title">Добавить друга</string>
+    <string name="friend_name_hint">Имя друга</string>
+    <string name="friend_description_hint">Описание друга</string>
     <string name="significant_events_title">Значимые события</string>
-    <string name="add_significant_event_button_text">Добавить особое событие</string>
+    <string name="add_significant_event_button_text">Добавить новое событие</string>
     <string name="startEventService">Start Event Service</string>
     <string name="stopEventService">Stop Event Service</string>
     <string name="title_activity_vkontakte">Импорт друзей</string>
@@ -47,7 +47,7 @@
     <string name="status_yellow_txt">Давно не общались</string>
     <string name="status_red_txt">Забытый друг</string>
     <string name="action_search">Поиск</string>
-    <string name="change_contact_layout_title">Изменить контакт</string>
+    <string name="change_contact_layout_title">Изменить</string>
     <string name="empty_person_name_hint">Имя друга не может быть пустым</string>
     <string name="import_compete">Друзья успешно импортированы</string>
 </resources>

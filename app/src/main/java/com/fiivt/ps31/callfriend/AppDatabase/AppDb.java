@@ -77,7 +77,7 @@ public class AppDb extends Singleton {
 
     private EventTemplate createEventTemplate(String name, int month, int day, int icon) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(new Date().getYear(), month, day);
+        calendar.set(0, month, day);
         return createEventTemplate(name, icon)
                 .setDefaultDate(calendar.getTime());
     }
