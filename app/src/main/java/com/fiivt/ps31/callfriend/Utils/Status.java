@@ -9,7 +9,8 @@ import lombok.Getter;
 @Getter
 public enum Status {
     EXPECTED(0),
-    ACHIEVED(1);
+    ACHIEVED(1),
+    DELETED(2);
 
     private int id;
 
