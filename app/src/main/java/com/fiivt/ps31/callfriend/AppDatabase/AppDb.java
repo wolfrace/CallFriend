@@ -133,7 +133,9 @@ public class AppDb extends Singleton {
         assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Person> persons = new ArrayList<Person>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
+        String query = "SELECT * FROM person ORDER BY name LIMIT " + limit + " OFFSET " + offset;
+
+        Cursor cursor = db.rawQuery(query, null);
 
         while(cursor.moveToNext()) {
             Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("1"), cursor.getString(4));
@@ -375,16 +377,20 @@ public class AppDb extends Singleton {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Event> events = new ArrayList<Event>();
+
         String query = "";
+
         if (partition == null)//default
             query = "SELECT * FROM event WHERE status=" + Status.EXPECTED.getId() +
                     " LIMIT " + limit + " OFFSET " + offset;
+
         else if (partition.equals("birthday"))
             query = "SELECT " +
                     "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
                     " FROM event INNER JOIN personTemplate ON event.idPersonTemplate = personTemplate.idPersonTemplate" +
                     " WHERE personTemplate.idTemplate = 1 AND status=" + Status.EXPECTED.getId() +
                     " LIMIT " + limit + " OFFSET " + offset;
+
         else if (partition.equals("special"))
             query = "SELECT " +
                     "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
