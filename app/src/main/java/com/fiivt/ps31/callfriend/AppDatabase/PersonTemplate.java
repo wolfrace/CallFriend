@@ -77,8 +77,7 @@ public class PersonTemplate implements Serializable {
             , Date customDate
             , Date cooldown
             , long reminderTime
-            , boolean enabled
-            , String info) {
+            , boolean enabled) {
         this.id = id;
         this.info = name;
         this.person = person;
@@ -86,7 +85,6 @@ public class PersonTemplate implements Serializable {
         this.customDate = customDate;
         this.reminderTime = reminderTime;
         this.enabled = enabled;
-        this.info = info;
     }
 
     private String generateInfo(String personInfo, String templateInfo) {
@@ -101,7 +99,7 @@ public class PersonTemplate implements Serializable {
     public Event generateEvent(Date lastDate) {
         return new Event(person,
                 this,
-                generateInfo(person.getName(), eventTemplate == null ? "null" : eventTemplate.getInfo()),
+                eventTemplate.getInfo(),//generateInfo(person.getName(), eventTemplate == null ? "null" : eventTemplate.getInfo()),
                 generateDate(lastDate),
                 Status.EXPECTED
         );

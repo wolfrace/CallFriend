@@ -426,7 +426,7 @@ public class AppDb extends Singleton {
     public Date getLastAchievedEventDateByPerson(Integer id) {
         Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
         if (cursor.moveToNext())
-            return new Date(cursor.getLong(1));
+            return new Date(cursor.getLong(0));
         return new Date(0);
     }
     public List<PersonTemplate> getPersonTemplates(Person person) {
