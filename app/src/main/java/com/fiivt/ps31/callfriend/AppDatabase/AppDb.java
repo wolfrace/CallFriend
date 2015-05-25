@@ -371,12 +371,27 @@ public class AppDb extends Singleton {
                 personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
     }
 
-    public ArrayList<Event> getEvents(int limit, int offset) {
+    public ArrayList<Event> getEvents(int limit, int offset, String partition) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Event> events = new ArrayList<Event>();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit + " OFFSET " + offset, null);
+        String query = "";
+        if (partition == null)//default
+            query = "SELECT * FROM event WHERE status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+        else if (partition.equals("birthday"))
+            query = "SELECT " +
+                    "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
+                    " FROM event INNER JOIN personTemplate ON event.idPersonTemplate = personTemplate.idPersonTemplate" +
+                    " WHERE personTemplate.idTemplate = 1 AND status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+        else if (partition.equals("special"))
+            query = "SELECT " +
+                    "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
+                    " FROM event INNER JOIN personTemplate ON event.idPersonTemplate = personTemplate.idPersonTemplate" +
+                    " WHERE personTemplate.idTemplate = -1 AND status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+        Cursor cursor = db.rawQuery(query, null);
 
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));

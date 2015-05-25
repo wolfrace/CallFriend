@@ -34,7 +34,15 @@ public class EventsActivity extends BaseActivity {
         initEventsLists();
 
         database = new AppDb(this);
-        addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+
+        String partition = getIntent().getStringExtra("partition");
+/*        if (partition.equals("birthday"))
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+        else if (partition.equals("special"))
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+        else
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));*/
+        addEventsToView(database.getEvents(Integer.MAX_VALUE, 0, partition));
     }
 
     public void dismissEvent(Event event) {
