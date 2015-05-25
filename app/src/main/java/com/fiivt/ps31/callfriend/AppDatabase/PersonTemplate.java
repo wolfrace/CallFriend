@@ -5,8 +5,11 @@ import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +38,14 @@ public class PersonTemplate implements Serializable {
     private boolean enabled;
     private int ZERO_YEAR = -1899;
 
-    public PersonTemplate(Integer id, Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled, String info) {
+    public PersonTemplate(Integer id
+            , Person person
+            , EventTemplate eventTemplate
+            , Date customDate
+            , Date cooldown
+            , long reminderTime
+            , boolean enabled
+            , String info) {
         this.id = id;
         this.person = person;
         this.eventTemplate = eventTemplate;
@@ -51,11 +61,24 @@ public class PersonTemplate implements Serializable {
         this.enabled = enabled;
     }
 
-    public PersonTemplate(Person person, EventTemplate eventTemplate, Date customDate, Date cooldown, long reminderTime, boolean enabled, String info) {
+    public PersonTemplate(Person person
+            , EventTemplate eventTemplate
+            , Date customDate
+            , Date cooldown
+            , long reminderTime
+            , boolean enabled
+            , String info) {
         this(0, person, eventTemplate, customDate, cooldown, reminderTime, enabled, info);
     }
 
-    public PersonTemplate(Integer id, Person person, String name, Date customDate, Date cooldown, long reminderTime, boolean enabled, String info) {
+    public PersonTemplate(Integer id
+            , Person person
+            , String name
+            , Date customDate
+            , Date cooldown
+            , long reminderTime
+            , boolean enabled
+            , String info) {
         this.id = id;
         this.info = name;
         this.person = person;
@@ -72,7 +95,7 @@ public class PersonTemplate implements Serializable {
 
     // TODO
     private Date generateDate(Date lastDate) {
-        return new Date(lastDate.getTime() + cooldown.getTime());
+        return applyCooldown(lastDate);//new Date(lastDate.getTime() + cooldown.getTime());
     }
 
     public Event generateEvent(Date lastDate) {
@@ -102,6 +125,20 @@ public class PersonTemplate implements Serializable {
             pattern = "d MMMM";
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, new Locale("ru", "RU"));
         return sdf.format(customDate);
+    }
+
+    public Date getCooldown(){
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(customDate);
+        return gc.isLeapYear(gc.get(Calendar.YEAR)) ?
+                new Date(TimeUnit.DAYS.toMillis(366)) :
+                new Date(TimeUnit.DAYS.toMillis(365));
+    }
+
+    public Date applyCooldown(Date date){//year cd
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(date);
+        return new GregorianCalendar(gc.get(Calendar.YEAR) + 1, gc.get(Calendar.MONTH), gc.get(Calendar.DAY_OF_MONTH)).getTime();
     }
 
     public void setTitle(String name) {

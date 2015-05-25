@@ -71,7 +71,7 @@ public class AppDb extends Singleton {
         templates.add(createEventTemplate("День Защитника Отечества", 1, 23, R.drawable.ic_event_deffend));
         templates.add(createEventTemplate("День свадьбы", R.drawable.ic_event_wedding));
         templates.add(createEventTemplate("День рождения ребенка", R.drawable.ic_event_baby));
-        templates.add(createEventTemplate("Китайский новый год", R.drawable.ic_event_china));
+        //templates.add(createEventTemplate("Китайский новый год", R.drawable.ic_event_china));
         return templates;
     }
 

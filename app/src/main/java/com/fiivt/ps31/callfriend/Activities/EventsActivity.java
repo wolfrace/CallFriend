@@ -69,7 +69,7 @@ public class EventsActivity extends BaseActivity {
         List<Event> urgently = new ArrayList<Event>();
 
         for(Event event: events) {
-            if (event.getDaysLeft() <= 0) {
+            if (event.getDaysLeft() <= 3) {
                 urgently.add(event);
             } else {
                 soon.add(event);

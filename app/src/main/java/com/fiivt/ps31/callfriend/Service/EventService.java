@@ -10,7 +10,9 @@ import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -62,14 +64,17 @@ public class EventService extends Service {
 
         AppDb appDb = new AppDb(this);
         List<PersonTemplate> personTemplates = appDb.getEnabledPersonTemplates(Integer.MAX_VALUE, 0);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(new Date());
+        GregorianCalendar today = new GregorianCalendar(gc.get(Calendar.YEAR), gc.get(Calendar.MONTH), gc.get(Calendar.DAY_OF_MONTH));
         for (int i = 0; i < personTemplates.size(); ++i) {
             Event lastEvent = appDb.getLastEventByPersonTemplate(personTemplates.get(i).getId());
             if (lastEvent == null)
             {//todo ref
-                Date eventDate = personTemplates.get(i).getCustomDate();//todo calendar to another class?
-                while (eventDate.before(new Date()))
+                Date eventDate = personTemplates.get(i).getCustomDate();
+                while (eventDate.getTime() < today.getTime().getTime())
                 {
-                    eventDate.setTime(eventDate.getTime() + personTemplates.get(i).getCooldown().getTime());
+                    eventDate = personTemplates.get(i).applyCooldown(eventDate);//.setTime(eventDate.getTime() + personTemplates.get(i).getCooldown().getTime());
                 }
                 lastEvent = new Event(0, personTemplates.get(i).getPerson(),
                         personTemplates.get(i), personTemplates.get(i).getInfo()
