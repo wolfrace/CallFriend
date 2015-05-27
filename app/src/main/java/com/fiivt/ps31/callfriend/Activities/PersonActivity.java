@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Äàíèë on 24.04.2015.
  */
-public class PersonActivity extends BaseActivity {
+public class PersonActivity extends BaseActivity{
 
     public AppDb database;
     private View friendListEmptyNotify;
@@ -78,7 +78,7 @@ public class PersonActivity extends BaseActivity {
     }
 
     private void notifyOnFriendListChanged() {
-        boolean isEmpty = true;// = personAdapter.isEmpty();
+        boolean isEmpty = personAdapter.isEmpty();
         friendListEmptyNotify.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
     }
 
@@ -86,12 +86,13 @@ public class PersonActivity extends BaseActivity {
         return personAdapter.isEmpty();
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
+        getMenuInflater().inflate(R.menu.menu_persons_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Data
      class PersonViewHolder {
