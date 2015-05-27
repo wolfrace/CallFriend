@@ -1,6 +1,7 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Service.EventService;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class EventsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // startService(new Intent(this, EventService.class));
+
         setContentView(R.layout.events_activity);
         eventListEmptyNotify = findViewById(R.id.events_not_existing_notify);
         initEventsLists();

@@ -1,16 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:sabd="http://schemas.android.com/apk/res-auto" >
-
-    <item
-            android:id="@+id/action_search"
-            android:icon="@android:drawable/ic_menu_search"
-            android:orderInCategory="100"
-            android:title="@string/action_search"
-            sabd:showAsAction="ifRoom"/>
-    <item
-            android:id="@+id/action_settings"
-            android:icon="@android:drawable/ic_dialog_alert"
-            android:orderInCategory="100"
-            android:title="@string/action_settings"
-            sabd:showAsAction="ifRoom"/>
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.fiivt.ps31.callfriend.Activities.MainActivity">
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
 </menu>

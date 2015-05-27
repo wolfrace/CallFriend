@@ -13,6 +13,7 @@ import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.vk.sdk.VKAccessToken;
@@ -111,9 +112,9 @@ public class VkontakteActivity extends BaseActivity {
             @Override
             public void onComplete(VKResponse response) {
                 parseJsonResponse(response);
-                Toast toast = Toast.makeText(getApplicationContext(),
-                        getString(R.string.import_compete), Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(getApplicationContext(),
+                        getString(R.string.import_compete), Toast.LENGTH_SHORT).show();
+
                 //Do complete stuff
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
@@ -181,6 +182,18 @@ public class VkontakteActivity extends BaseActivity {
             }catch(JSONException e){
                 e.printStackTrace();
             }
+
+            new Thread(new Runnable() {
+                Context context;
+                @Override
+                public void run() {
+                    EventsGenerator.generate(context);
+                }
+                public Runnable init(Context context){
+                    this.context = context;
+                    return this;
+                }
+            }.init(this)).start();
         }
         else {
             Log.e("ServiceHandler", "Couldn't get any data from the url");

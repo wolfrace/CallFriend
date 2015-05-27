@@ -37,6 +37,7 @@ import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener;
+import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
@@ -412,7 +413,19 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 db.updatePersonTemplate(pt);
             }
         }
-        startService(new Intent(this, EventService.class));//todo remove
+
+        new Thread(new Runnable() {
+            Context context;
+            @Override
+            public void run() {
+                EventsGenerator.generate(context);
+            }
+            public Runnable init(Context context){
+                this.context = context;
+                return this;
+            }
+        }.init(this)).start();
+
         close();
     }
 

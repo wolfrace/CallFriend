@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class EventService extends Service {
 
+    Alarm alarm = new Alarm();
     final String LOG_TAG = "EventServiceLogs";
     private Date lastDateGenerate;
 
@@ -30,8 +31,14 @@ public class EventService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(LOG_TAG, "onStartCommandEventService");
-        someTask();
+        alarm.SetAlarm(this);
+        // someTask();
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        alarm.SetAlarm(this);
     }
 
     public void onDestroy() {
@@ -48,10 +55,10 @@ public class EventService extends Service {
         new Thread(new Runnable() {
             @Override
             public void run() {
-               // if (lastDateGenerate != null && TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastDateGenerate.getTime()) > 1) {
-                    lastDateGenerate = new Date();
-                    generateEvents();
-             //   }
+                // if (lastDateGenerate != null && TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastDateGenerate.getTime()) > 1) {
+                lastDateGenerate = new Date();
+                generateEvents();
+                //   }
                 //temp
                 stopSelf();
             }
@@ -59,6 +66,7 @@ public class EventService extends Service {
     }
 
     private final static int generateForXdays = 30;
+
     public void generateEvents() {
         Log.e(LOG_TAG, "generateEventsFromEventService");
 
@@ -69,11 +77,9 @@ public class EventService extends Service {
         GregorianCalendar today = new GregorianCalendar(gc.get(Calendar.YEAR), gc.get(Calendar.MONTH), gc.get(Calendar.DAY_OF_MONTH));
         for (int i = 0; i < personTemplates.size(); ++i) {
             Event lastEvent = appDb.getLastEventByPersonTemplate(personTemplates.get(i).getId());
-            if (lastEvent == null)
-            {//todo ref
+            if (lastEvent == null) {//todo ref
                 Date eventDate = personTemplates.get(i).getCustomDate();
-                while (eventDate.getTime() < today.getTime().getTime())
-                {
+                while (eventDate.getTime() < today.getTime().getTime()) {
                     eventDate = personTemplates.get(i).applyCooldown(eventDate);//.setTime(eventDate.getTime() + personTemplates.get(i).getCooldown().getTime());
                 }
                 lastEvent = new Event(0, personTemplates.get(i).getPerson(),
