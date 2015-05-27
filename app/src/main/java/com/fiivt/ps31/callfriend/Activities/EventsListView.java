@@ -3,6 +3,7 @@ package com.fiivt.ps31.callfriend.Activities;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,7 +167,7 @@ public class EventsListView extends LinearLayout {
             String mPhotoPath = event.getPerson().getIdPhoto();
             if (mPhotoPath != "") {
                 try {
-                    personImage.setImageBitmap(BitmapFactory.decodeFile(mPhotoPath));
+                    personImage.setImageURI(Uri.parse(mPhotoPath));
                 } catch (Exception e) {
                     //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
