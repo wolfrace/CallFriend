@@ -11,8 +11,8 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="import_from_vk"
-            android:id="@+id/buttonImportVk"
-            android:layout_alignParentTop="true" android:layout_centerHorizontal="true"/>
+            android:text="Продолжить"
+            android:id="@+id/startApp"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>

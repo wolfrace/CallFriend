@@ -22,7 +22,14 @@ android {
     }
 }
 
+repositories{
+    maven { url "http://dl.bintray.com/populov/maven" }
+    mavenCentral()
+}
+
 dependencies {
+    compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.github.markushi:circlebutton:1.1'
     compile 'de.hdodenhof:circleimageview:1.2.2'
