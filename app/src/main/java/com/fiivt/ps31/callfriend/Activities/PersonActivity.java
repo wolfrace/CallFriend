@@ -12,7 +12,9 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -40,10 +42,29 @@ public class PersonActivity extends BaseActivity {
 
     public AppDb database;
     public Bitmap mPersonImagePlaceolder;
+    private LruCache<String, Bitmap> mMemoryCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get max available VM memory, exceeding this amount will throw an
+        // OutOfMemory exception. Stored in kilobytes as LruCache takes an
+        // int in its constructor.
+        final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+
+        // Use 1/8th of the available memory for this memory cache.
+        final int cacheSize = maxMemory / 8;
+
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                // The cache size will be measured in kilobytes rather than
+                // number of items.
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+
         database = new AppDb(this);
         mPersonImagePlaceolder = BitmapFactory.decodeResource(getResources(), R.drawable.friend_avatar);
         setContentView(R.layout.person_list_layout);
@@ -126,12 +147,19 @@ public class PersonActivity extends BaseActivity {
         }
 
         public void loadBitmap(String uriString, ImageView imageView) {
-            if (cancelPotentialWork(uriString, imageView)) {
-                final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
-                final AsyncDrawable asyncDrawable =
-                        new AsyncDrawable(getResources(), mPersonImagePlaceolder, task);
-                imageView.setImageDrawable(asyncDrawable);
-                task.execute(uriString);
+            final String imageKey = uriString;
+
+            final Bitmap bitmap = getBitmapFromMemCache(imageKey);
+            if (bitmap != null) {
+                image.setImageBitmap(bitmap);
+            } else {
+                if (cancelPotentialWork(uriString, imageView)) {
+                    final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
+                    final AsyncDrawable asyncDrawable =
+                            new AsyncDrawable(getResources(), mPersonImagePlaceolder, task);
+                    imageView.setImageDrawable(asyncDrawable);
+                    task.execute(uriString);
+                }
             }
         }
     }
@@ -151,7 +179,7 @@ public class PersonActivity extends BaseActivity {
             data = params[0];
             ImageView thumbnail = imageViewWeakReference.get();
             Bitmap bitmap = decodeSampledBitmapFromStream(data, 40, 40);
-//            addBitmapToMemoryCache(uriString, bitmap);
+            addBitmapToMemoryCache(data, bitmap);
             return bitmap;
         }
 
@@ -261,6 +289,16 @@ public class PersonActivity extends BaseActivity {
 
         return inSampleSize;
 
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            mMemoryCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return mMemoryCache.get(key);
     }
 
 
