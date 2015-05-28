@@ -52,13 +52,6 @@ public class PersonActivity extends BaseActivity{
             }
         });
 
-        addFriendsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
-                startActivity(intent);
-            }
-        });
 
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
         List<Person> person = database.getPersons(100, 0);
@@ -74,7 +67,7 @@ public class PersonActivity extends BaseActivity{
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Person person = ((PersonArrayAdapter) adapterView.getAdapter()).getItem(pos);
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, PersonProfileActivity.class);
                 intent.putExtra("person", person);
                 startActivity(intent);
             }

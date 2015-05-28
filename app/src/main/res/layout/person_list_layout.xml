@@ -20,7 +20,7 @@
                         android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         android:id="@+id/friends_not_existing_notify"
                         >
                         <TextView
@@ -45,6 +45,11 @@
 
                 </LinearLayout>
 
+                <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
                 <ListView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
@@ -62,6 +67,8 @@
                         android:src="@drawable/ic_person_add_white_36dp"
                         app:cb_color="@color/circle_button_color"
                         app:cb_pressedRingWidth="8dp" />
+                </RelativeLayout>>
+
         </LinearLayout>
 </RelativeLayout>
 
