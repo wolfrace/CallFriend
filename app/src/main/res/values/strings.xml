@@ -37,7 +37,7 @@
     <string name="empty_event_name_hint">Название события не может быть пустым</string>
     <string name="settings_switch_push">Push-уведомления</string>
     <string name="settings_get_friends_from_vk">Добавить друзей из Вконтакте</string>
-    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_settings">Настройки</string>
     <string name="empty_event_date_hint">Дата события не задана</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
