@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class PersonActivity extends BaseActivity {
 
     public AppDb database;
-    public Bitmap mPersonImagePlaceolder;
+    public Bitmap mPersonImagePlaceholder;
     private LruCache<String, Bitmap> mMemoryCache;
 
     @Override
@@ -66,7 +66,7 @@ public class PersonActivity extends BaseActivity {
         };
 
         database = new AppDb(this);
-        mPersonImagePlaceolder = BitmapFactory.decodeResource(getResources(), R.drawable.friend_avatar);
+        mPersonImagePlaceholder = BitmapFactory.decodeResource(getResources(), R.drawable.friend_avatar);
         setContentView(R.layout.person_list_layout);
 
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
@@ -156,7 +156,7 @@ public class PersonActivity extends BaseActivity {
                 if (cancelPotentialWork(uriString, imageView)) {
                     final BitmapWorkerTask task = new BitmapWorkerTask(imageView);
                     final AsyncDrawable asyncDrawable =
-                            new AsyncDrawable(getResources(), mPersonImagePlaceolder, task);
+                            new AsyncDrawable(getResources(), mPersonImagePlaceholder, task);
                     imageView.setImageDrawable(asyncDrawable);
                     task.execute(uriString);
                 }
@@ -275,7 +275,7 @@ public class PersonActivity extends BaseActivity {
         //take raw parameters of img
         final int height = options.outHeight;
         final int width = options.outWidth;
-        int inSampleSize = 16;
+        int inSampleSize = 8;
 
         if (reqHeight == 0 || reqWidth == 0) return inSampleSize;
 
