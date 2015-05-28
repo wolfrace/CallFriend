@@ -1,6 +1,7 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +11,8 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Service.EventService;
+import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,27 +32,42 @@ public class EventsActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // startService(new Intent(this, EventService.class));
+
         setContentView(R.layout.events_activity);
         eventListEmptyNotify = findViewById(R.id.events_not_existing_notify);
         initEventsLists();
 
         database = new AppDb(this);
-        addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+
+        String partition = getIntent().getStringExtra("partition");
+/*        if (partition.equals("birthday"))
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+        else if (partition.equals("special"))
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));
+        else
+            addEventsToView(database.getEvents(Integer.MAX_VALUE, 0));*/
+        addEventsToView(database.getEvents(Integer.MAX_VALUE, 0, partition));
     }
 
     public void dismissEvent(Event event) {
-        //todo remove(update template) from db
+        //todo remove pushes
+        event.setStatus(Status.DELETED);
         removeEventFromView(event);
     }
 
     public void acceptEvent(Event event) {
-        //todo remove(update template) from db
+        //todo remove pushes
+        event.setStatus(Status.ACHIEVED);
+        database.updateEvent(event);
         removeEventFromView(event);
     }
 
     public void putOffEvent(Event event) {
         event.putOff(TimeUnit.HOURS, 25);
-        //todo save into db
+        //todo update pushes
+        database.updateEvent(event);
         removeEventFromView(event);
         addEventToView(event);
     }
@@ -69,7 +87,7 @@ public class EventsActivity extends BaseActivity {
         List<Event> urgently = new ArrayList<Event>();
 
         for(Event event: events) {
-            if (event.getDaysLeft() <= 0) {
+            if (event.getDaysLeft() <= 3) {
                 urgently.add(event);
             } else {
                 soon.add(event);

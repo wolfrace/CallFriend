@@ -1,28 +1,28 @@
 package com.fiivt.ps31.callfriend.Activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-import at.markushi.ui.CircleButton;
-import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import android.view.Gravity;
 
+import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
-import lombok.Data;
+import com.fiivt.ps31.callfriend.Utils.FriendLastActive;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import at.markushi.ui.CircleButton;
+import lombok.Data;
 
 /**
  * Created by Äàíèë on 24.04.2015.
@@ -61,8 +61,13 @@ public class PersonActivity extends BaseActivity{
         });
 
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
-        final List<Person> person = database.getPersons(100, 0);
+        List<Person> person = database.getPersons(100, 0);
         personAdapter = new PersonArrayAdapter(this, person);
+
+
+        person = sortPersons(person);
+
+        ArrayAdapter personAdapter = new PersonArrayAdapter(this, person);
         personsListView.setAdapter(personAdapter);
 
         personsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -86,6 +91,32 @@ public class PersonActivity extends BaseActivity{
         return personAdapter.isEmpty();
     }
 
+    List<Person> sortPersons(List<Person> persons){
+        List<Person> p30 = new ArrayList<Person>();
+        List<Person> p60 = new ArrayList<Person>();
+        List<Person> pMore = new ArrayList<Person>();
+
+        for (Person p: persons){
+            long timeLeft = System.currentTimeMillis() - database.getLastAchievedEventDateByPerson(p.getId()).getTime();
+            long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
+
+            if(daysLeft >= 60){
+                p.setActiveStatus(FriendLastActive.INFINITY);
+                pMore.add(p);
+            }
+            else if (daysLeft < 60 && daysLeft >= 30){
+                p.setActiveStatus(FriendLastActive.TWO_MONTH);
+                p60.add(p);
+            }
+            else{
+                p.setActiveStatus(FriendLastActive.MONTH);
+                p30.add(p);
+            }
+        }
+        pMore.addAll(p60);
+        pMore.addAll(p30);
+        return pMore;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -104,14 +135,14 @@ public class PersonActivity extends BaseActivity{
 
         public void setPersonValues(Person person) {
 
-            long timeLeft = System.currentTimeMillis() - database.getLastAchievedEventDateByPerson(person.getId()).getTime();
-            long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
+           /* long timeLeft = System.currentTimeMillis() - database.getLastAchievedEventDateByPerson(person.getId()).getTime();
+            long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);*/
 
-            if(daysLeft >= 60){
+            if(person.getActiveStatus() == FriendLastActive.INFINITY){
                 personStatus.setText(R.string.status_red_txt);
                 personStatusRL.setBackgroundResource(R.drawable.red_label);
             }
-            else if (daysLeft < 60 && daysLeft >= 30){
+            else if (person.getActiveStatus() == FriendLastActive.TWO_MONTH){
                 personStatus.setText(R.string.status_yellow_txt);
                 personStatusRL.setBackgroundResource(R.drawable.yellow_label);
             }

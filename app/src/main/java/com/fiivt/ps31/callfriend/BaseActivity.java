@@ -198,17 +198,19 @@ public class BaseActivity extends ActionBarActivity {
 //depends on string array
         switch (position) {
             case 0://friends
-                goToActivity(PersonActivity.class,position);
+                goToActivity(PersonActivity.class,position, null);
                 break;
             case 1://events
-                goToActivity(EventsActivity.class,position);
+                goToActivity(EventsActivity.class,position, null);
                 break;
             case 2://birthday
+                goToActivity(EventsActivity.class,position, "birthday");
                 break;
             case 3://special
+                goToActivity(EventsActivity.class,position, "special");
                 break;
             case 4://settings
-                goToActivity(SettingsActivity.class, position);
+                goToActivity(SettingsActivity.class, position, null);
                 break;
             case 5://about
                 break;
@@ -220,9 +222,10 @@ public class BaseActivity extends ActionBarActivity {
         mDrawerLayout.closeDrawer(mDrawerLeft);
     }
 
-    public void goToActivity(Class activityClass , int pos){
+    public void goToActivity(Class activityClass , int pos, String partition){
         Intent intent = new Intent(this, activityClass);
         intent.putExtra("selectedPos", pos);
+        intent.putExtra("partition", partition);
         startActivity(intent);
         finish();// finishes the current activity
     }

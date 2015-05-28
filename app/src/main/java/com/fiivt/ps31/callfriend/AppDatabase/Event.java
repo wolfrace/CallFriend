@@ -3,7 +3,9 @@ package com.fiivt.ps31.callfriend.AppDatabase;
 import com.fiivt.ps31.callfriend.Utils.Status;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 import lombok.Data;
@@ -38,13 +40,12 @@ public class Event implements Serializable {
         if (date == null) {
             return 0;
         }
-        long timeLeft = date.getTime() - System.currentTimeMillis();
-        if (timeLeft > 0) {
-            long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
-            return (int) daysLeft;
-        } else {
-            return 0;
-        }
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.setTime(new Date());
+        GregorianCalendar today = new GregorianCalendar(gc.get(Calendar.YEAR), gc.get(Calendar.MONTH), gc.get(Calendar.DAY_OF_MONTH));
+        long timeLeft = date.getTime() - today.getTime().getTime();
+        long daysLeft = TimeUnit.MILLISECONDS.toDays(timeLeft);
+        return (int) daysLeft;
     }
 
     public void putOff(TimeUnit unit, int amount) {

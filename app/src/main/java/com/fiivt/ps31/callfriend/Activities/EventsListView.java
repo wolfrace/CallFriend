@@ -7,9 +7,15 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.fiivt.ps31.callfriend.AppDatabase.Event;
+import com.fiivt.ps31.callfriend.R;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +25,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.fiivt.ps31.callfriend.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 import lombok.Getter;
@@ -171,7 +176,7 @@ public class EventsListView extends LinearLayout {
                     //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
-            //eventImage.setImageResource();
+            eventImage.setImageResource(event.getPersonTemplate().getIconResId());
         }
     }
 

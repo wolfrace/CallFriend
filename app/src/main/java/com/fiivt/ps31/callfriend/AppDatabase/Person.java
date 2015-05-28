@@ -1,9 +1,11 @@
 package com.fiivt.ps31.callfriend.AppDatabase;
 
-import android.net.Uri;
-import lombok.Data;
+import com.fiivt.ps31.callfriend.Utils.FriendLastActive;
 
 import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Created by Egor on 24.03.2015.
@@ -16,6 +18,9 @@ public class Person implements Serializable{
     private String description;
     private  boolean isMale;
     private String idPhoto;
+    @Setter
+    @Getter
+    private FriendLastActive activeStatus;
 
     public Person(){
         this.id = 0;
@@ -42,6 +47,9 @@ public class Person implements Serializable{
         this.idPhoto = idPhoto;
         this.isMale = isMale;
     }
+
+   /* public void setActiveStatus(FriendLastActive la){activeStatus = la;}*/
+
 
     public Integer getId() {
         return id;

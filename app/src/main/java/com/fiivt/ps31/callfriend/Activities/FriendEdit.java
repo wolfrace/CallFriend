@@ -9,19 +9,23 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
@@ -33,6 +37,7 @@ import com.fiivt.ps31.callfriend.SignificantEventActionDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnDataSetChangedListener;
 import com.fiivt.ps31.callfriend.SignificantEventEditDialog.OnSuccessListener;
+import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
@@ -68,6 +73,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private ImageView avatarView;
     private String avatarImagePath;
     private SignificantEventAdapter eventsAdapter;
+    private static Context context;
 
     private Bitmap bmp;
 
@@ -76,6 +82,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = AppDb.getInstance(this);
+        context = this;
 
         initData();
         initView();
@@ -131,7 +138,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private Date getYearCooldown(){
-        return new Date(TimeUnit.DAYS.toMillis(365));//todo 366
+        return new Date(TimeUnit.DAYS.toMillis(365));//not uses
     }
 
     private void initView() {
@@ -406,7 +413,19 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
                 db.updatePersonTemplate(pt);
             }
         }
-        startService(new Intent(this, EventService.class));//todo remove
+
+        new Thread(new Runnable() {
+            Context context;
+            @Override
+            public void run() {
+                EventsGenerator.generate(context);
+            }
+            public Runnable init(Context context){
+                this.context = context;
+                return this;
+            }
+        }.init(this)).start();
+
         close();
     }
 
@@ -473,7 +492,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onCreateNewEvent(String eventName, Date eventDate, long reminderTime) {
-        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, getYearCooldown(), reminderTime, false, "");
+        PersonTemplate event = new PersonTemplate(IdGenerator.generate(), person, eventName, eventDate, getYearCooldown(), reminderTime, false);
         eventsAdapter.add(event);
         eventsAdapter.notifyDataSetChanged();
     }
@@ -483,11 +502,18 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private static class SignificantEventHolder {
         View checkBoxButton;
         TextView title;
+        TextView subtitle;
         CheckBox checkBox;
         CircleImageView icon;
 
         public void setEventValues(PersonTemplate event) {
             title.setText(event.getTitle());
+            if (!event.getCustomDate().equals(INVALID_DATE)) {
+                subtitle.setText(event.getCustomDateString());
+                subtitle.setVisibility(View.VISIBLE);
+            }
+            else
+                subtitle.setVisibility(View.GONE);
             checkBox.setChecked(event.isEnabled());
             icon.setImageResource(event.getIconResId());
         }
@@ -550,6 +576,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
             SignificantEventHolder holder = new SignificantEventHolder();
             holder.setIcon((CircleImageView) view.findViewById(R.id.significant_event_icon));
             holder.setTitle((TextView) view.findViewById(R.id.significant_event_title));
+            holder.setSubtitle((TextView) view.findViewById(R.id.significant_event_subtitle));
             holder.setCheckBox((CheckBox) view.findViewById(R.id.significant_event_checkbox));
             holder.setCheckBoxButton(view.findViewById(R.id.enable_significant_event_button));
             view.setTag(holder);

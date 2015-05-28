@@ -71,13 +71,13 @@ public class AppDb extends Singleton {
         templates.add(createEventTemplate("День Защитника Отечества", 1, 23, R.drawable.ic_event_deffend));
         templates.add(createEventTemplate("День свадьбы", R.drawable.ic_event_wedding));
         templates.add(createEventTemplate("День рождения ребенка", R.drawable.ic_event_baby));
-        templates.add(createEventTemplate("Китайский новый год", R.drawable.ic_event_china));
+        //templates.add(createEventTemplate("Китайский новый год", R.drawable.ic_event_china));
         return templates;
     }
 
     private EventTemplate createEventTemplate(String name, int month, int day, int icon) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(new Date().getYear(), month, day);
+        calendar.set(0, month, day);
         return createEventTemplate(name, icon)
                 .setDefaultDate(calendar.getTime());
     }
@@ -133,7 +133,9 @@ public class AppDb extends Singleton {
         assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Person> persons = new ArrayList<Person>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM person LIMIT " + limit + " OFFSET " + offset, null);
+        String query = "SELECT * FROM person ORDER BY name LIMIT " + limit + " OFFSET " + offset;
+
+        Cursor cursor = db.rawQuery(query, null);
 
         while(cursor.moveToNext()) {
             Person p = new Person(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).equalsIgnoreCase("1"), cursor.getString(4));
@@ -371,12 +373,31 @@ public class AppDb extends Singleton {
                 personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
     }
 
-    public ArrayList<Event> getEvents(int limit, int offset) {
+    public ArrayList<Event> getEvents(int limit, int offset, String partition) {
         assert limit > 0 : "Limit must be great than 0";
         assert  offset >= 0 : "Offset must be great than 0";
         ArrayList<Event> events = new ArrayList<Event>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM event LIMIT " + limit + " OFFSET " + offset, null);
+        String query = "";
+
+        if (partition == null)//default
+            query = "SELECT * FROM event WHERE status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+
+        else if (partition.equals("birthday"))
+            query = "SELECT " +
+                    "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
+                    " FROM event INNER JOIN personTemplate ON event.idPersonTemplate = personTemplate.idPersonTemplate" +
+                    " WHERE personTemplate.idTemplate = 1 AND status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+
+        else if (partition.equals("special"))
+            query = "SELECT " +
+                    "event.idEvent , event.idPerson , event.idPersonTemplate , event.info, event.date , event.status" +
+                    " FROM event INNER JOIN personTemplate ON event.idPersonTemplate = personTemplate.idPersonTemplate" +
+                    " WHERE personTemplate.idTemplate = -1 AND status=" + Status.EXPECTED.getId() +
+                    " LIMIT " + limit + " OFFSET " + offset;
+        Cursor cursor = db.rawQuery(query, null);
 
         while(cursor.moveToNext()) {
             Person person = getPerson(cursor.getInt(1));
@@ -411,7 +432,7 @@ public class AppDb extends Singleton {
     public Date getLastAchievedEventDateByPerson(Integer id) {
         Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
         if (cursor.moveToNext())
-            return new Date(cursor.getLong(1));
+            return new Date(cursor.getLong(0));
         return new Date(0);
     }
     public List<PersonTemplate> getPersonTemplates(Person person) {

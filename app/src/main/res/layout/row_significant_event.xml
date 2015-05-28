@@ -2,7 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_height="48dp"
+    android:layout_height="72dp"
     android:layout_width="fill_parent"
     android:gravity="center_vertical">
 
@@ -27,18 +27,30 @@
             android:layout_gravity="center_vertical" />
 
         </FrameLayout>
-
-    <TextView
-        android:id="@+id/significant_event_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Example TEXT HERE!"
-        android:singleLine="true"
-        android:textSize="@dimen/standard_text_size"
-        android:textColor="@color/text_color_secondary"
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
         android:layout_weight="1"
         android:layout_marginLeft="12dp"
-        android:layout_marginRight="8dp" />
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/significant_event_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Example TEXT HERE!"
+            android:singleLine="true"
+            android:textSize="@dimen/standard_text_size"
+            android:textColor="@color/text_color" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/events_subtitle_size"
+            android:text="petyh Kokoko"
+            android:textColor="@color/text_color_light"
+            android:id="@+id/significant_event_subtitle"
+            />
+    </LinearLayout>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="32dp"
