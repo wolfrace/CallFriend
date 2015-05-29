@@ -21,14 +21,25 @@ public class PersonProfileActivity extends Activity {
     private Person person;
     private String avatarImagePath;
     private ImageView avatarView;
+    private TextView personName;
+    private TextView personNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = new AppDb(this);
 
-
         initView();
+
+        RelativeLayout addPersonButton = (RelativeLayout)findViewById(R.id.edit_person);
+        addPersonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PersonProfileActivity.this, FriendEdit.class);
+                intent.putExtra("person", person);
+                startActivity(intent);
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
@@ -36,6 +47,8 @@ public class PersonProfileActivity extends Activity {
         }
 
         setAvatar();
+        setPersonName();
+        setPersonNote();
     }
 
     private void setAvatar() {
@@ -52,19 +65,19 @@ public class PersonProfileActivity extends Activity {
         }
     }
 
+    private void setPersonName() {
+        personName.setText(person.getName());
+    }
+
+    private void setPersonNote() {
+        personNote.setText(person.getDescription());
+    }
+
     private void initView() {
         setContentView(R.layout.person_profile_view);
         avatarView = (ImageView) findViewById(R.id.person_profile_photo);
-
-        RelativeLayout addPersonButton = (RelativeLayout)findViewById(R.id.edit_person);
-        addPersonButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(PersonProfileActivity.this, FriendEdit.class);
-                intent.putExtra("person", person);
-                startActivity(intent);
-            }
-        });
+        personName = (TextView) findViewById(R.id.person_profile_name);
+        personNote = (TextView) findViewById(R.id.person_profile_note);
 
     }
 }

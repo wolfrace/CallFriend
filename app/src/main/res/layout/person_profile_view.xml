@@ -64,6 +64,26 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
             </LinearLayout>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="No name"
+                    android:id="@+id/person_profile_name"
+                    android:textSize="@dimen/person_name_size"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="254dp"
+                    android:textColor="@color/text_color_primary"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="No note"
+                    android:id="@+id/person_profile_note"
+                    android:textSize="@dimen/add_friends_button_text_size"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="294dp"
+                    android:textColor="@color/text_color_primary"/>
 
         </RelativeLayout>
 </ScrollView>
