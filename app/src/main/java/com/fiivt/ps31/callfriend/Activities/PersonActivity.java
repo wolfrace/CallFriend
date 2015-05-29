@@ -84,6 +84,13 @@ public class PersonActivity extends BaseActivity{
             }
         });
 
+        addFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                startActivity(intent);
+            }
+        });
 
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
         List<Person> person = database.getPersons(100, 0);

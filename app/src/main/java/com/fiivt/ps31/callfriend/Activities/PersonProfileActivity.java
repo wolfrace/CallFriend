@@ -1,10 +1,12 @@
 package com.fiivt.ps31.callfriend.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.*;
+import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.R;
@@ -51,8 +53,18 @@ public class PersonProfileActivity extends Activity {
     }
 
     private void initView() {
-
         setContentView(R.layout.person_profile_view);
         avatarView = (ImageView) findViewById(R.id.person_profile_photo);
+
+        RelativeLayout addPersonButton = (RelativeLayout)findViewById(R.id.edit_person);
+        addPersonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PersonProfileActivity.this, FriendEdit.class);
+                intent.putExtra("person", person);
+                startActivity(intent);
+            }
+        });
+
     }
 }
