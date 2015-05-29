@@ -8,8 +8,11 @@
     <color name="text_color_darkness">#212121</color>
     <color name="text_color_secondary">#757575</color>
     <color name="text_color_light">#cccccc</color>
-    <color name="window_background">#ffffffff</color>
+
     <color name="circle_button_color_pressed">#e02f73</color>
+
+    <color name="window_background">#fff</color>
+
     <color name="circle_button_color">#ff4181</color>
     <color name="text_days_left_color_urgently">#ff80ab</color>
     <color name="text_days_left_color_soon">@color/text_color_light</color>

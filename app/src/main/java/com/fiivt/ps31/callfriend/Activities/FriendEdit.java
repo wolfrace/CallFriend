@@ -41,6 +41,7 @@ import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 import com.fiivt.ps31.callfriend.Utils.ExpandedListView;
 import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -174,23 +175,27 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         // set personal info
         nameView.setText(person.getName());
         descriptionView.setText(person.getDescription());
+        setAvatar(person.getIdPhoto());
 
-        avatarImagePath = person.getIdPhoto();
-        if (avatarImagePath != "") {
-            try {
-                avatarView.setImageBitmap(BitmapFactory.decodeFile(avatarImagePath));
-                avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            //todo: show default avatar picture
-        }
 
 
         // set significant events
         eventsAdapter.setValues(events);
         eventsAdapter.notifyDataSetChanged();
+    }
+
+    private void setAvatar(String path) {
+//        for VK
+//        URL url = new URL("http://image10.bizrate-images.com/resize?sq=60&uid=2216744464");
+//        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//        imageView.setImageBitmap(bmp);
+
+        avatarImagePath = person.getIdPhoto();
+        if (avatarImagePath != "") {
+            //Toast.makeText(getApplicationContext(), "IN", Toast.LENGTH_SHORT).show();
+            avatarView.setImageURI(Uri.parse(avatarImagePath));
+            avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        }
     }
 
     private void initEventsList() {
@@ -207,74 +212,96 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     }
 
     private void onChangeAvatar(View view) {
-        startActivityForResult(
-                Intent.createChooser(
-                        new Intent(Intent.ACTION_GET_CONTENT)
-                                .setType("image/*"), "Choose an image"),
-                1);
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null)
         handleGalleryResult(data);
     }
 
     private void handleGalleryResult(Intent data) {
-        Uri selectedImage = data.getData();
-        String mTmpGalleryPicturePath = getPath(selectedImage);
-        if(mTmpGalleryPicturePath!=null) {
-//            Toast.makeText(getApplicationContext(), "not null", Toast.LENGTH_SHORT).show();
-            avatarImagePath = mTmpGalleryPicturePath;
-            avatarView.setImageBitmap(BitmapFactory.decodeFile(mTmpGalleryPicturePath));
-
+        Uri selectedImageUri = data.getData();
+//        String mTmpGalleryPicturePath = getPath(selectedImage);
+//        if(mTmpGalleryPicturePath!=null) {
+//            Toast.makeText(getApplicationContext(), mTmpGalleryPicturePath, Toast.LENGTH_SHORT).show();
+//            avatarImagePath = mTmpGalleryPicturePath;
+//            avatarView.setImageBitmap(BitmapFactory.decodeFile(mTmpGalleryPicturePath));
+        try {
+            InputStream is = getContentResolver().openInputStream(selectedImageUri);
+            Bitmap bitmap = BitmapFactory.decodeStream(is);
+            is.close();
+            avatarImagePath = selectedImageUri.toString();
+            avatarView.setImageBitmap(bitmap);
             avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        else {
-            try {
-                InputStream is = getContentResolver().openInputStream(selectedImage);
-                avatarView.setImageBitmap(BitmapFactory.decodeStream(is));
-                //mTmpGalleryPicturePath = selectedImage.getPath();
-            } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+
+//        }
+//        else {
+//            try {
+//                InputStream is = getContentResolver().openInputStream(selectedImage);
+//                avatarView.setImageBitmap(BitmapFactory.decodeStream(is));
+//                mTmpGalleryPicturePath = selectedImage.getPath();
+//            } catch (Exception e) {
+//                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
+    }
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
             }
         }
     }
 
-    @SuppressLint("NewApi")
-    private String getPath(Uri uri) {
-
-        if( uri == null ) {
-            return null;
-        }
-
-        String[] projection = { MediaStore.Images.Media.DATA };
-
-        Cursor cursor;
-        // Will return "image:x*"
-        String wholeID = DocumentsContract.getDocumentId(uri);
-        // Split at colon, use second item in the array
-        String id = wholeID.split(":")[1];
-        // where id is equal to
-        String sel = MediaStore.Images.Media._ID + "=?";
-
-        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                projection, sel, new String[]{ id }, null);
-
-        String path = null;
-        try {
-            int column_index = cursor
-                    .getColumnIndex(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            path = cursor.getString(column_index).toString();
-            cursor.close();
-        }
-        catch(NullPointerException e) {
-            Toast.makeText(getApplicationContext(), "ept", Toast.LENGTH_SHORT).show();
-        }
-        return path;
-    }
+//    @SuppressLint("NewApi")
+//    private String getPath(Uri uri) {
+//
+//        if( uri == null ) {
+//            return null;
+//        }
+//
+//        String[] projection = { MediaStore.Images.Media.DATA };
+//
+//        Cursor cursor;
+//        // Will return "image:x*"
+//        String wholeID = DocumentsContract.getDocumentId(uri);
+//        // Split at colon, use second item in the array
+//        String id = wholeID.split(":")[1];
+//        // where id is equal to
+//        String sel = MediaStore.Images.Media._ID + "=?";
+//
+//        cursor = getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+//                projection, sel, new String[]{ id }, null);
+//
+//        String path = null;
+//        try {
+//            int column_index = cursor
+//                    .getColumnIndex(MediaStore.Images.Media.DATA);
+//            cursor.moveToFirst();
+//            path = cursor.getString(column_index).toString();
+//            cursor.close();
+//        }
+//        catch(NullPointerException e) {
+//            Toast.makeText(getApplicationContext(), "ept", Toast.LENGTH_SHORT).show();
+//        }
+//        return path;
+//    }
 
     private void onCreateNewSignificantEvent() {
         showSignificantEventEditDialog(null, null);
