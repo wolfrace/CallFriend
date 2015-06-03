@@ -5,15 +5,13 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.LruCache;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -30,14 +28,16 @@ import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
-import lombok.Data;
+import com.fiivt.ps31.callfriend.Utils.FriendLastActive;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import at.markushi.ui.CircleButton;
+import lombok.Data;
 
 /**
  * Created by Äàíèë on 24.04.2015.
