@@ -29,7 +29,7 @@
     <string name="title_activity_vkontakte">Импорт друзей</string>
     <string name="import_from_vk">Импортировать друзей из ВКонтакте</string>
     <string name="import_category">Импорт</string>
-    <string name="enable_push">Включить push-уведомления</string>
+    <string name="enable_push">Включить уведомления</string>
     <string name="notifications_category">Уведомления</string>
     <string name="title_activity_preferences">Preferences</string>
     <string name="significant_event_name_hint">Название замечания</string>
@@ -37,7 +37,7 @@
     <string name="cancel_button">ОТМЕНА</string>
     <string name="significant_event_date_hint">Дата</string>
     <string name="empty_event_name_hint">Название события не может быть пустым</string>
-    <string name="settings_switch_push">Push-уведомления</string>
+    <string name="settings_switch_push">Уведомления</string>
     <string name="settings_get_friends_from_vk">Добавить друзей из Вконтакте</string>
     <string name="title_activity_settings">Настройки</string>
     <string name="empty_event_date_hint">Дата события не задана</string>

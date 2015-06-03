@@ -19,10 +19,12 @@
                 android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="72dp"
-                    android:layout_height="24dp"
+                    android:layout_width="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="32dp"
+                    android:layout_height="56dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_info_outline_grey600_24dp"/>
+                    android:src="@drawable/ic_notify"/>
 
                 <TextView
                     android:id="@+id/settings_push_label"
@@ -33,7 +35,6 @@
                     android:textSize="@dimen/standard_text_size"
                     android:textColor="@color/text_color_darkness"
                     android:layout_weight="1"
-                    android:layout_marginLeft="12dp"
                     android:layout_marginRight="8dp" />
 
                 <FrameLayout
@@ -72,7 +73,9 @@
 
                 <ImageView
                     android:src="@drawable/ic_vk_blue"
-                    android:layout_width="72dp"
+                    android:layout_width="24dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="32dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center_vertical"/>
 
@@ -85,8 +88,7 @@
                     android:text="@string/settings_get_friends_from_vk"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="12dp" />
+                    android:gravity="center_vertical"/>
 
             </LinearLayout>
 
