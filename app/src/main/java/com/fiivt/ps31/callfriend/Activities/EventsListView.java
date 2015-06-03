@@ -199,6 +199,7 @@ public class EventsListView extends LinearLayout {
             title.setText(event.getInfo());
             daysLeft.setText(Integer.toString(event.getDaysLeft()));
             //personImage.setImageResource();
+            eventImage.setImageResource(event.getPersonTemplate().getIconResId());
             setAvatar(event.getPerson().getIdPhoto());
         }
 

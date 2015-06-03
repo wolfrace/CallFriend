@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="60dp" >
+
+    <RelativeLayout
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center_vertical">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:src="@color/avatar_holder_background_color"
+                app:border_width="0dp"
+                app:border_color="#FF000000" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center_vertical">
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/events_title_size"
+                android:text="Large Text"
+                android:textColor="@color/text_color"
+                android:id="@+id/event_title"
+                android:layout_marginTop="4dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/events_subtitle_size"
+                android:text="petyh Kokoko"
+                android:textColor="@color/text_color_light"
+                android:id="@+id/event_date"
+                android:layout_marginBottom="4dp"
+                android:singleLine="true"
+                android:ellipsize="end" />
+    </LinearLayout>
+
+</LinearLayout> 
