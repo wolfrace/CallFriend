@@ -17,7 +17,7 @@
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
-                android:src="@color/avatar_holder_background_color"
+                android:src="@drawable/friend_avatar"
                 app:border_width="0dp"
                 app:border_color="#FF000000" />
 
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/events_title_size"
                 android:text="Large Text"
-                android:textColor="@color/text_color"
+                android:textColor="@color/text_color_secondary"
                 android:id="@+id/event_title"
                 android:layout_marginTop="4dp"
                 android:singleLine="true"

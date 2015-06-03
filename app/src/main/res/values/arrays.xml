@@ -23,7 +23,7 @@
 <!-- иконки для итемов бокового меню, порядок соответствующий верхнему списку -->
     <array name="nav_drawer_icons">
         <item>@drawable/ic_friends_grey600_24dp</item>
-        <item>@drawable/ic_friend_events</item>
+        <item>@drawable/ic_event_grey600_24dp</item>
         <item>@drawable/ic_event_birthday</item>
         <item>@drawable/ic_event_special</item>
         <item>@drawable/ic_settings_grey600_24dp</item>

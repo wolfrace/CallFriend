@@ -35,7 +35,7 @@ public class PersonProfileActivity extends Activity {
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PersonProfileActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonProfileActivity.this, ImageChooserActivity.class);
                 intent.putExtra("person", person);
                 startActivity(intent);
             }

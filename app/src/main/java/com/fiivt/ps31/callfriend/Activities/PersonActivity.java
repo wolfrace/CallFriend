@@ -78,7 +78,7 @@ public class PersonActivity extends BaseActivity{
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, ImageChooserActivity.class);
                 startActivity(intent);
             }
         });
@@ -86,7 +86,7 @@ public class PersonActivity extends BaseActivity{
         addFriendsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, ImageChooserActivity.class);
                 startActivity(intent);
             }
         });
@@ -189,6 +189,7 @@ public class PersonActivity extends BaseActivity{
 
 
             String pathUriString = person.getIdPhoto();
+            image.setImageResource(R.drawable.friend_avatar);
             setAvatar(pathUriString);
         }
 

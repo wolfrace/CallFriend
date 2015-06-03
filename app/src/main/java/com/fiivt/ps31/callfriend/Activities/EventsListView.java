@@ -200,12 +200,13 @@ public class EventsListView extends LinearLayout {
             daysLeft.setText(Integer.toString(event.getDaysLeft()));
             //personImage.setImageResource();
             eventImage.setImageResource(event.getPersonTemplate().getIconResId());
+            personImage.setImageResource(R.drawable.friend_avatar);
             setAvatar(event.getPerson().getIdPhoto());
         }
 
         private void setAvatar(final String path) {
 
-            if (!path.equals("")) {
+            if (path != null && !path.equals("")) {
                 loadBitmap(path, personImage);
             }
         }

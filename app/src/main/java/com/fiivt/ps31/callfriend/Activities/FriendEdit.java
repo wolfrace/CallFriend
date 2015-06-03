@@ -90,6 +90,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 
         initData();
         initView();
+        avatarImagePath = "";
         setPersonDataOnView(person, personTemplates);
     }
 
@@ -194,7 +195,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
 //        imageView.setImageBitmap(bmp);
 
         avatarImagePath = person.getIdPhoto();
-        if (avatarImagePath != "") {
+        if (!avatarImagePath.equals("")) {
             //Toast.makeText(getApplicationContext(), "IN", Toast.LENGTH_SHORT).show();
             avatarView.setImageURI(Uri.parse(avatarImagePath));
             avatarView.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -13,7 +13,7 @@
         android:textSize="@dimen/mini_text_size"
         android:id="@+id/event_list_title_text"
         android:gravity="center_vertical"
-        android:layout_marginLeft="12dp" />
+        android:layout_marginLeft="12dp" android:textStyle="bold"/>
 
     <ListView
         android:layout_width="fill_parent"
