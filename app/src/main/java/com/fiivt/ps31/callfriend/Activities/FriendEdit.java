@@ -50,6 +50,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.kbeanie.imagechooser.api.ChooserType;
+import com.kbeanie.imagechooser.api.ImageChooserManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 import lombok.Getter;
@@ -62,17 +64,18 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
     private static final long DEFAULT_REMINDER_TIME = TimeUnit.DAYS.toMillis(1);
     private static final Date INVALID_DATE = new Date(0);
 
+
     private AppDb db;
 
-    private Person person;
+    protected Person person;
     private boolean isNewUser;
     private List<Integer> removedTemplateIds;
     private List<PersonTemplate> personTemplates;
 
     private EditText nameView;
     private EditText descriptionView;
-    private ImageView avatarView;
-    private String avatarImagePath;
+    protected ImageView avatarView;
+    protected String avatarImagePath;
     private SignificantEventAdapter eventsAdapter;
     private static Context context;
 
@@ -184,7 +187,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         eventsAdapter.notifyDataSetChanged();
     }
 
-    private void setAvatar(String path) {
+    protected void setAvatar(String path) {
 //        for VK
 //        URL url = new URL("http://image10.bizrate-images.com/resize?sq=60&uid=2216744464");
 //        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -211,7 +214,7 @@ public class FriendEdit extends Activity implements OnDataSetChangedListener {
         eventList.setAdapter(eventsAdapter);
     }
 
-    private void onChangeAvatar(View view) {
+    protected void onChangeAvatar(View view) {
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(i, 1);
     }

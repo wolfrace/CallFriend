@@ -315,9 +315,9 @@ public class EventsListView extends LinearLayout {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         try {
-            InputStream is = getContext().getContentResolver().openInputStream(Uri.parse(fileUriString));
-            BitmapFactory.decodeStream(is, null, options);
-            is.close();
+//            InputStream is = getContext().getContentResolver().openInputStream(Uri.parse(fileUriString));
+            BitmapFactory.decodeFile(fileUriString, options);
+//            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -326,9 +326,9 @@ public class EventsListView extends LinearLayout {
 
         options.inJustDecodeBounds = false;
         try {
-            InputStream is = getContext().getContentResolver().openInputStream(Uri.parse(fileUriString));
-            resBmp = BitmapFactory.decodeStream(is, null, options);
-            is.close();
+//            InputStream is = getContext().getContentResolver().openInputStream(Uri.parse(fileUriString));
+            resBmp = BitmapFactory.decodeFile(fileUriString, options);
+//            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
