@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.FriendEdit"
+            android:name=".Activities.ImageChooserActivity"
             android:label="@string/title_activity_friend_edit" >
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />

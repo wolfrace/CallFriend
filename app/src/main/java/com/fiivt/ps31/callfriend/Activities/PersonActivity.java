@@ -77,7 +77,7 @@ public class PersonActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //addPersonButton.setBackgroundColor();
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, ImageChooserActivity.class);
                 startActivity(intent);
             }
         });
@@ -94,7 +94,7 @@ public class PersonActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Person person = ((PersonArrayAdapter) adapterView.getAdapter()).getItem(pos);
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, ImageChooserActivity.class);
                 intent.putExtra("person", person);
                 startActivity(intent);
             }
@@ -174,7 +174,7 @@ public class PersonActivity extends BaseActivity {
 
         private void setAvatar(final String path) {
 
-            if (!path.equals("")) {
+            if (path != null && !path.equals("")) {
                 loadBitmap(path, image);
             }
         }
@@ -287,9 +287,10 @@ public class PersonActivity extends BaseActivity {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         try {
-            InputStream is = getContentResolver().openInputStream(Uri.parse(fileUriString));
-            BitmapFactory.decodeStream(is, null, options);
-            is.close();
+//            InputStream is = getContentResolver().openInputStream(Uri.parse(fileUriString));
+//            BitmapFactory.decodeStream(is, null, options);
+            BitmapFactory.decodeFile(fileUriString, options);
+//            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -298,9 +299,10 @@ public class PersonActivity extends BaseActivity {
 
         options.inJustDecodeBounds = false;
         try {
-            InputStream is = getContentResolver().openInputStream(Uri.parse(fileUriString));
-            resBmp = BitmapFactory.decodeStream(is, null, options);
-            is.close();
+//            InputStream is = getContentResolver().openInputStream(Uri.parse(fileUriString));
+//            resBmp = BitmapFactory.decodeStream(is, null, options);
+//            is.close();
+            resBmp = BitmapFactory.decodeFile(fileUriString,options);
         } catch (Exception e) {
             e.printStackTrace();
         }
