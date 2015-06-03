@@ -99,7 +99,7 @@ public class PersonTemplate implements Serializable {
     public Event generateEvent(Date lastDate) {
         return new Event(person,
                 this,
-                eventTemplate.getInfo(),//generateInfo(person.getName(), eventTemplate == null ? "null" : eventTemplate.getInfo()),
+                (eventTemplate == null) ? null : eventTemplate.getInfo(),//generateInfo(person.getName(), eventTemplate == null ? "null" : eventTemplate.getInfo()),
                 generateDate(lastDate),
                 Status.EXPECTED
         );

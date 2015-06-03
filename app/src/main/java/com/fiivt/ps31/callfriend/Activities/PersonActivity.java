@@ -14,10 +14,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.LruCache;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -26,10 +23,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
+import com.fiivt.ps31.callfriend.Utils.FriendLastActive;
 import lombok.Data;
 
 import java.io.InputStream;
@@ -213,7 +212,11 @@ public class PersonActivity extends BaseActivity {
             data = params[0];
             ImageView thumbnail = imageViewWeakReference.get();
             Bitmap bitmap = decodeSampledBitmapFromStream(data, 40, 40);
-            addBitmapToMemoryCache(data, bitmap);
+            if (bitmap != null) {
+                addBitmapToMemoryCache(data, bitmap);
+            } else {
+                Toast.makeText(getApplicationContext(), "Decode failed", Toast.LENGTH_SHORT).show();
+            }
             return bitmap;
         }
 
@@ -326,7 +329,7 @@ public class PersonActivity extends BaseActivity {
     }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemCache(key) == null) {
+        if (getBitmapFromMemCache(key) == null ) {
             mMemoryCache.put(key, bitmap);
         }
     }
