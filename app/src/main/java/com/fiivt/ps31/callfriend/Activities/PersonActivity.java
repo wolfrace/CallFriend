@@ -5,23 +5,14 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.LruCache;
 import android.view.*;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import at.markushi.ui.CircleButton;
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
@@ -33,19 +24,26 @@ import lombok.Data;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import at.markushi.ui.CircleButton;
+import lombok.Data;
 
 /**
  * Created by Äàíèë on 24.04.2015.
  */
-public class PersonActivity extends BaseActivity {
+public class PersonActivity extends BaseActivity{
 
     public AppDb database;
+
+    private View friendListEmptyNotify;
+    private  ArrayAdapter personAdapter;
+
     public Bitmap mPersonImagePlaceholder;
     private LruCache<String, Bitmap> mMemoryCache;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,18 +70,31 @@ public class PersonActivity extends BaseActivity {
         mPersonImagePlaceholder = BitmapFactory.decodeResource(getResources(), R.drawable.friend_avatar);
         setContentView(R.layout.person_list_layout);
 
+
+        friendListEmptyNotify = findViewById(R.id.friends_not_existing_notify);
         CircleButton addPersonButton = (CircleButton)findViewById(R.id.person_add_image);
+        Button addFriendsButton = (Button) findViewById(R.id.add_friends_button);
+
         addPersonButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //addPersonButton.setBackgroundColor();
+                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                startActivity(intent);
+            }
+        });
+
+        addFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
                 startActivity(intent);
             }
         });
 
         ListView personsListView = (ListView) findViewById(R.id.person_list_view);
-        /*final*/ List<Person> person = database.getPersons(100, 0);
+        List<Person> person = database.getPersons(100, 0);
+        personAdapter = new PersonArrayAdapter(this, person);
+
 
         person = sortPersons(person);
 
@@ -94,11 +105,21 @@ public class PersonActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 Person person = ((PersonArrayAdapter) adapterView.getAdapter()).getItem(pos);
-                Intent intent = new Intent(PersonActivity.this, FriendEdit.class);
+                Intent intent = new Intent(PersonActivity.this, PersonProfileActivity.class);
                 intent.putExtra("person", person);
                 startActivity(intent);
             }
         });
+        notifyOnFriendListChanged();
+    }
+
+    private void notifyOnFriendListChanged() {
+        boolean isEmpty = personAdapter.isEmpty();
+        friendListEmptyNotify.setVisibility(isEmpty ? View.VISIBLE : View.GONE);
+    }
+
+    public boolean isEmpty() {
+        return personAdapter.isEmpty();
     }
 
     List<Person> sortPersons(List<Person> persons){
@@ -130,8 +151,7 @@ public class PersonActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-
+        getMenuInflater().inflate(R.menu.menu_persons_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

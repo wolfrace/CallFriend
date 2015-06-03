@@ -21,7 +21,8 @@
         <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
         <activity
             android:name=".Activities.EventsActivity"
-            android:label="@string/events_activity_title" >
+            android:icon="@drawable/ic_menu_white_24dp"
+            android:label="@string/events_activity_title">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 
@@ -64,7 +65,8 @@
 
         <activity
             android:name=".Activities.PersonActivity"
-            android:label="@string/persons_activity_title" >
+            android:label="@string/persons_activity_title"
+            android:icon="@drawable/ic_menu_white_24dp">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 
@@ -89,7 +91,8 @@
         </activity>
         <activity
             android:name=".Activities.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/title_activity_settings"
+            android:icon="@drawable/ic_menu_white_24dp">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 
@@ -100,12 +103,23 @@
                 android:noHistory="true"
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main" >
-            <intent-filter>
+            <intent-filter android:label="@string/app_name">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+                android:name=".Activities.PersonProfileActivity"
+                android:theme="@style/NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>
