@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import android.util.Log;
 import com.fiivt.ps31.callfriend.Activities.FriendEdit;
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
@@ -409,6 +410,26 @@ public class AppDb extends Singleton {
         }
 
         return events;
+    }
+
+    public Event getTodayEventByPersonTemplate(Integer id) {
+        Log.e("gfdgdfgdf", "generateNotifications!!!!!!!!!!");
+        //Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date asc;", null);
+        Calendar today = Calendar.getInstance();
+        today.clear(Calendar.HOUR);
+        today.clear(Calendar.MINUTE); today.clear(Calendar.SECOND);
+        Date todayDate = today.getTime();;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' AND date>='" + todayDate.getTime() + "' AND date<='" + new Date(todayDate.getTime() + (1000 * 60 * 60 * 24)).getTime() + "' ORDER BY date DESC;", null);
+        if (cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            return new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+        }
+        else
+            return null;
     }
 
     public Event getLastEventByPersonTemplate(Integer id) {

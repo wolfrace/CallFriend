@@ -54,4 +54,5 @@
     <string name="import_compete">Друзья успешно импортированы</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="welcome_title">Приветственный экран</string>
+    <string name="notification_suffix">" отмечает "</string>
 </resources>
