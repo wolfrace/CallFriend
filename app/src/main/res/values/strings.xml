@@ -52,7 +52,8 @@
     <string name="change_contact_layout_title">Изменить</string>
     <string name="empty_person_name_hint">Имя друга не может быть пустым</string>
     <string name="import_compete">Друзья успешно импортированы</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Welcome to Call Friend!</string>
     <string name="welcome_title">Приветственный экран</string>
+    <string name="skip">Пропустить</string>
     <string name="notification_suffix">" отмечает "</string>
 </resources>

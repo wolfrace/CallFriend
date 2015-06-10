@@ -100,7 +100,7 @@ public class VkontakteActivity extends BaseActivity {
         if (settings.isImportVkNeed() == false) {
             Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
             startActivity(i);
-
+            finish();
             return;
         }
 
@@ -119,6 +119,7 @@ public class VkontakteActivity extends BaseActivity {
                 //Do complete stuff
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
+                finish();
 
             }
 
@@ -130,6 +131,7 @@ public class VkontakteActivity extends BaseActivity {
                 toast.show();
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
+                finish();
             }
 
             @Override
