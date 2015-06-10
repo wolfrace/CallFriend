@@ -4,6 +4,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="have_not_events">События отсутствуют.</string>
+    <string name="have_not_events_history">Вы совсем забыли друга :(</string>
     <string name="title_activity_friend_edit">Изменить</string>
     <string name="action_friend_list">Contacts</string>
     <string name="action_event_list">Events</string>

@@ -20,11 +20,15 @@ import com.fiivt.ps31.callfriend.Utils.FriendLastActive;
 import de.hdodenhof.circleimageview.CircleImageView;
 import lombok.Data;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Данил on 28.05.2015.
  */
+
 public class PersonProfileActivity extends Activity {
 
     public AppDb database;
@@ -35,12 +39,15 @@ public class PersonProfileActivity extends Activity {
     private TextView personNote;
     private ArrayAdapter eventPersonProfileAdapter;
     private RelativeLayout tab1;
-    private TextView tab2;
+    private RelativeLayout tab2;
     private LinearLayout tabContent;
     private LinearLayout eventNotExciting;
     private int eventCount;
     private int eventHistoryCount;
     private ListView eventsListView;
+    private ListView eventsHistoryListView;
+    private LinearLayout eventHistoryNotExciting;
+    private int ZERO_YEAR = -1899;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +77,15 @@ public class PersonProfileActivity extends Activity {
         eventHistoryCount = 0;
         ResizeTabContent(eventCount);
         eventPersonProfileAdapter = new EventPersonProfileArrayAdapter(this, event);
-
         EventPersonProfileListView.setAdapter(eventPersonProfileAdapter);
+
+        ListView EventPersonHistoryProfileListView = (ListView) findViewById(R.id.person_profile_event_history_list);
+        List<Event> eventHistory = database.getLastEventsByPerson(person.getId());;
+        eventHistoryCount = eventHistory.size();
+        ResizeTabContent(eventCount);
+        eventPersonProfileAdapter = new EventPersonProfileArrayAdapter(this, eventHistory);
+
+        EventPersonHistoryProfileListView.setAdapter(eventPersonProfileAdapter);
 
 
         setAvatar();
@@ -120,10 +134,21 @@ public class PersonProfileActivity extends Activity {
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             public void onTabChanged(String tabId) {
                 if(tab1.getVisibility() == View.VISIBLE ){
-                    ResizeTabContent(eventHistoryCount);
+
                     tab1.setVisibility(View.GONE);
                     tab2.setVisibility(View.VISIBLE);
-
+                    ResizeTabContent(eventHistoryCount);
+                    if(eventHistoryCount == 0)
+                    {
+                        ResizeTabContent(3);
+                        eventHistoryNotExciting.setVisibility(View.VISIBLE);
+                        eventsHistoryListView.setVisibility(View.GONE);
+                    }
+                    else{
+                        ResizeTabContent(eventHistoryCount);
+                        eventHistoryNotExciting.setVisibility(View.GONE);
+                        eventsHistoryListView.setVisibility(View.VISIBLE);
+                    }
                 }
                 else{
                     tab1.setVisibility(View.VISIBLE);
@@ -161,6 +186,14 @@ public class PersonProfileActivity extends Activity {
         }
     }
 
+    public String getCustomDateString(Date customDate){
+        String pattern = "d MMMM yyyy 'г.'";
+        if (ZERO_YEAR == customDate.getYear())
+            pattern = "d MMMM";
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, new Locale("ru", "RU"));
+        return sdf.format(customDate);
+
+    }
     private void setPersonName() {
         String name = person.getName();
         if (name.length() <= 14){
@@ -182,11 +215,12 @@ public class PersonProfileActivity extends Activity {
         personName = (TextView) findViewById(R.id.person_profile_name);
         personNote = (TextView) findViewById(R.id.person_profile_note);
         tab1 = (RelativeLayout) findViewById(R.id.tvTab1);
-        tab2 = (TextView) findViewById(R.id.tvTab2);
+        tab2 = (RelativeLayout) findViewById(R.id.tvTab2);
+        eventsHistoryListView = (ListView) findViewById(R.id.person_profile_event_history_list);
+        eventHistoryNotExciting = (LinearLayout) findViewById(R.id.events_history_profile_not_existing_notify);
         tabContent = (LinearLayout) findViewById(R.id.tabContent);
         eventNotExciting = (LinearLayout) findViewById(R.id.events_profile_not_existing_notify);
         eventsListView = (ListView) findViewById(R.id.person_profile_event_list);
-
         eventHistoryCount = 0;
     }
 
@@ -203,7 +237,7 @@ public class PersonProfileActivity extends Activity {
         public void setEventPersonProfileValues(Event event) {
 
             name.setText(event.getInfo());
-            date.setText(event.getDate().toString());
+            date.setText(getCustomDateString(event.getDate()));
             image.setImageResource(event.getPersonTemplate().getIconResId());
         }
 
@@ -227,6 +261,7 @@ public class PersonProfileActivity extends Activity {
             viewHolder.setEventPersonProfileValues(event);
             return view;
         }
+
 
         private View getViewWithHolder(View convertView, ViewGroup parent) {
             if (convertView == null) {

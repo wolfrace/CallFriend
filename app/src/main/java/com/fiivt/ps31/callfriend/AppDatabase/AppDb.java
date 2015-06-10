@@ -444,6 +444,23 @@ public class AppDb extends Singleton {
             return null;
     }
 
+    public ArrayList<Event>  getLastEventsByPerson(Integer id) {
+
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPerson='" + id + "' AND status=1 ORDER BY date DESC;", null);
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            Event event = new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            events.add(event);
+        }
+
+        return events;
+    }
+
     public static AppDb getInstance(FriendEdit conetext) {
         return new AppDb(conetext);
     }

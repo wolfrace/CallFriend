@@ -134,12 +134,34 @@
                                                         android:id="@+id/person_profile_event_list"
                                                         android:divider="@null"/>
                                         </RelativeLayout>
-                                        <TextView
-                                                android:id="@+id/tvTab2"
-                                                android:layout_width="wrap_content"
+                                        <RelativeLayout
+                                                android:orientation="vertical"
+                                                android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:text="456">
-                                        </TextView>
+                                                android:id="@+id/tvTab2"
+                                                >
+                                                <LinearLayout
+                                                        android:orientation="vertical"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent"
+                                                        android:visibility="gone"
+                                                        android:id="@+id/events_history_profile_not_existing_notify"
+                                                        >
+                                                        <TextView
+                                                                android:text="@string/have_not_events_history"
+                                                                android:textColor="@color/text_color_light"
+                                                                android:textSize="@dimen/add_friends_button_text_size"
+                                                                android:layout_width="wrap_content"
+                                                                android:layout_height="35dp"
+                                                                android:layout_marginTop="70dp"
+                                                                android:layout_gravity="center_horizontal"/>
+                                                </LinearLayout>
+                                                <ListView
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:id="@+id/person_profile_event_history_list"
+                                                        android:divider="@null"/>
+                                        </RelativeLayout>
                                 </FrameLayout>
                         </LinearLayout>
                 </TabHost>
