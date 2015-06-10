@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:text="New Text"
+        android:textStyle="bold"
         android:textColor="@color/text_color"
         android:textSize="@dimen/mini_text_size"
         android:id="@+id/event_list_title_text"
