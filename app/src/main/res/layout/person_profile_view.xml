@@ -6,84 +6,143 @@
                 android:layout_height="match_parent"
                 tools:context=".PersonProfileActivity">
 
-        <RelativeLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical" >
 
-            <ImageView
-                    android:layout_width="360dp"
-                    android:layout_height="336dp"
-                    android:id="@+id/person_profile_photo"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:background="@drawable/edit_avatar_back"/>
+                <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
 
-            <RelativeLayout
-                    android:orientation="horizontal"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="28dp"
-                    android:id="@+id/edit_person"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="68dp">
-                    <LinearLayout
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_centerVertical="true"
-                            android:layout_centerHorizontal="true"
-                            android:background="@drawable/ic_mode_edit_white_24dp"/>
-            </RelativeLayout>
+                            <ImageView
+                                    android:layout_width="360dp"
+                                    android:layout_height="336dp"
+                                    android:id="@+id/person_profile_photo"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:background="@drawable/edit_avatar_back"
+                                    android:focusable="true"/>
 
-            <RelativeLayout
-                    android:orientation="horizontal"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="28dp"
-                    android:id="@+id/delete_person"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="16dp">
-                <LinearLayout
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_delete_white_24dp"
-                        android:layout_centerHorizontal="true"/>
-            </RelativeLayout>
+                            <RelativeLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_marginTop="28dp"
+                                    android:id="@+id/edit_person"
+                                    android:layout_alignParentTop="true"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginRight="68dp">
+                                    <LinearLayout
+                                            android:layout_width="24dp"
+                                            android:layout_height="24dp"
+                                            android:layout_centerVertical="true"
+                                            android:layout_centerHorizontal="true"
+                                            android:background="@drawable/ic_mode_edit_white_24dp"
+                                            android:focusableInTouchMode="true" android:focusable="true"/>
+                            </RelativeLayout>
 
-            <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true">
-            </LinearLayout>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="No name"
-                    android:id="@+id/person_profile_name"
-                    android:textSize="@dimen/person_name_size"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="254dp"
-                    android:textColor="@color/text_color_primary"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="No note"
-                    android:id="@+id/person_profile_note"
-                    android:textSize="@dimen/add_friends_button_text_size"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="294dp"
-                    android:textColor="@color/text_color_primary"/>
+                            <RelativeLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:layout_marginTop="28dp"
+                                    android:id="@+id/delete_person"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_marginRight="16dp">
+                                <LinearLayout
+                                        android:layout_width="24dp"
+                                        android:layout_height="24dp"
+                                        android:layout_centerVertical="true"
+                                        android:background="@drawable/ic_delete_white_24dp"
+                                        android:layout_centerHorizontal="true"/>
+                            </RelativeLayout>
 
-        </RelativeLayout>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:text="No name"
+                                    android:id="@+id/person_profile_name"
+                                    android:textSize="@dimen/person_name_size"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginRight="16dp"
+                                    android:layout_marginTop="254dp"
+                                    android:textColor="@color/text_color_primary"/>
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
+                                    android:text="No note"
+                                    android:id="@+id/person_profile_note"
+                                    android:textSize="@dimen/add_friends_button_text_size"
+                                    android:layout_marginLeft="16dp"
+                                    android:layout_marginTop="294dp"
+                                    android:textColor="@color/text_color_primary"/>
+
+                </RelativeLayout>
+
+
+                <TabHost
+                        android:id="@android:id/tabhost"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:id="@+id/tabContent">
+                                <TabWidget
+                                        android:id="@android:id/tabs"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+                                </TabWidget>
+                                <FrameLayout
+                                        android:id="@android:id/tabcontent"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <RelativeLayout
+                                                android:orientation="vertical"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:id="@+id/tvTab1"
+                                                >
+                                                <LinearLayout
+                                                        android:orientation="vertical"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="match_parent"
+                                                        android:visibility="gone"
+                                                        android:id="@+id/events_profile_not_existing_notify"
+                                                        >
+                                                        <TextView
+                                                                android:text="@string/have_not_events"
+                                                                android:textColor="@color/text_color_light"
+                                                                android:textSize="@dimen/add_friends_button_text_size"
+                                                                android:layout_width="wrap_content"
+                                                                android:layout_height="35dp"
+                                                                android:layout_marginTop="70dp"
+                                                                android:layout_gravity="center_horizontal"/>
+                                                </LinearLayout>
+                                                <ListView
+                                                        android:layout_width="fill_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:id="@+id/person_profile_event_list"
+                                                        android:divider="@null"/>
+                                        </RelativeLayout>
+                                        <TextView
+                                                android:id="@+id/tvTab2"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="456">
+                                        </TextView>
+                                </FrameLayout>
+                        </LinearLayout>
+                </TabHost>
+
+        </LinearLayout>
 </ScrollView>

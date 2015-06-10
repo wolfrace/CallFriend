@@ -13,7 +13,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
+                android:id="@+id/person_profile_image"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
@@ -37,7 +37,7 @@
                 android:textSize="@dimen/events_title_size"
                 android:text="Large Text"
                 android:textColor="@color/text_color"
-                android:id="@+id/event_title"
+                android:id="@+id/person_profile_event_title"
                 android:layout_marginTop="4dp"
                 android:singleLine="true"
                 android:ellipsize="end" />
@@ -48,7 +48,7 @@
                 android:textSize="@dimen/events_subtitle_size"
                 android:text="petyh Kokoko"
                 android:textColor="@color/text_color_light"
-                android:id="@+id/event_date"
+                android:id="@+id/person_profile_event_date"
                 android:layout_marginBottom="4dp"
                 android:singleLine="true"
                 android:ellipsize="end" />

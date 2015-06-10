@@ -411,6 +411,25 @@ public class AppDb extends Singleton {
         return events;
     }
 
+    public ArrayList<Event> getEventsByPerson(int idPerson) {
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        String  query = "SELECT * FROM event WHERE event.idPerson=" + idPerson;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            Event event = new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            events.add(event);
+        }
+
+        return events;
+    }
+
     public Event getLastEventByPersonTemplate(Integer id) {
 
         Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date DESC;", null);
