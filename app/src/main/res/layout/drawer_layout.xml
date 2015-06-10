@@ -21,7 +21,9 @@ android:layout_height="match_parent">
     android:choiceMode="singleChoice"
     android:background="@color/window_background">
     <ImageView
+        android:id="@+id/drawer_back_img"
         android:layout_width="match_parent"
+        android:scaleType="centerCrop"
         android:layout_height="172dp"
         android:background="@drawable/menu_back_304x172dp"/>
     <ListView

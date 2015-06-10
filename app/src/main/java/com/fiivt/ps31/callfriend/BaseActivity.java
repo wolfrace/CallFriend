@@ -135,13 +135,14 @@ public class BaseActivity extends ActionBarActivity {
 
     private void initDrawer() {
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-
         mDrawerLeft = (LinearLayout) findViewById(R.id.left_drawer);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = size.x;
         mDrawerLeft.setMinimumWidth(width-getStatusBarHeight());
+        ImageView img = (ImageView)findViewById(R.id.drawer_back_img);
+        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
         mDrawerList = (ListView)findViewById(R.id.drawer_list);
         mDrawerLayout.setDrawerListener(createDrawerToggle());

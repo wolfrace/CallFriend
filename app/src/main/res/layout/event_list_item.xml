@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/events_subtitle_size"
             android:text="petyh Kokoko"
-            android:textColor="@color/text_color_light"
+            android:textColor="@color/text_color_secondary"
             android:id="@+id/event_list_event_title"
             android:layout_marginBottom="4dp"
             android:singleLine="true"
