@@ -22,7 +22,7 @@ import lombok.Setter;
 
 public class SignificantEventEditDialog extends DialogFragment {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd", Locale.US);
     private static final Date INVALID_DATE = new Date(0);
     private final long[] spinnerItemIdToReminderTime = {
             TimeUnit.DAYS.toMillis(1),

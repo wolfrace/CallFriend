@@ -1,21 +1,17 @@
 package com.fiivt.ps31.callfriend.Activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
 import com.fiivt.ps31.callfriend.AppDatabase.AppDb;
-import com.fiivt.ps31.callfriend.AppDatabase.EventTemplate;
 import com.fiivt.ps31.callfriend.AppDatabase.Person;
-import com.fiivt.ps31.callfriend.AppDatabase.PersonTemplate;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
-import com.fiivt.ps31.callfriend.Utils.IdGenerator;
 import com.fiivt.ps31.callfriend.Utils.Settings;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKScope;
@@ -34,12 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.AbstractCollection;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 // ��������� ����������� ��� Android:
@@ -119,7 +109,7 @@ public class VkontakteActivity extends BaseActivity {
                 //Do complete stuff
                 Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
                 startActivity(i);
-                finish();
+                //finish();
 
             }
 
@@ -129,9 +119,9 @@ public class VkontakteActivity extends BaseActivity {
                 Toast toast = Toast.makeText(getApplicationContext(),
                         error.errorMessage, Toast.LENGTH_SHORT);
                 toast.show();
-                Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
-                startActivity(i);
-                finish();
+                //Intent i = new Intent(VkontakteActivity.this, PersonActivity.class);
+                //startActivity(i);
+                //finish();
             }
 
             @Override

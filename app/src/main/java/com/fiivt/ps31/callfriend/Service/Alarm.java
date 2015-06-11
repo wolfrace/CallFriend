@@ -6,10 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
-import android.widget.Toast;
-import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 
-import java.util.Date;
+import com.fiivt.ps31.callfriend.Utils.EventsGenerator;
 
 /**
  * Created by Egor on 27.05.2015.
@@ -34,7 +32,7 @@ public class Alarm extends BroadcastReceiver {
             }
         }.init(context)).start();
 
-        Toast.makeText(context, "Generation of events completed", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Generation of events completed", Toast.LENGTH_LONG).show();
 
         wl.release();
     }
