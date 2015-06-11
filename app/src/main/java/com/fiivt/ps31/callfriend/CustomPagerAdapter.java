@@ -16,12 +16,9 @@ import android.widget.TextView;
 public class CustomPagerAdapter extends PagerAdapter {
 
     int[] storyboard = {
-            R.drawable.a1,
-            R.drawable.a2,
-            R.drawable.a3,
-            R.drawable.a4,
-            R.drawable.a5,
-            R.drawable.a6
+            R.drawable.story1,
+            R.drawable.story2,
+            R.drawable.story3
     };
 
     Context mContext;

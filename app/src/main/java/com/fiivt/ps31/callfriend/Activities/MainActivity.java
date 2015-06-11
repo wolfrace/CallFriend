@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import com.fiivt.ps31.callfriend.BaseActivity;
 import com.fiivt.ps31.callfriend.CustomPagerAdapter;
 import com.fiivt.ps31.callfriend.R;
@@ -19,7 +20,7 @@ import com.viewpagerindicator.CirclePageIndicator;
 
 public class MainActivity extends Activity {
     Alarm alarm = new Alarm();
-    Button skipBtn;
+    TextView skipBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
         CirclePageIndicator circleIndicator = (CirclePageIndicator)findViewById(R.id.indicator);
         circleIndicator.setViewPager(viewPager);
 
-        skipBtn = (Button)findViewById(R.id.buttonSkip);
+        skipBtn = (TextView)findViewById(R.id.buttonSkip);
         skipBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startApplication();
