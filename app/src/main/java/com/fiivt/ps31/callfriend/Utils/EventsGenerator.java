@@ -80,7 +80,7 @@ public class EventsGenerator {
         PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
         Notification n  = new Notification.Builder(context)
-                .setContentTitle("CallFriend!")
+                .setContentTitle(context.getString(R.string.notify_text_title))
                 .setContentText(lastEvent.getPerson().getName().concat(context.getString(R.string.notification_suffix)).concat(lastEvent.getInfo()))
                 .setSmallIcon(R.drawable.callfriend_app_icon)
                 .setContentIntent(pIntent)

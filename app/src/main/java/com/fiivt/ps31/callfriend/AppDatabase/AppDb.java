@@ -4,8 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import android.util.Log;
+
 import com.fiivt.ps31.callfriend.Activities.FriendEdit;
 import com.fiivt.ps31.callfriend.R;
 import com.fiivt.ps31.callfriend.Utils.Singleton;
@@ -412,6 +412,70 @@ public class AppDb extends Singleton {
         return events;
     }
 
+    public ArrayList<Event> getEventsByPerson(int idPerson) {
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        String  query = "SELECT * FROM event WHERE event.idPerson=" + idPerson;
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            Event event = new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            events.add(event);
+        }
+
+        return events;
+    }
+
+    public Event getLastEventByPersonTemplate(Integer id) {
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date DESC;", null);
+        if (cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            return new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+        }
+        else
+            return null;
+    }
+
+    public ArrayList<Event>  getLastEventsByPerson(Integer id) {
+
+        ArrayList<Event> events = new ArrayList<Event>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPerson='" + id + "' AND status=1 ORDER BY date DESC;", null);
+        while(cursor.moveToNext()) {
+            Person person = getPerson(cursor.getInt(1));
+            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
+
+            Event event = new Event(cursor.getInt(0), person,
+                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
+            events.add(event);
+        }
+
+        return events;
+    }
+
+    public static AppDb getInstance(FriendEdit conetext) {
+        return new AppDb(conetext);
+    }
+
+    public Date getLastAchievedEventDateByPerson(Integer id) {
+        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
+        if (cursor.moveToNext())
+            return new Date(cursor.getLong(0));
+        return new Date(0);
+    }
+    public List<PersonTemplate> getPersonTemplates(Person person) {
+        return getPersonTemplatesByPerson(person.getId(), Integer.MAX_VALUE, 0);
+    }
+
     public Event getTodayEventByPersonTemplate(Integer id) {
         Log.e("gfdgdfgdf", "generateNotifications!!!!!!!!!!");
         //Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date asc;", null);
@@ -430,33 +494,5 @@ public class AppDb extends Singleton {
         }
         else
             return null;
-    }
-
-    public Event getLastEventByPersonTemplate(Integer id) {
-
-        Cursor cursor = db.rawQuery("SELECT * FROM event WHERE idPersonTemplate='" + id + "' ORDER BY date DESC;", null);
-        if (cursor.moveToNext()) {
-            Person person = getPerson(cursor.getInt(1));
-            PersonTemplate personTemplate = getPersonTemplate(cursor.getInt(2));
-
-            return new Event(cursor.getInt(0), person,
-                    personTemplate, cursor.getString(3), new Date(cursor.getLong(4)), Status.fromInteger(cursor.getInt(5)));
-        }
-        else
-            return null;
-    }
-
-    public static AppDb getInstance(FriendEdit conetext) {
-        return new AppDb(conetext);
-    }
-
-    public Date getLastAchievedEventDateByPerson(Integer id) {
-        Cursor cursor = db.rawQuery("SELECT date FROM event WHERE idPerson='" + id + "' AND status=" + Status.ACHIEVED.getId() + " ORDER BY date DESC;", null);
-        if (cursor.moveToNext())
-            return new Date(cursor.getLong(0));
-        return new Date(0);
-    }
-    public List<PersonTemplate> getPersonTemplates(Person person) {
-        return getPersonTemplatesByPerson(person.getId(), Integer.MAX_VALUE, 0);
     }
 }

@@ -100,11 +100,11 @@
             </intent-filter>
         </activity>
         <activity
-                android:noHistory="true"
+            android:noHistory="true"
             android:name=".Activities.MainActivity"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:label="@string/app_name" >
-            <intent-filter android:label="@string/app_name">
+            android:label="@string/title_activity_main" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -115,11 +115,28 @@
                 android:name=".Activities.PersonProfileActivity"
                 android:theme="@style/NoActionBar" >
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <application
+                android:allowBackup="true"
+                android:icon="@drawable/ic_launcher"
+                android:label="@string/app_name"
+                android:theme="@style/AppTheme" >
+            <activity
+                    android:name=".Activities.PersonProfileTabsActivity"
+                    android:label="@string/app_name" >
+                <intent-filter>
+                    <action android:name="android.intent.action.EDIT" />
+
+                    <category android:name="android.intent.category.LAUNCHER" />
+                </intent-filter>
+            </activity>
+        </application>
 
     </application>
 
